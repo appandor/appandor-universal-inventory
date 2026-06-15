@@ -17,7 +17,7 @@ echo "=== 2. Updating system packages ==="
 apt update && apt upgrade -y
 apt install -y vi curl ca-certificates gnupg lsb-release git
 
-# 3. Download and register official Docker repositories
+# 3. Download and register official Docker repositories (FIXED PATHS)
 echo "=== 3. Setting up official Docker keys & repository ==="
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://docker.com | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -34,11 +34,11 @@ systemctl start docker
 systemctl enable docker
 usermod -aG docker appandor
 
-# 6. Deploy code architecture from GitHub
+# 6. Deploy code architecture from GitHub via SSH (PASSWORDS DEACTIVATED)
 echo "=== 6. Deploying code architecture from GitHub ==="
 TARGET_DIR="/home/appandor/appandor-system"
 
-sudo -u appandor git clone https://github.com "$TARGET_DIR"
+sudo -u appandor git clone git@github.com:appandor/appandor-universal-inventory.git "$TARGET_DIR"
 
 # Move the init SQL file into the correct place so Postgres picks it up
 sudo -u appandor mkdir -p "$TARGET_DIR/init_sql"
