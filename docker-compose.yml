@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # --- CONTAINER 1: POSTGRESQL DATABASE (MULTI-TENANCY READY) ---
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: appandor_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: appandor_admin
+      POSTGRES_PASSWORD: EinSicheresDatenbankPasswort123!
+      POSTGRES_DB: appandor_universal_inventory
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init_sql:/docker-entrypoint-initdb.d
+
+  # --- CONTAINER 2: API-FIRST NODE.JS BACKEND ---
+  node-app:
+    image: node:20-alpine
+    container_name: appandor_backend
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=EinSuperGeheimesZufallsPasswortFuerDieTokenGenerierung2026!
+      - JWT_EXPIRATION_MINUTES=15
+    command: sh -c "npm install && node server.js"
+    volumes:
+      - ./node_src:/usr/src/app
+      - ./app_images:/usr/src/app/public/images
+    depends_on:
+      - postgres-db
