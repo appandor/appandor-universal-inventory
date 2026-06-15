@@ -1,11 +1,10 @@
 -- =============================================================================
--- STEP 1: POSTGRESQL DATABASE SETUP (UNIVERSAL SAAS SUPPLY CHAIN STRUCTURE)
+-- STEP 1: POSTGRESQL DATABASE SETUP (UNIVERSAL SAAS COMPREHENSIVE STRUCTURE)
 -- =============================================================================
 -- This script drops existing tables and initializes the core schema for the
 -- universal inventory system (Product -> Purchase -> Box -> Location).
 -- Multi-tenancy (tenant_id) is natively embedded into all core entities.
--- product_attributes are stored natively via JSONB for NoSQL-like flexibility.
--- Full tracking for orders, estimated deliveries, and status is included.
+-- Includes advanced supply chain fields, retail links, and minimum stocks.
 -- =============================================================================
 
 -- CLEAN UP EXISTING TABLES (CASCADE ENSURES RELATIONSHIPS ARE DROPPED)
@@ -28,7 +27,7 @@ CREATE TABLE locations (
 );
 
 -- -----------------------------------------------------------------------------
--- TABLE 2: PRODUCT MASTER (The pure, universal product template with JSONB)
+-- TABLE 2: PRODUCT MASTER (The pure, universal product template with retail sync)
 -- -----------------------------------------------------------------------------
 CREATE TABLE product_master (
     product_id SERIAL PRIMARY KEY,
@@ -36,6 +35,10 @@ CREATE TABLE product_master (
     barcode VARCHAR(50),                     -- EAN / Manufacturer barcode
     name VARCHAR(255) NOT NULL,              -- e.g., 'One Piece OP-05 Display', 'Barilla No. 5'
     category VARCHAR(100) NOT NULL,          -- e.g., 'TCG', 'Wine', 'Groceries'
+    unit VARCHAR(20) DEFAULT 'pcs',          -- Measurement unit: pcs, kg, l, g
+    minimum_stock INT DEFAULT 0,             -- Alert trigger for low inventory
+    shopify_product_id VARCHAR(100),         -- Optional: Direct link to Shopify store variant
+    cardmarket_id VARCHAR(100),              -- Optional: Direct link to Cardmarket product
     attributes JSONB DEFAULT '{}',            -- Flexible attributes (NoSQL style key-value)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -51,7 +54,7 @@ CREATE TABLE tracked_products (
     purchase_price_gross NUMERIC(10, 2) NOT NULL, -- Historical gross buy price
     estimated_delivery DATE,                  -- Expected delivery date (Supply Chain tracking)
     expiry_date DATE,                        -- Optional: Best-before date for groceries / cans
-    status VARCHAR(20) DEFAULT 'ORDERED',     -- 'ORDERED' (schwebend), 'RECEIVED' (im Loft), 'SOLD' (weg)
+    status VARCHAR(20) DEFAULT 'ORDERED',     -- 'ORDERED', 'RECEIVED', 'SOLD'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -87,3 +90,4 @@ CREATE INDEX idx_products_barcode ON product_master(barcode);
 CREATE INDEX idx_boxen_tenant ON boxes(tenant_id);
 CREATE INDEX idx_transactions_tenant ON stock_transactions(tenant_id);
 CREATE INDEX idx_products_attributes ON product_master USING gin(attributes); -- Fast search inside JSON
+
