@@ -13,6 +13,7 @@ Because this repository is **Private**, your server cannot download the files wi
 * **Deployment:** Containerized via Docker Compose
 
 ## Repository File Structure
+* `docs/architecture.txt` - Strategic 5-year technical infrastructure and backup concept
 * `01_init_tables.sql` - Core PostgreSQL database schema (English)
 * `package.json` - Node.js dependencies (Express & PG Driver)
 * `server.js` - Main backend API logic with active CRUD endpoints
