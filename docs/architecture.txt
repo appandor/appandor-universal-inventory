@@ -1,0 +1,47 @@
+=============================================================================
+TECHNICAL INFRASTRUCTURE & ARCHITECTURE CONCEPT (INTERNAL)
+=============================================================================
+Project:      Central Inventory Management "Appandor Intern"
+Owner:        Andreas Sandkühler
+Hardware:     Netcup Root Server (RS 1000 G12 12M)
+Location:     Nuremberg Datacenter
+Time Horizon: 5-Year Continuous Operation Lifecycle
+=============================================================================
+
+1. SYSTEM BASE & VIRTUALIZATION (KEEP IT SIMPLE)
+* Operating System: Ubuntu 24.04 LTS Server (Minimal Installation). Guarantees
+  full security updates for the entire 5-year operational lifecycle.
+* Virtualization: Docker with Docker Compose for maximum host system cleanliness.
+  All services run isolated in containers. No Kubernetes deployment.
+
+2. CONTAINER ARCHITECTURE
+* Container A: Node.js Backend & Frontend Delivery
+  - Pure Node.js utilizing the Express framework.
+  - Manages all routing, authentication, and authorization.
+  - Serves static frontend files (HTML, CSS, JS, images) directly to clients.
+  - No Apache or Nginx reverse-proxies installed on the Ubuntu host.
+* Container B: PostgreSQL Database
+  - Reliable, open-source relational database engine.
+  - Zero Microsoft SQL licensing fees. Full crash-safety during power outages.
+
+3. NETWORKING, PORTS & ACCESSIBILITY
+* Port-Mapping: Docker forwards Port 80 (HTTP) and Port 443 (HTTPS) directly 
+  from the Ubuntu host into the Node.js backend container.
+* SSL Encryption: Node.js reads Let's Encrypt certificates directly at startup.
+  System accessibility is bound to "://appandor.com".
+* DNS Isolation: Main storefront domains (appandor.de/.com) route strictly 
+  to Shopify. Server backend access is exclusively restricted via the prefix "intern.".
+
+4. DATA STORAGE & BACKUP STRATEGY
+* Docker Volumes: All master records, user accounts, transaction logs, and images
+  are mirrored outside the containers into a fixed host directory (/home/appandor/appandor-system/).
+* System Master Backup: Before executing any Linux updates (apt update/upgrade)
+  or pushing major code changes, one free Netcup snapshot is taken in the SCP. 
+  Images and entire system states are frozen there.
+* Daily Transaction Ledger Backup: An automated cron job script exports the
+  PostgreSQL database as a plain text dump every single night (date-stamped files,
+  no overwriting) and syncs it securely to Google Drive.
+* Image Asset Safeguards: High-volume product image directories are excluded 
+  from the daily Google Drive cloud export. The explicit fallback strategy is 
+  a manual re-import of assets directly from the live Shopify shop via API.
+=============================================================================
