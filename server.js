@@ -47,18 +47,47 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// API ROUTE 2: CREATE NEW PRODUCT MASTER TEMPLATE
+// API ROUTE 2: CREATE NEW COMPREHENSIVE PRODUCT TEMPLATE (POST)
 app.post('/api/products', async (req, res) => {
-  const { name, barcode, category } = req.body;
+  const { 
+    name, 
+    barcode, 
+    category, 
+    unit, 
+    minimum_stock, 
+    shopify_product_id, 
+    cardmarket_id, 
+    attributes 
+  } = req.body;
+
   if (!name || !category) {
     return res.status(400).json({ error: 'Name and category are required fields' });
   }
+
   try {
+    // Ensure standard fallbacks for numeric/string fields and handle JSONB stringification
+    const finalUnit = unit || 'pcs';
+    const finalMinStock = minimum_stock !== undefined ? minimum_stock : 0;
+    const finalAttributes = attributes ? JSON.stringify(attributes) : '{}';
+
     const result = await pool.query(
-      'INSERT INTO product_master (tenant_id, name, barcode, category) VALUES ($1, $2, $3, $4) RETURNING *',
-      [req.tenant.id, name, barcode, category]
+      `INSERT INTO product_master 
+       (tenant_id, barcode, name, category, unit, minimum_stock, shopify_product_id, cardmarket_id, attributes) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+       RETURNING *`,
+      [
+        req.tenant.id, 
+        barcode || null, 
+        name, 
+        category, 
+        finalUnit, 
+        finalMinStock, 
+        shopify_product_id || null, 
+        cardmarket_id || null, 
+        finalAttributes
+      ]
     );
-    res.status(201).json(result.rows);
+    res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error while creating product' });
@@ -68,16 +97,47 @@ app.post('/api/products', async (req, res) => {
 // API ROUTE 3: UPDATE EXISTING PRODUCT MASTER TEMPLATE (PUT)
 app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, barcode, category } = req.body;
+  const { 
+    name, 
+    barcode, 
+    category, 
+    unit, 
+    minimum_stock, 
+    shopify_product_id, 
+    cardmarket_id, 
+    attributes 
+  } = req.body;
+
   if (!name || !category) {
     return res.status(400).json({ error: 'Name and category are required fields' });
   }
+
   try {
+    const finalUnit = unit || 'pcs';
+    const finalMinStock = minimum_stock !== undefined ? minimum_stock : 0;
+    const finalAttributes = attributes ? JSON.stringify(attributes) : '{}';
+
     // We strictly check the tenant_id so users can only update their own circle's products
     const result = await pool.query(
-      'UPDATE product_master SET name = $1, barcode = $2, category = $3 WHERE product_id = $4 AND tenant_id = $5 RETURNING *',
-      [name, barcode, category, id, req.tenant.id]
+      `UPDATE product_master 
+       SET name = $1, barcode = $2, category = $3, unit = $4, minimum_stock = $5, 
+           shopify_product_id = $6, cardmarket_id = $7, attributes = $8 
+       WHERE product_id = $9 AND tenant_id = $10 
+       RETURNING *`,
+      [
+        name, 
+        barcode || null, 
+        category, 
+        finalUnit, 
+        finalMinStock, 
+        shopify_product_id || null, 
+        cardmarket_id || null, 
+        finalAttributes, 
+        id, 
+        req.tenant.id
+      ]
     );
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Product not found or access denied' });
     }
