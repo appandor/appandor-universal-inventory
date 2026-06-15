@@ -8,6 +8,7 @@
 
 -- CLEAN UP EXISTING TABLES (CASCADE ENSURES RELATIONSHIPS ARE DROPPED)
 DROP TABLE IF EXISTS stock_transactions CASCADE;
+DROP TABLE IF EXISTS product_attributes CASCADE;
 DROP TABLE IF EXISTS boxes CASCADE;
 DROP TABLE IF EXISTS tracked_products CASCADE;
 DROP TABLE IF EXISTS product_master CASCADE;
@@ -38,7 +39,19 @@ CREATE TABLE product_master (
 );
 
 -- -----------------------------------------------------------------------------
--- TABLE 3: TRACKED PRODUCTS (Specific commercial purchases with historical values)
+-- TABLE 3: PRODUCT ATTRIBUTES (The dynamic Key-Value Secret Weapon)
+-- -----------------------------------------------------------------------------
+CREATE TABLE product_attributes (
+    attribute_id SERIAL PRIMARY KEY,
+    tenant_id INT NOT NULL,
+    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE CASCADE,
+    attribute_key VARCHAR(100) NOT NULL,     -- e.g., 'set_code', 'language', 'weight', 'dimensions'
+    attribute_value VARCHAR(255) NOT NULL,   -- e.g., 'OP-05', 'English', '500g', '61x91cm'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- -----------------------------------------------------------------------------
+-- TABLE 4: TRACKED PRODUCTS (Specific commercial purchases with historical values)
 -- -----------------------------------------------------------------------------
 CREATE TABLE tracked_products (
     tracked_id SERIAL PRIMARY KEY,
@@ -46,12 +59,12 @@ CREATE TABLE tracked_products (
     product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE CASCADE,
     purchased_at DATE NOT NULL,               -- Exact date of purchase (2026 vs. 2027 logic)
     purchase_price_gross NUMERIC(10, 2) NOT NULL, -- Historical gross buy price
-    expiry_date DATE,                        -- Optional: Best-before date for groceries
+    expiry_date DATE,                        -- Optional: Best-before date for groceries / cans
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- -----------------------------------------------------------------------------
--- TABLE 4: BOXES / CASES (The mobile containers with the unique barcode outside)
+-- TABLE 5: BOXES / CASES (The mobile containers with the unique barcode outside)
 -- -----------------------------------------------------------------------------
 CREATE TABLE boxes (
     box_id VARCHAR(50) PRIMARY KEY,          -- Unique custom ID (e.g., 'APP-00001', 'BOX-BLUE')
@@ -62,7 +75,7 @@ CREATE TABLE boxes (
 );
 
 -- -----------------------------------------------------------------------------
--- TABLE 5: STOCK TRANSACTIONS (The Ledger / Kassenbuch fuer Ein- und Verkaeufe)
+-- TABLE 6: STOCK TRANSACTIONS (The Ledger / Kassenbuch fuer Ein- und Verkaeufe)
 -- -----------------------------------------------------------------------------
 CREATE TABLE stock_transactions (
     transaction_id SERIAL PRIMARY KEY,
@@ -79,5 +92,6 @@ CREATE TABLE stock_transactions (
 -- PERFORMANCE INDEXES FOR FAST SMARTPHONE SCANNING
 -- -----------------------------------------------------------------------------
 CREATE INDEX idx_products_barcode ON product_master(barcode);
-CREATE INDEX idx_boxes_tenant ON boxes(tenant_id);
+CREATE INDEX idx_boxen_tenant ON boxes(tenant_id);
 CREATE INDEX idx_transactions_tenant ON stock_transactions(tenant_id);
+CREATE INDEX idx_attributes_product ON product_attributes(product_id);
