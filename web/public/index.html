@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appandor Universal Inventory</title>
+    <!-- Link to external CSS styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Appandor Inventory</h1>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Universal Multi-Tenant Workspace</p>
+            </div>
+            <div id="connection-status" class="status-badge">Connecting...</div>
+        </header>
+
+        <div class="grid">
+            <!-- LEFT COLUMN: ADD PRODUCT FORM -->
+            <div class="card">
+                <h2>Add Master Product</h2>
+                <form id="product-form">
+                    <div class="form-group">
+                        <label for="name">Product Name *</label>
+                        <input type="text" id="name" required placeholder="e.g. One Piece OP-05 Display">
+                    </div>
+                    <div class="form-group">
+                        <label for="barcode">Barcode / EAN</label>
+                        <input type="text" id="barcode" placeholder="Scan or type barcode">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" required>
+                            <option value="TCG">Trading Card Games (TCG)</option>
+                            <option value="Wine">Wine Selection</option>
+                            <option value="Groceries">Groceries & Cans</option>
+                            <option value="Art">Art & Frameworks</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="minimum_stock">Minimum Alert Stock</label>
+                        <input type="number" id="minimum_stock" value="0" min="0">
+                    </div>
+                    <button type="submit">Save Product Master</button>
+                </form>
+            </div>
+
+            <!-- RIGHT COLUMN: PRODUCT MASTER LIST -->
+            <div class="card">
+                <h2>Product Master Templates</h2>
+                <ul id="products-container" class="product-list">
+                    <!-- Products will be loaded dynamically via app.js -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript logic -->
+    <script src="app.js"></script>
+</body>
+</html>
