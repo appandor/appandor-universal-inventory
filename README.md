@@ -43,3 +43,6 @@ After running the automated script `scripts/setup_server.sh`, follow these comma
 * `docs/architecture.txt` - Strategic 5-year technical infrastructure and backup concept
 * `docs/ssh_setup_guide.txt` - Step-by-step guide for passwordless server-to-GitHub authentication
 * `scripts/setup_server.sh` - Automated deployment script for fresh server initialization
+* `web/public/index.html` - Core HTML user interface layout for mobile and desktop screens
+* `web/public/css/style.css` - Custom Dark Mode stylesheet tailored for clean loft and basement visibility
+* `web/public/js/app.js` - Client-side asynchronous JavaScript handling health checks and CRUD API communication
