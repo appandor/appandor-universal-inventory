@@ -1,10 +1,14 @@
 const express = require('express');
 const { Pool } = require('pg');
+const path = require('path'); // NEW: Required to resolve the 'web/public' path safely
 const app = express();
 const port = 80;
 
 // Middleware to parse JSON bodies in API requests
 app.use(express.json());
+
+// NEW: Serve static frontend files from the 'web/public' directory
+app.use(express.static(path.join(__dirname, 'web/public')));
 
 // DATABASE CONNECTION (PostgreSQL inside Docker)
 const pool = new Pool({
@@ -16,7 +20,6 @@ const pool = new Pool({
 });
 
 // FAKE-AUTH MIDDLEWARE (DEVELOPMENT PHASE)
-// Automatically injects User 1 and Tenant (Circle) 1 into every request
 app.use((req, res, next) => {
   req.user = { id: 1, name: 'Andreas', role: 'Admin' };
   req.tenant = { id: 1, name: 'Appandor Circle 1' };
@@ -65,7 +68,6 @@ app.post('/api/products', async (req, res) => {
   }
 
   try {
-    // Ensure standard fallbacks for numeric/string fields and handle JSONB stringification
     const finalUnit = unit || 'pcs';
     const finalMinStock = minimum_stock !== undefined ? minimum_stock : 0;
     const finalAttributes = attributes ? JSON.stringify(attributes) : '{}';
@@ -87,7 +89,7 @@ app.post('/api/products', async (req, res) => {
         finalAttributes
       ]
     );
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error while creating product' });
@@ -117,7 +119,6 @@ app.put('/api/products/:id', async (req, res) => {
     const finalMinStock = minimum_stock !== undefined ? minimum_stock : 0;
     const finalAttributes = attributes ? JSON.stringify(attributes) : '{}';
 
-    // We strictly check the tenant_id so users can only update their own circle's products
     const result = await pool.query(
       `UPDATE product_master 
        SET name = $1, barcode = $2, category = $3, unit = $4, minimum_stock = $5, 
@@ -141,7 +142,7 @@ app.put('/api/products/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Product not found or access denied' });
     }
-    res.json(result.rows[0]);
+    res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error while updating product' });
@@ -152,7 +153,6 @@ app.put('/api/products/:id', async (req, res) => {
 app.delete('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    // Strictly verify tenant boundaries before dropping data
     const result = await pool.query(
       'DELETE FROM product_master WHERE product_id = $1 AND tenant_id = $2 RETURNING *',
       [id, req.tenant.id]
@@ -160,17 +160,22 @@ app.delete('/api/products/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Product not found or access denied' });
     }
-    res.json({ message: 'Product deleted successfully', deleted_product: result.rows[0] });
+    res.json({ message: 'Product deleted successfully', deleted_product: result.rows });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error while deleting product' });
   }
 });
 
+// NEW: Fallback route to serve index.html for any other frontend navigation
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web/public', 'index.html'));
+});
+
 // START SERVER
 app.listen(port, () => {
   console.log(`====================================================`);
   console.log(` Appandor Universal Backend active on port ${port} `);
-  console.log(` Mode: Fake-Auth (User 1 / Tenant 1 active)        `);
+  console.log(` Modus: Fake-Auth (User 1 / Tenant 1 permanent aktiv)`);
   console.log(`====================================================`);
 });
