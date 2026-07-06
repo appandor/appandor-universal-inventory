@@ -67,6 +67,7 @@ CREATE TABLE tracked_products (
     purchase_price_gross NUMERIC(10, 2) NOT NULL, -- Historical gross buy price
     estimated_delivery DATE,                  -- Expected delivery date (Supply Chain tracking)
     expiry_date DATE,                        -- Optional: Best-before date for groceries / cans
+    quantity INT NOT NULL DEFAULT 1,
     status VARCHAR(20) DEFAULT 'ORDERED',     -- 'ORDERED', 'RECEIVED', 'SOLD'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -91,7 +92,7 @@ CREATE TABLE stock_transactions (
     product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE CASCADE,
     box_id VARCHAR(50),                      -- Which box container was moved/sold
     transaction_type VARCHAR(10) NOT NULL,   -- 'IN' (Einkauf) oder 'OUT' (Verkauf/Verbrauch)
-    quantity INT NOT NULL,                   -- Menge (z.B. 1 oder 5)
+    quantity INT NOT NULL DEFAULT 1,
     price_gross NUMERIC(10, 2) NOT NULL,     -- Der jeweilige EK oder VK Brutto
     logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
