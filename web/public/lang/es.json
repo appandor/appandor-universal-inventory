@@ -12,6 +12,9 @@
     "login_label_password": "Contraseña *",
     "login_btn_submit": "Iniciar sesión en el Workspace",
 
+    "msg_logout_confirm": "¿Realmente desea cerrar sesión?",
+
+
     "err_invalid_credentials": "Correo electrónico o contraseña inválidos.",
     "err_server_unreachable": "Error de interfaz. Servidor no disponible.",
 

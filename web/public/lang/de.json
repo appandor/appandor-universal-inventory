@@ -12,6 +12,8 @@
     "login_label_password": "Passwort *",
     "login_btn_submit": "Im Workspace anmelden",
 
+    "msg_logout_confirm": "Möchten Sie sich wirklich abmelden?",
+
     "err_invalid_credentials": "Ungültige E-Mail oder falsches Passwort.",
     "err_server_unreachable": "Schnittstellen-Fehler. Server nicht erreichbar.",
 

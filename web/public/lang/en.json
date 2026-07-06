@@ -12,6 +12,9 @@
     "login_label_password": "Password *",
     "login_btn_submit": "Sign In to Workspace",
 
+    "msg_logout_confirm": "Do you really want to sign out?",
+
+
     "err_invalid_credentials": "Invalid email or password.",
     "err_server_unreachable": "Interface error. Server unreachable.",
 
