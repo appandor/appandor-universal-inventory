@@ -259,3 +259,49 @@ button:hover {
     max-width: 1000px;
     margin: 60px auto 0 auto !important; /* Symmetrische Zentrierung in der Hauptachse */
 }
+
+/* ==========================================================================
+   APPANDOR CORE: SETTINGS TILES (LIGHT / DARK THEME VARIATION)
+   ========================================================================== */
+/* ==========================================================================
+   APPANDOR CORE: SETTINGS TILES (CONTRAST POLISH)
+   ========================================================================== */
+:root {
+    /* LIGHT MODE: Die Boxen werden etwas dunkler (ein ganz zartes, edles Grau) */
+    --tile-bg: #eaeaea; 
+    --tile-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 2px 6px rgba(0, 0, 0, 0.05);
+    --tile-hover-border: #2e7d32;
+    --tile-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    /* DARK MODE: Die Boxen werden etwas heller als der tiefschwarze Hintergrund */
+    --tile-bg: #222222; 
+    --tile-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --tile-hover-border: #4caf50;
+    --tile-hover-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.settings-tile {
+    display: block;
+    padding: 25px 20px;
+    background-color: var(--tile-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: var(--tile-shadow);
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* Hover-Effekt nur für aktive Kacheln (die nicht disabled sind) */
+.settings-tile:not([style*="not-allowed"]):hover {
+    transform: translateY(-3px);
+    border-color: var(--tile-hover-border);
+    box-shadow: var(--tile-hover-shadow);
+}

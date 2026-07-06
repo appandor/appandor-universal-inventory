@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <p style="color: var(--text-color, #fff); font-size: 16px; font-weight: bold; margin: 0 0 25px 0;">${logoutMsg}</p>
                             <div style="display: flex; justify-content: center; gap: 15px;">
                                 <button id="modal-confirm-yes" style="padding: 10px 20px; background: #c62828; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s;">${btnYes}</button>
-                                <button id="modal-confirm-no" style="padding: 10px 20px; background: var(--input-bg, #333); border: 1px solid var(--border-color, #444); color: var(--text-color, #ccc); border-radius: 4px; font-weight: bold; cursor: pointer;">${btnNo}</button>
+                                <button id="modal-confirm-no" style="padding: 10px 20px; background: var(--input-bg, #333); border: 1px solid var(--border-color, #444); color: #ffffff; border-radius: 4px; font-weight: bold; cursor: pointer;">${btnNo}</button>
                             </div>
                         </div>
                     `;
