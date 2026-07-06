@@ -13,7 +13,7 @@
     "login_btn_submit": "Iniciar sesión en el Workspace",
 
     "msg_logout_confirm": "¿Realmente desea cerrar sesión?",
-
+    "msg_error_required_fields": "Por favor, complete todos los campos obligatorios.",
 
     "err_invalid_credentials": "Correo electrónico o contraseña inválidos.",
     "err_server_unreachable": "Error de interfaz. Servidor no disponible.",
@@ -97,6 +97,12 @@
     "title_history": "Historial / Diario",
     "btn_collapse": "[ MINIMIZAR ]",
     "btn_expand": "[ MOSTRAR ]",
+    "btn_receive": "Confirmar",
+
+    "modal_receive_title": "Confirmar cantidad",
+    "btn_modal_confirm": "Confirmar",
+    "btn_modal_cancel": "Cancelar",
+
     
     "inbound_form_title": "Registrar compra / pedido",
     "inbound_label_template": "Plantilla de artículo *",

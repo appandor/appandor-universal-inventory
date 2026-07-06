@@ -13,6 +13,7 @@
     "login_btn_submit": "Im Workspace anmelden",
 
     "msg_logout_confirm": "Möchten Sie sich wirklich abmelden?",
+    "msg_error_required_fields": "Bitte füllen Sie alle Pflichtfelder aus.",
 
     "err_invalid_credentials": "Ungültige E-Mail oder falsches Passwort.",
     "err_server_unreachable": "Schnittstellen-Fehler. Server nicht erreichbar.",
@@ -95,8 +96,13 @@
     "set_tile_ledger": "Finanzbuchhaltung",
     "title_history": "Chronik / Journal",
     "btn_collapse": "[ MINIMIEREN ]",
-    "btn_expand": "[ EINBLENDEN ]",
-    
+    "btn_expand": "[ EINBLENDEN ]",    
+    "btn_receive": "Einbuchen",
+
+    "modal_receive_title": "Menge bestätigen",
+    "btn_modal_confirm": "Einbuchen",
+    "btn_modal_cancel": "Abbrechen",
+
     "inbound_form_title": "Einkauf / Bestellung verbuchen",
     "inbound_label_template": "Artikelvorlage *",
     "inbound_label_date": "Kaufdatum *",

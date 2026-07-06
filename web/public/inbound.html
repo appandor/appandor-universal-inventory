@@ -24,22 +24,26 @@
                 <span id="inbound-toggle-btn" data-i18n="btn_collapse" style="color: #2e7d32; font-size: 12px; font-weight: bold; font-family: monospace;"></span>
             </div>
             
+
+            <!-- DYNAMISCHES FEHLER-LABEL (Ersetzt das unschöne Alert-Fenster) -->
+            <div id="inbound-error-message" style="display: none; margin-top: 10px; padding: 10px; background: rgba(229, 115, 115, 0.15); border: 1px solid #e57373; color: #e57373; border-radius: 4px; font-size: 13px; font-weight: bold; text-align: left;"></div>
+
             <form id="inbound-add-form" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; margin-top: 15px;">
                 <div class="form-group" style="flex: 2; min-width: 200px; margin: 0;">
                     <label style="display: block; margin-bottom: 5px; color: var(--text-color); font-size: 12px; font-weight: bold; opacity: 0.8;" data-i18n="inbound_label_template">Artikelvorlage *</label>
-                    <select id="inbound-product-select" required style="width: 100%; padding: 6px 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; cursor: pointer; height: 38px; line-height: 24px; box-sizing: border-box;"></select>
+                    <select id="inbound-product-select" style="width: 100%; padding: 6px 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; cursor: pointer; height: 38px; line-height: 24px; box-sizing: border-box;"></select>
                 </div>
                 <div class="form-group" style="flex: 1; min-width: 130px; margin: 0;">
                     <label style="display: block; margin-bottom: 5px; color: var(--text-color); font-size: 12px; font-weight: bold; opacity: 0.8;" data-i18n="tbl_purchase_date">Kaufdatum *</label>
-                    <input type="date" id="inbound-date" value="2026-06-18" required style="width: 100%; padding: 8px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; height: 38px; box-sizing: border-box;">
+                    <input type="date" id="inbound-date" value="2026-06-18" style="width: 100%; padding: 8px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; height: 38px; box-sizing: border-box;">
                 </div>
                 <div class="form-group" style="flex: 1; min-width: 110px; margin: 0;">
                     <label style="display: block; margin-bottom: 5px; color: var(--text-color); font-size: 12px; font-weight: bold; opacity: 0.8;" data-i18n="inbound_label_price">EK Brutto *</label>
-                    <input type="number" id="inbound-price" step="0.01" min="0" required placeholder="0.00 €" style="width: 100%; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; height: 38px; box-sizing: border-box;">
+                    <input type="number" id="inbound-price" step="0.01" min="0" placeholder="0.00 €" style="width: 100%; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; height: 38px; box-sizing: border-box;">
                 </div>
                 <div class="form-group" style="flex: 0.5; min-width: 80px; margin: 0;">
                     <label style="display: block; margin-bottom: 5px; color: var(--text-color); font-size: 12px; font-weight: bold; opacity: 0.8;" data-i18n="inbound_label_quantity">Menge *</label>
-                    <input type="number" id="inbound-quantity" value="1" min="1" required style="width: 100%; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; height: 38px; box-sizing: border-box; text-align: center; font-weight: bold;">
+                    <input type="number" id="inbound-quantity" value="1" min="1" style="width: 100%; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; height: 38px; box-sizing: border-box; text-align: center; font-weight: bold;">
                 </div>
                 <div class="form-group" style="flex: 1; min-width: 130px; margin: 0;">
                     <label style="display: block; margin-bottom: 5px; color: var(--text-color); font-size: 12px; font-weight: bold; opacity: 0.8;" data-i18n="inbound_label_expected">Erwartet am</label>

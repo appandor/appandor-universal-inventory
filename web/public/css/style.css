@@ -438,3 +438,40 @@ button:hover {
 .btn-primary-submit:active {
     transform: scale(0.98); /* Minimales haptisches Feedback beim Klick */
 }
+
+/* Einheitliche Dimensionen für Buchungs-Buttons und Status-Badges */
+.btn-receive-action {
+    display: inline-block;
+    width: 105px;
+    height: 28px;
+    line-height: 28px;
+    padding: 0;
+    background-color: #2e7d32;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+    box-sizing: border-box;
+    transition: background-color 0.2s;
+}
+
+.btn-receive-action:hover {
+    background-color: #1b5e20;
+}
+
+/* Anpassung der bestehenden Status-Badges auf dieselbe Größe */
+.status-badge-container {
+    display: inline-block;
+    width: 105px;
+    height: 28px;
+    line-height: 26px; /* Leicht reduziert wegen des 1px-Rahmens */
+    padding: 0;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

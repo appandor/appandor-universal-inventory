@@ -80,21 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         let actionCellHTML = `<span class="status-badge-container ${badgeClass}">${statusText}</span>`;
                         let quantityDisplay = `<strong style="font-family: monospace; font-size: 14px;">${row.quantity || 1}</strong>`;
 
+                        const actionBtnText = translations.btn_receive || "Receipt";
+
                         if (row.status === 'ORDERED') {
                             const currentQty = row.quantity || 1;
-                            quantityDisplay = `
-                                <div style="display: flex; align-items: center; gap: 4px; justify-content: center;">
-                                    <input type="number" id="receive-qty-${row.tracked_id}" min="1" max="${currentQty}" value="${currentQty}" style="width: 45px; padding: 4px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; text-align: center; font-weight: bold; font-family: monospace;">
-                                    <span style="color: var(--text-muted); font-size: 11px;">/ ${currentQty}</span>
-                                </div>
-                            `;
                             actionCellHTML = `
-                                <button class="btn-receive-action" onclick="executeInboundReceipt(${row.tracked_id}, ${currentQty})" style="padding: 5px 12px; background: #2e7d32; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; transition: background 0.2s;">
-                                    ✓ Buchung
+                                <button class="btn-receive-action" onclick="openReceiveModal(${row.tracked_id}, ${currentQty})">
+                                    ${actionBtnText}
                                 </button>
                             `;
-                        }
-
+                        }     
+                                           
                         html += `
                             <tr style="${bgStyle} border-bottom: 1px solid var(--border-color); color: var(--text-color);">
                                 <td style="padding: 12px 8px; font-family: monospace;">${dateObj}</td>
@@ -128,15 +124,47 @@ document.addEventListener("DOMContentLoaded", () => {
         loadInboundTable();
     });
 
-    if (inboundAddForm) {
+if (inboundAddForm) {
         inboundAddForm.addEventListener("submit", (e) => {
+            // SCHARFE BLOCKADE: Stoppt sofort das Standardverhalten und die Browser-Sprechblase
             e.preventDefault();
 
+            const currentLang = localStorage.getItem('appandor_lang') || 'en';
+            const token = localStorage.getItem('appandor_jwt_token');
+
+            const productSelect = document.getElementById("inbound-product-select");
+            const dateInput = document.getElementById("inbound-date");
+            const priceInput = document.getElementById("inbound-price");
+            const qtyInput = document.getElementById("inbound-quantity");
+            const expectedInput = document.getElementById("inbound-delivery-est");
+
+            // KORREKTUR: Visuelle Validierung über das integrierte HTML-Feld statt Browser-Alert
+            if (!productSelect || !productSelect.value || !dateInput || !dateInput.value || !priceInput || !priceInput.value) {
+                const errorEl = document.getElementById("inbound-error-message");
+                
+                fetch(`lang/${currentLang}.json`)
+                    .then(res => res.json())
+                    .then(translations => {
+                        if (errorEl) {
+                            errorEl.innerText = translations.msg_error_required_fields || "Please fill in all required fields.";
+                            errorEl.style.display = "block"; // Fehlermeldung einblenden
+                            
+                            // Nach 4 Sekunden automatisch wieder weich ausblenden
+                            setTimeout(() => {
+                                errorEl.style.display = "none";
+                            }, 4000);
+                        }
+                    });
+                return; // Bricht die Funktion hier ab und sendet nichts an die API
+            }
+
+            // Wenn alle Felder befüllt sind, wird der Payload inklusive Menge geschnürt
             const payload = {
                 product_id: productSelect ? productSelect.value : null,
-                purchased_at: document.getElementById("inbound-date").value,
-                purchase_price_gross: document.getElementById("inbound-price").value,
-                estimated_delivery: document.getElementById("inbound-delivery-est").value
+                purchased_at: dateInput.value,
+                purchase_price_gross: priceInput.value,
+                quantity: qtyInput ? parseInt(qtyInput.value || 1) : 1, // Mengen-Feld integriert
+                estimated_delivery: expectedInput && expectedInput.value ? expectedInput.value : null
             };
 
             fetch('/api/inbound/add', {
@@ -159,4 +187,76 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => alert(err.message));
         });
     }
+
+
 });
+
+// Öffnet das modale Fenster für die optionale Mengenanpassung
+window.openReceiveModal = function(trackedId, maxQty) {
+    const currentLang = localStorage.getItem('appandor_lang') || 'en';    
+
+    // Holt sich die Übersetzungen synchron aus dem Speicher oder lädt sie kurz nach
+    fetch(`lang/${currentLang}.json`)
+        .then(res => res.json())
+        .then(translations => {
+            const modalTitle = translations.modal_receive_title || 'Confirm Quantity';
+            const btnConfirm = translations.btn_modal_confirm || 'Confirm';
+            const btnCancel = translations.btn_modal_cancel || 'Cancel';
+
+            const modalOverlay = document.createElement("div");
+            modalOverlay.id = "inbound-receive-modal";
+            modalOverlay.style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(2px);";
+
+            modalOverlay.innerHTML = `
+                <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e0e0e0); padding: 25px; border-radius: 6px; width: 100%; max-width: 320px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif;">
+                    <h3 style="color: var(--text-color, #1a1a1a); margin: 0 0 15px 0; font-size: 16px;">${modalTitle}</h3>
+                    <div style="margin-bottom: 20px;">
+                        <input type="number" id="modal-receive-qty" min="1" max="${maxQty}" value="${maxQty}" style="width: 100%; padding: 8px; background: var(--input-bg, #f5f5f5); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; text-align: center; font-weight: bold; font-size: 16px; box-sizing: border-box;">
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button id="modal-receive-cancel" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer; font-size: 13px;">${btnCancel}</button>
+                        <button id="modal-receive-confirm" style="padding: 6px 16px; background: #2e7d32; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px;">${btnConfirm}</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modalOverlay);
+
+            document.getElementById("modal-receive-confirm").addEventListener("click", () => {
+                const inputQty = parseInt(document.getElementById("modal-receive-qty").value);
+                if (isNaN(inputQty) || inputQty <= 0 || inputQty > maxQty) {
+                    alert("Ungültige Menge");
+                    return;
+                }
+                modalOverlay.remove();
+                sendReceiveRequest(trackedId, inputQty);
+            });
+
+            document.getElementById("modal-receive-cancel").addEventListener("click", () => {
+                modalOverlay.remove();
+            });
+        })
+        .catch(err => console.error("[Modal Lang Error]:", err.message));
+};
+
+
+// Sendet die verifizierte Menge an das Backend
+function sendReceiveRequest(trackedId, receiveQty) {
+    const token = localStorage.getItem('appandor_jwt_token');
+    fetch('/api/inbound/receive', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            tracked_id: trackedId,
+            qty_received: receiveQty
+        })
+    })
+    .then(res => { if (!res.ok) throw new Error("Receipt processing failed"); return res.json(); })
+    .then(() => {
+        window.location.reload();
+    })
+    .catch(err => alert("Error: " + err.message));
+}

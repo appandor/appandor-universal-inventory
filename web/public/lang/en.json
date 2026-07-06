@@ -13,6 +13,7 @@
     "login_btn_submit": "Sign In to Workspace",
 
     "msg_logout_confirm": "Do you really want to sign out?",
+    "msg_error_required_fields": "Please fill in all required fields.",
 
 
     "err_invalid_credentials": "Invalid email or password.",
@@ -97,6 +98,11 @@
     "title_history": "Transaction History",
     "btn_collapse": "[ COLLAPSE ]",
     "btn_expand": "[ EXPAND ]",
+    "btn_receive": "Confirm",
+
+    "modal_receive_title": "Confirm Quantity",
+    "btn_modal_confirm": "Confirm",
+    "btn_modal_cancel": "Cancel",
 
     "inbound_form_title": "Log Inbound Purchase",
     "inbound_label_template": "Product Template *",
