@@ -66,6 +66,7 @@
     "tbl_product_desc": "Descripción del producto",
     "tbl_barcode": "Código de barras",
     "tbl_price_gross": "Precio bruto",
+    "tbl_quantity": "Cantidad",    
     "tbl_estimated_delivery": "Esperado el",
     "tbl_received_at": "Recibido el",
     "tbl_expiry_date": "Caducidad",
@@ -101,6 +102,7 @@
     "inbound_label_template": "Plantilla de artículo *",
     "inbound_label_date": "Fecha de compra *",
     "inbound_label_price": "Precio bruto *",
+    "inbound_label_quantity": "Candidad *",
     "inbound_label_expected": "Esperado el",
     "inbound_btn_activate": "Activar pedido",
     
