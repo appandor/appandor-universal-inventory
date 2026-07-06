@@ -25,21 +25,21 @@ router.get('/purchases', async (req, res) => {
     if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
 
     try {
-        const query = `
+const query = `
             SELECT 
-                tp.tracked_id,
-                p.name AS product_name,
-                p.barcode,
-                tp.purchased_at,
-                tp.purchase_price_gross AS price,
-                tp.estimated_delivery,
-                tp.expiry_date,
-                tp.status,
-                tp.created_at AS received_at
-            FROM tracked_products tp
-            JOIN product_master p ON tp.product_id = p.product_id
-            WHERE tp.tenant_id = $1
-            ORDER BY tp.purchased_at DESC;
+                t.tracked_id, 
+                t.purchased_at, 
+                t.purchase_price_gross as price, 
+                t.estimated_delivery, 
+                t.received_at, 
+                t.status, 
+                t.quantity, -- SCHARFE KORREKTUR: Menge muss mitgeliefert werden!
+                p.name as product_name, 
+                p.barcode 
+            FROM tracked_products t
+            JOIN product_master p ON t.product_id = p.product_id
+            WHERE t.tenant_id = $1
+            ORDER BY t.purchased_at DESC;
         `;
         const result = await pool.query(query, [activeTenantId]);
         res.json(result.rows);

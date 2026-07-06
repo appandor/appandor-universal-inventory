@@ -47,22 +47,75 @@ document.addEventListener("DOMContentLoaded", () => {
                         return;
                     }
 
+                    // KORREKTUR: MHD entfernt, Fokus rein auf kaufmännische Menge und Status!
                     let html = `
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; text-align: left;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
                             <thead>
-                                <tr style="border-bottom: 2px solid #444; color: #fff;">
-                                    <th style="padding: 12px 8px;">${translations.tbl_purchase_date || 'Purchase Date'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_product_desc || 'Product Description'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_barcode || 'Barcode'}</th>
-                                    <th style="padding: 12px 8px; text-align: right;">${translations.tbl_price_gross || 'Price Gross'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_estimated_delivery || 'Expected'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_received_at || 'Received At'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_expiry_date || 'Expiry'}</th>
-                                    <th style="padding: 12px 8px; text-align: center;">${translations.tbl_logistics_status || 'Logistics Status'}</th>
+                                <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-weight: bold;">
+                                    <th style="padding: 10px 8px;" data-i18n="tbl_purchase_date">Kaufdatum</th>
+                                    <th style="padding: 10px 8px;" data-i18n="tbl_product_desc">Artikelbezeichnung</th>
+                                    <th style="padding: 10px 8px;" data-i18n="tbl_barcode">Barcode</th>
+                                    <th style="padding: 10px 8px; text-align: center;">Menge</th>
+                                    <th style="padding: 10px 8px; text-align: right;" data-i18n="tbl_price_gross">EK Brutto</th>
+                                    <th style="padding: 10px 8px;" data-i18n="tbl_estimated_delivery">Erwartet am</th>
+                                    <th style="padding: 10px 8px;" data-i18n="tbl_received_at">Geliefert am</th>
+                                    <th style="padding: 10px 8px; text-align: center;" data-i18n="tbl_logistics_status">Logistik-Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                     `;
+
+                    data.forEach((row, index) => {
+                        const dateObj = new Date(row.purchased_at).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US');
+                        const priceFormatted = parseFloat(row.price || 0).toFixed(2) + ' €';
+                        
+                        const estDelivery = row.estimated_delivery ? new Date(row.estimated_delivery).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US') : '-';
+                        const receivedDate = row.received_at ? new Date(row.received_at).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US') : '-';
+                        
+                        const statusKey = "status_" + row.status.toLowerCase();
+                        const statusText = translations[statusKey] || row.status;
+                        
+                        const stateClass = "status-text-" + row.status.toLowerCase();
+                        const badgeClass = row.status === 'RECEIVED' ? 'badge-received' : 'badge-ordered';
+                        const bgStyle = index % 2 === 0 ? 'background: var(--table-row-even);' : 'background: var(--table-row-odd);';
+
+                        let actionCellHTML = `<span class="status-badge-container ${badgeClass}">${statusText}</span>`;
+                        let quantityDisplay = `<strong style="font-family: monospace; font-size: 14px;">${row.quantity || 1}</strong>`;
+
+                        if (row.status === 'ORDERED') {
+                            const currentQty = row.quantity || 1;
+                            quantityDisplay = `
+                                <div style="display: flex; align-items: center; gap: 4px; justify-content: center;">
+                                    <input type="number" id="receive-qty-${row.tracked_id}" min="1" max="${currentQty}" value="${currentQty}" style="width: 45px; padding: 4px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; text-align: center; font-weight: bold; font-family: monospace;">
+                                    <span style="color: var(--text-muted); font-size: 11px;">/ ${currentQty}</span>
+                                </div>
+                            `;
+                            actionCellHTML = `
+                                <button class="btn-receive-action" onclick="executeInboundReceipt(${row.tracked_id}, ${currentQty})" style="padding: 5px 12px; background: #2e7d32; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; transition: background 0.2s;">
+                                    ✓ Buchung
+                                </button>
+                            `;
+                        }
+
+                        // KORREKTUR: MHD td-Zelle komplett entfernt!
+                        html += `
+                            <tr style="${bgStyle} border-bottom: 1px solid var(--border-color); color: var(--text-color);">
+                                <td style="padding: 12px 8px; font-family: monospace;">${dateObj}</td>
+                                <td style="padding: 12px 8px; font-weight: bold;">${row.product_name}</td>
+                                <td style="padding: 12px 8px; font-family: monospace; color: var(--text-muted);">${row.barcode || '-'}</td>
+                                <td style="padding: 12px 8px; text-align: center;">${quantityDisplay}</td>
+                                <td style="padding: 12px 8px; text-align: right; font-weight: bold;">${priceFormatted}</td>
+                                <td style="padding: 12px 8px; font-family: monospace; color: var(--text-muted);">${estDelivery}</td>
+                                <td class="${stateClass}" style="padding: 12px 8px; font-family: monospace;">${receivedDate}</td>
+                                <td style="padding: 12px 8px; text-align: center;">
+                                    ${actionCellHTML}
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `</tbody></table>`;
+                    tableContainer.innerHTML = html;
 
                     data.forEach((row, index) => {
                         const dateObj = new Date(row.purchased_at).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US');
