@@ -18,6 +18,10 @@
     "err_invalid_credentials": "Ungültige E-Mail oder falsches Passwort.",
     "err_server_unreachable": "Schnittstellen-Fehler. Server nicht erreichbar.",
 
+    "msg_err_api_missing": "Schnittstelle fehlt: Die Backend-Route wurde noch nicht auf dem Server hinterlegt (404).",
+    "msg_err_server_crash": "Datenbank-Fehler: Die Buchung wurde vom Server abgelehnt (500).",
+
+
     "sandbox_banner": "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
     "workspace_subtext": "Universeller Mandanten-Workspace",
     "status_connecting": "Verbinde...",

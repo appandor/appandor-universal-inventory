@@ -15,9 +15,11 @@
     "msg_logout_confirm": "Do you really want to sign out?",
     "msg_error_required_fields": "Please fill in all required fields.",
 
-
     "err_invalid_credentials": "Invalid email or password.",
     "err_server_unreachable": "Interface error. Server unreachable.",
+
+    "msg_err_api_missing": "Interface missing: The backend route has not been deployed on the server yet (404).",
+    "msg_err_server_crash": "Database error: The transaction was rejected by the server (500).",
 
     "sandbox_banner": "SANDBOX MODE — LIMITS ACTIVE (Max {max_products} Products / {max_transactions} Transactions)",
     "workspace_subtext": "Universal Multi-Tenant Workspace",

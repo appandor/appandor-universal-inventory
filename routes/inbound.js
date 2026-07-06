@@ -17,7 +17,7 @@ function getTenantId(req) {
     }
 }
 
-// 1. API: Holt alle Einkäufe für die Tabelle (Nach Mandant gefiltert)
+// API: Holt alle Einkäufe für die Tabelle (Nach Mandant gefiltert)
 router.get('/purchases', async (req, res) => {
     const pool = req.app.get('db_pool');
     const activeTenantId = getTenantId(req);
@@ -25,7 +25,6 @@ router.get('/purchases', async (req, res) => {
     if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
 
     try {
-        // KORREKTUR: SQL-Query exakt auf deine 01_init_tables.sql gemappt!
         const query = `
             SELECT 
                 t.tracked_id, 
@@ -50,7 +49,7 @@ router.get('/purchases', async (req, res) => {
     }
 });
 
-// 2. API-Route zum Buchen eines neuen Einkaufs (Status ORDERED mit echter Menge)
+// API-Route zum Buchen eines neuen Einkaufs
 router.post('/add', async (req, res) => {
     const pool = req.app.get('db_pool');
     const activeTenantId = getTenantId(req);
