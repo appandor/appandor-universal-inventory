@@ -1,10 +1,2 @@
 node_modules/
 postgres_data/
-*_backup
-*.backup*
-*.old
-*.COPY
-web/public/js/core.js_backup
-web/public/js/header.js_BACKUP
-web/public/js/layout.js_backup2
-02_test_data.sql
