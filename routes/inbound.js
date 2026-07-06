@@ -25,15 +25,16 @@ router.get('/purchases', async (req, res) => {
     if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
 
     try {
-const query = `
+        // KORREKTUR: SQL-Query exakt auf deine 01_init_tables.sql gemappt!
+        const query = `
             SELECT 
                 t.tracked_id, 
                 t.purchased_at, 
                 t.purchase_price_gross as price, 
                 t.estimated_delivery, 
-                t.received_at, 
+                CASE WHEN t.status = 'RECEIVED' THEN t.created_at ELSE NULL END as received_at, 
                 t.status, 
-                t.quantity, -- SCHARFE KORREKTUR: Menge muss mitgeliefert werden!
+                t.quantity,
                 p.name as product_name, 
                 p.barcode 
             FROM tracked_products t
@@ -49,24 +50,23 @@ const query = `
     }
 });
 
-// 2. NEW: API-Route zum Buchen eines neuen Einkaufs (Status ORDERED)
+// 2. API-Route zum Buchen eines neuen Einkaufs (Status ORDERED mit echter Menge)
 router.post('/add', async (req, res) => {
     const pool = req.app.get('db_pool');
     const activeTenantId = getTenantId(req);
 
     if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
 
-    const { product_id, purchased_at, purchase_price_gross, estimated_delivery } = req.body;
+    const { product_id, purchased_at, purchase_price_gross, estimated_delivery, quantity } = req.body;
 
-    // Unbestechliche Validierung
     if (!product_id || !purchased_at || !purchase_price_gross) {
         return res.status(400).json({ error: "Product, purchase date and price are strictly required" });
     }
 
     try {
         const query = `
-            INSERT INTO tracked_products (tenant_id, product_id, purchased_at, purchase_price_gross, estimated_delivery, status)
-            VALUES ($1, $2, $3, $4, $5, 'ORDERED')
+            INSERT INTO tracked_products (tenant_id, product_id, purchased_at, purchase_price_gross, estimated_delivery, quantity, status)
+            VALUES ($1, $2, $3, $4, $5, $6, 'ORDERED')
             RETURNING tracked_id;
         `;
         const values = [
@@ -74,11 +74,12 @@ router.post('/add', async (req, res) => {
             parseInt(product_id),
             purchased_at,
             parseFloat(purchase_price_gross),
-            estimated_delivery || null
+            estimated_delivery || null,
+            parseInt(quantity || 1)
         ];
 
         await pool.query(query, values);
-        res.status(21).json({ message: "Inbound purchase successfully ordered" });
+        res.status(201).json({ message: "Inbound purchase successfully ordered" }); // KORREKTUR: Status 201 statt falschem 21!
     } catch (err) {
         console.error("[API Inbound Add Error]:", err.message);
         res.status(500).json({ error: "Failed to inject ordered purchase into database" });
