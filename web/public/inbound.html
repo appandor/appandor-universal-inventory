@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareneingang</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sandbox Notice Bar -->
+    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
+        Loading Sandbox Mode...
+    </div>
+
+    <!-- Hauptcontainer -->
+    <div class="container">
+        <!-- Universeller dynamischer Header -->
+        <div id="appandor-header"></div>
+
+        <!-- SAUBERER FORMULAR-KASTEN (Fest im HTML verankert, i18n-gesteuert) -->
+        <div class="card" id="inbound-form-card" style="display: block; background: #1a1a1a; padding: 15px 20px; border: 1px solid #333; border-radius: 6px; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;" id="inbound-toggle-header">
+                <h3 style="margin: 0; color: #fff; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="inbound_form_title">Einkauf / Bestellung verbuchen</h3>
+                <span id="inbound-toggle-btn" data-i18n="btn_collapse" style="color: #2e7d32; font-size: 12px; font-weight: bold; font-family: monospace;"></span>
+            </div>
+            
+            <form id="inbound-add-form" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; margin-top: 15px;">
+                <div class="form-group" style="flex: 2; min-width: 200px; margin: 0;">
+                    <label style="display: block; margin-bottom: 5px; color: #aaa; font-size: 12px; font-weight: bold;" data-i18n="inbound_label_template">Artikelvorlage *</label>
+                    <select id="inbound-product-select" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px; cursor: pointer; height: 38px; box-sizing: border-box;"></select>
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 130px; margin: 0;">
+                    <label style="display: block; margin-bottom: 5px; color: #aaa; font-size: 12px; font-weight: bold;" data-i18n="nav_inbound">Kaufdatum *</label>
+                    <input type="date" id="inbound-date" value="2026-06-18" required style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px; height: 38px; box-sizing: border-box;">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 110px; margin: 0;">
+                    <label style="display: block; margin-bottom: 5px; color: #aaa; font-size: 12px; font-weight: bold;" data-i18n="inbound_label_price">EK Brutto *</label>
+                    <input type="number" id="inbound-price" step="0.01" min="0" required placeholder="0.00 €" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px; height: 38px; box-sizing: border-box;">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 130px; margin: 0;">
+                    <label style="display: block; margin-bottom: 5px; color: #aaa; font-size: 12px; font-weight: bold;" data-i18n="inbound_label_expected">Erwartet am</label>
+                    <input type="date" id="inbound-delivery-est" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px; height: 38px; box-sizing: border-box;">
+                </div>
+                <button type="submit" data-i18n="inbound_btn_activate" style="flex: 1; min-width: 180px; padding: 10px; background: #2e7d32; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; height: 38px; box-sizing: border-box;">
+                    Bestellung aktivieren
+                </button>
+            </form>
+        </div>
+
+        <!-- LIEFERLISTE -->
+        <div class="card" style="width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; margin-top: 20px; box-sizing: border-box; overflow-x: auto;">
+            <div id="inbound-form-container">
+                <p style="color: #888; font-style: italic; list-style: none;" data-i18n="loading_inbound">Querying inbound purchases...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skripte -->
+    <script src="js/session.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/inbound.js"></script>
+
+    <!-- Klappmechanik -->
+    <script>
+        document.getElementById("inbound-toggle-header").addEventListener("click", () => {
+            const form = document.getElementById("inbound-add-form");
+            const btn = document.getElementById("inbound-toggle-btn");
+
+            if (form.style.display === "none") {
+                form.style.display = "flex";
+                btn.setAttribute("data-i18n", "btn_collapse");
+                btn.style.color = "#2e7d32";
+            } else {
+                form.style.display = "none";
+                btn.setAttribute("data-i18n", "btn_expand");
+                btn.style.color = "#fbc02d";
+            }
+            
+            const currentLang = localStorage.getItem('appandor_lang') || 'en';
+            fetch(`lang/${currentLang}.json`)
+                .then(r => r.json())
+                .then(t => {
+                    const key = btn.getAttribute("data-i18n");
+                    if (t[key]) btn.innerText = t[key];
+                });
+        });
+    </script>
+</body>
+</html>

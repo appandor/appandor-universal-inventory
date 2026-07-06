@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkt-Stammdaten</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sandbox Notice Bar -->
+    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
+        Loading Sandbox Mode...
+    </div>
+
+    <div class="container">
+        <!-- Universeller dynamischer Header -->
+        <div id="appandor-header"></div>
+
+        <div class="grid">
+            <div class="card">
+                <h2 data-i18n="prod_add_title">Add Master Product</h2>
+                <form id="product-form">
+                    <div class="form-group">
+                        <label for="name" data-i18n="prod_label_name">Product Name *</label>
+                        <input type="text" id="name" required data-i18n-placeholder="prod_placeholder_name" placeholder="e.g. One Piece OP-05 Display">
+                    </div>
+                    <div class="form-group">
+                        <label for="barcode" data-i18n="prod_label_barcode">Barcode / EAN</label>
+                        <input type="text" id="barcode" data-i18n-placeholder="prod_placeholder_barcode" placeholder="Scan or type barcode">
+                    </div>
+                    <div class="form-group">
+                        <label for="category" data-i18n="prod_label_category">Category *</label>
+                        <select id="category" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="minimum_stock" data-i18n="prod_label_minstock">Minimum Alert Stock</label>
+                        <input type="number" id="minimum_stock" value="0" min="0">
+                    </div>
+                    <button type="submit" data-i18n="prod_btn_save">Save Product Master</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 data-i18n="prod_list_title">Product Master Templates</h2>
+                <ul id="products-container" class="product-list">
+                    <li style="color: #888; font-style: italic; list-style: none;" data-i18n="loading_products">Querying product masters...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/session.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>

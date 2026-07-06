@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einstellungen</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sandbox Notice Bar -->
+    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
+        Loading Sandbox Mode...
+    </div>
+
+    <div class="container">
+        <!-- Universeller dynamischer Header -->
+        <div id="appandor-header"></div>
+
+        <div class="card" style="margin-top: 20px;">
+            <p data-i18n="desc_settings" style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Manage users, system categories, custom containers, and storage topology.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                <!-- KACHEL 1: PRODUKT-STAMMDATEN -->
+                <a href="products.html" id="tile-products" style="display: block; padding: 25px 20px; background: #222; border: 1px solid #333; border-radius: 6px; color: #fff; text-decoration: none; font-weight: bold; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                    <div style="color: #2e7d32; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_master_data">Master Data</div>
+                    <span data-i18n="title_products">Product Masters</span>
+                </a>
+
+                <!-- KACHEL 2: KATEGORIEN (DISABLED) -->
+                <div id="tile-categories" style="display: block; padding: 25px 20px; background: #161616; border: 1px solid #222; border-radius: 6px; color: #555; font-weight: bold; text-align: center; cursor: not-allowed; opacity: 0.6;">
+                    <div style="color: #444; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_config">Configurations</div>
+                    <span data-i18n="set_tab_categories">Product Categories</span>
+                </div>
+
+                <!-- KACHEL 3: USER & LIZENZEN (DISABLED) -->
+                <div id="tile-users" style="display: block; padding: 25px 20px; background: #161616; border: 1px solid #222; border-radius: 6px; color: #555; font-weight: bold; text-align: center; cursor: not-allowed; opacity: 0.6;">
+                    <div style="color: #444; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Access Control</div>
+                    <span data-i18n="set_tab_users">User Licenses</span>
+                </div>
+
+                <!-- KACHEL 4: LAGERPLÄTZE (DISABLED) -->
+                <div id="tile-infrastructure" style="display: block; padding: 25px 20px; background: #161616; border: 1px solid #222; border-radius: 6px; color: #555; font-weight: bold; text-align: center; cursor: not-allowed; opacity: 0.6;">
+                    <div style="color: #444; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_logistics">Logistics</div>
+                    <span data-i18n="tbl_storage_location">Lagerplätze</span>
+                </div>
+
+                <!-- KACHEL 5: SCHUTZBOXEN (DISABLED) -->
+                <div id="tile-boxes" style="display: block; padding: 25px 20px; background: #161616; border: 1px solid #222; border-radius: 6px; color: #555; font-weight: bold; text-align: center; cursor: not-allowed; opacity: 0.6;">
+                    <div style="color: #444; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_logistics">Logistics</div>
+                    <span data-i18n="tbl_box_id">Schutzboxen</span>
+                </div>
+
+                <!-- NEW KACHEL 6: DIE CHRONIK / DASHBOARD JOURNAL (DISABLED) -->
+                <div id="tile-history" style="display: block; padding: 25px 20px; background: #161616; border: 1px solid #222; border-radius: 6px; color: #555; font-weight: bold; text-align: center; cursor: not-allowed; opacity: 0.6;">
+                    <div style="color: #444; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_ledger">Financial Ledger</div>
+                    <span data-i18n="title_history">Chronik / Journal</span>
+                </div>
+
+                <!-- SUPERADMIN KACHEL: Live Translation Override (DISABLED) -->
+                <div id="tile-superadmin" style="display: none; padding: 25px 20px; background: #161616; border: 1px solid #444; border-radius: 6px; color: #555; font-weight: bold; text-align: center; cursor: not-allowed; opacity: 0.6;">
+                    <div style="color: #444; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_core">Core Engine</div>
+                    <span data-i18n="set_tab_superadmin">Live Translation Override</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/session.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/core.js"></script>
+</body>
+</html>

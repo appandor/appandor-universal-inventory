@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warenausgang</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sandbox Notice Bar -->
+    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
+        Loading Sandbox Mode...
+    </div>
+
+    <div class="container">
+        <!-- Universeller dynamischer Header -->
+        <div id="appandor-header"></div>
+
+        <div class="card" style="margin-top: 20px;">
+            <p data-i18n="desc_outbound" style="color: var(--text-muted); font-size: 14px; margin-bottom: 15px;">Scan box barcodes to fulfill orders and clear physical storage slots.</p>
+            <div id="outbound-form-container">
+                <p style="color: #888; font-style: italic; list-style: none;" data-i18n="loading_outbound">Querying ready outbound boxes...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/session.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/outbound.js"></script>
+</body>
+</html>

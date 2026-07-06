@@ -1,0 +1,105 @@
+{
+    "lp_title": "Appandor Core",
+    "lp_subtitle": "El motor de inventario y logística universal de próxima generación",
+    "lp_description": "Gestione inventarios físicos, cajas de protección a medida y logística multilocación en tiempo real. Arquitectura API-first ultrarrápida y totalmente aislada para empresas en crecimiento.",
+    "lp_sandbox_highlight": "Entornos de prueba disponibles: Pruebe procesos, escanee códigos de barras y capacite a su equipo en un sandbox sin riesgos.",
+    "lp_btn_enter": "Entrar al espacio de trabajo",
+    "lp_btn_pricing": "Ver precios (Modelo de licencia de usuario)",
+
+    "login_title": "Appandor Core Acceso",
+    "login_subtitle": "Libro de Seguridad de Almacén Universal",
+    "login_label_email": "Correo electrónico *",
+    "login_label_password": "Contraseña *",
+    "login_btn_submit": "Iniciar sesión en el Workspace",
+
+    "sandbox_banner": "MODO SANDBOX — LÍMITES ACTIVOS (Máx. {max_products} productos / {max_transactions} transacciones)",
+    "workspace_subtext": "Espacio de trabajo multi-inquilino universal",
+    "status_connecting": "Conectando...",
+    "status_connected": "Conectado",
+    "status_disconnected": "Desconectado",
+    
+    "nav_inventory": "Inventario",
+    "nav_inbound": "Entrada de mercancías",
+    "nav_outbound": "Salida de mercancías",
+    "nav_products": "Maestros de producto",
+    "nav_settings": "Configuración",
+
+    "title_dashboard": "Inventario",
+    "title_inbound": "Entrada de mercancías",
+    "title_outbound": "Salida de mercancías",
+    "title_products": "Maestros de producto",
+    "title_settings": "Configuración",
+
+    "desc_dashboard": "Valoración en tiempo real y posicionamiento físico de cajas.",
+    "desc_inbound": "Escanee artículos y asígnelos a contenedores activos y ubicaciones.",
+    "desc_outbound": "Escanee códigos de barras de cajas para procesar pedidos y liberar espacio.",
+    "desc_settings": "Gestione usuarios, categorías del sistema, contenedores personalizados y topología de almacenamiento.",
+
+    "loading_records": "Consultando registros de la base de datos...",
+    "loading_components": "Inicializando componentes del formulario...",
+    "loading_settings": "Inicializando componentes de configuración...",
+    "loading_products": "Cargando maestros de producto...",
+    "loading_inbound": "Cargando compras y pedidos de entrada...",
+    "loading_outbound": "Cargando cajas listas para salida...",
+
+    "prod_add_title": "Crear plantilla de producto",
+    "prod_list_title": "Plantillas maestras de producto",
+    "prod_label_name": "Nombre del producto *",
+    "prod_label_barcode": "Código de barras / EAN",
+    "prod_label_category": "Categoría *",
+    "prod_label_minstock": "Stock mínimo de alerta",
+    "prod_btn_save": "Guardar maestro de producto",
+    
+    "prod_placeholder_name": "ej. One Piece OP-05 Display",
+    "prod_placeholder_barcode": "Escanee o escriba el código de barras",
+
+    "status_ordered": "PEDIDO",
+    "status_received": "RECIBIDO",
+
+    "tbl_purchase_date": "Fecha de compra",
+    "tbl_product_desc": "Descripción del producto",
+    "tbl_barcode": "Código de barras",
+    "tbl_price_gross": "Precio bruto",
+    "tbl_estimated_delivery": "Esperado el",
+    "tbl_received_at": "Recibido el",
+    "tbl_expiry_date": "Caducidad",
+    "tbl_logistics_status": "Estado logístico",
+
+    "tbl_box_id": "ID de Caja",
+    "tbl_storage_location": "Ubicación",
+    "tbl_product_name": "Nombre del artículo",
+
+    "prod_alert_at": "Alerta de stock en:",
+    "unit_pcs": "uds",
+
+    "tbl_action": "Acción",
+    "btn_fulfill": "Retirar",
+
+    "set_tab_localization": "Localización",
+    "set_tab_users": "Usuarios y Licencias",
+    "set_tab_categories": "Categorías",
+    "set_tab_infrastructure": "Infraestructura",
+    "set_tab_superadmin": "Core Superadmin",
+
+    "set_tile_master_data": "Datos maestros",
+    "set_tile_config": "Configuración",
+    "set_tile_security": "Control de acceso",
+    "set_tile_logistics": "Logística",
+    "set_tile_core": "Núcleo del sistema",
+    "set_tile_ledger": "Contabilidad",
+    "title_history": "Historial / Diario",
+    "btn_collapse": "[ MINIMIZAR ]",
+    "btn_expand": "[ MOSTRAR ]",
+    
+    "inbound_form_title": "Registrar compra / pedido",
+    "inbound_label_template": "Plantilla de artículo *",
+    "inbound_label_date": "Fecha de compra *",
+    "inbound_label_price": "Precio bruto *",
+    "inbound_label_expected": "Esperado el",
+    "inbound_btn_activate": "Activar pedido",
+    
+    "theme_light": "Modo claro",
+    "theme_dark": "Modo oscuro",
+    "tooltip_logout": "Haga clic para cerrar sesión / cancelar la sesión activa",
+    "sys_not_applicable": "N/A"
+}

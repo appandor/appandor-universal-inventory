@@ -1,4 +1,5 @@
 :root {
+    /* STANDARD: DARK MODE VARIABLEN */
     --bg-color: #121214;
     --card-bg: #1a1a1e;
     --accent-color: #38bdf8;
@@ -6,6 +7,32 @@
     --text-muted: #a1a1aa;
     --border-color: #27272a;
     --success-color: #4ade80;
+    --warning-color: #fbc02d;
+    --table-header-color: #fff;
+    --table-row-even: #191919;
+    --table-row-odd: #1e1e1e;
+}
+
+/* COMPREHENSIVE LIGHT MODE OVERRIDE */
+[data-theme="light"] {
+    --bg-color: #f4f4f5;      
+    --card-bg: #ffffff;       
+    --accent-color: #0284c7;  
+    --text-color: #18181b;     
+    --text-muted: #52525b;    
+    --border-color: #e4e4e7;  
+    --success-color: #16a34a; 
+    --warning-color: #d97706; 
+    --table-header-color: #18181b;
+    --table-row-even: #ffffff; 
+    --table-row-odd: #fafafa;  
+}
+
+/* UNZERSTÖRBARE FLEXBOX-MATRIX FÜR DEN STICKY FOOTER */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 * {
@@ -19,9 +46,15 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .container {
+    flex: 1 0 auto; /* Drückt den Footer unbarmherzig an den absoluten unteren Rand */
+    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -41,13 +74,24 @@ h1 {
     letter-spacing: -0.5px;
 }
 
+/* NEUTRALES BASIS-DESIGN FÜR DAS LOGOUT-BADGE */
 .status-badge {
-    font-size: 12px;
-    background: #14532d;
-    color: var(--success-color);
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 4px; 
+    font-weight: bold;
+    transition: all 0.2s ease;
+    color: #ffffff !important; 
+    background: #27272a !important; 
+    border: 1px solid #3f3f46 !important;
+}
+
+[data-theme="light"] .status-badge {
+    color: #18181b !important; 
+    background: #e4e4e7 !important; 
+    border: 1px solid #d4d4d8 !important;
 }
 
 .grid {
@@ -67,12 +111,13 @@ h1 {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 24px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .card h2 {
     font-size: 18px;
     margin-bottom: 20px;
-    color: #fff;
+    color: var(--text-color);
 }
 
 .form-group {
@@ -92,9 +137,10 @@ input, select {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 10px;
-    color: #fff;
+    color: var(--text-color);
     font-size: 14px;
     outline: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 input:focus, select:focus {
@@ -104,53 +150,112 @@ input:focus, select:focus {
 button {
     width: 100%;
     background-color: var(--accent-color);
-    color: #000;
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 10px;
+    color: #fff;
 }
 
 button:hover {
     opacity: 0.9;
 }
 
-.product-list {
-    list-style: none;
+/* =============================================================================
+   SCHARFE DYNAMISCHE TABELLEN-STEUERUNG
+   ============================================================================ */
+#inbound-form-container table,
+#inventory-table-container table,
+#outbound-form-container table {
+    background-color: var(--card-bg) !important;
+    transition: background-color 0.2s ease;
 }
 
-.product-item {
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+#inbound-form-container th,
+#inventory-table-container th,
+#outbound-form-container th {
+    color: var(--table-header-color) !important;
+    border-bottom: 2px solid var(--border-color) !important;
 }
 
-.product-info h3 {
-    font-size: 15px;
-    color: #fff;
-    margin-bottom: 4px;
+#inbound-form-container tr,
+#inventory-table-container tr,
+#outbound-form-container tr {
+    border-bottom: 1px solid var(--border-color) !important;
+    transition: background-color 0.1s ease;
 }
 
-.product-info p {
-    font-size: 12px;
-    color: var(--text-muted);
+#inbound-form-container td, 
+#inventory-table-container td, 
+#outbound-form-container td {
+    color: var(--text-color) !important;
 }
 
-.badge {
-    background-color: var(--border-color);
-    color: var(--text-color);
-    font-size: 11px;
-    padding: 3px 8px;
+#inbound-form-container td[style*="font-family: monospace"],
+#inventory-table-container td[style*="font-family: monospace"],
+#outbound-form-container td[style*="font-family: monospace"] {
+    color: var(--text-muted) !important;
+}
+
+/* =============================================================================
+   LOGISTIK-BADGES (B2B PASTEL STANDARD)
+   ============================================================================= */
+.status-badge-container {
+    padding: 4px 10px;
     border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    display: inline-block;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    font-weight: 600;
+}
+
+.badge-received {
+    background: rgba(74, 222, 128, 0.12) !important;
+    color: var(--success-color) !important;
+    border: 1px solid rgba(74, 222, 128, 0.25) !important;
+}
+
+.badge-ordered {
+    background: rgba(251, 192, 45, 0.12) !important;
+    color: var(--warning-color) !important;
+    border: 1px solid rgba(251, 192, 45, 0.25) !important;
+}
+
+.status-text-received {
+    color: var(--success-color) !important;
+    font-weight: bold;
+}
+
+.status-text-ordered {
+    color: var(--warning-color) !important;
+    font-weight: bold;
+}
+
+/* COMPACT PACKSTATION ACTION BUTTONS */
+.outbound-action-btn {
+    background-color: rgba(198, 40, 40, 0.1) !important;
+    color: #ef5350 !important;
+    border: 1px solid rgba(198, 40, 40, 0.3) !important;
+    border-radius: 4px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+[data-theme="light"] .outbound-action-btn {
+    background-color: rgba(211, 47, 47, 0.08) !important;
+    color: #c62828 !important;
+    border-color: rgba(211, 47, 47, 0.2) !important;
+}
+
+.outbound-action-btn:hover {
+    background-color: #c62828 !important;
+    color: #fff !important;
+    border-color: #e53935 !important;
+    box-shadow: 0 0 8px rgba(198, 40, 40, 0.4);
+}
+
+/* PROFI GLOBAL SAAS FOOTER RIGGING */
+#appandor-global-footer {
+    flex-shrink: 0; /* Verhindert Stauchung bei langen Tabellen */
+    width: 100%;
+    max-width: 1000px;
+    margin: 60px auto 0 auto !important; /* Symmetrische Zentrierung in der Hauptachse */
 }
