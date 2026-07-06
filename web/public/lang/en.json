@@ -12,6 +12,9 @@
     "login_label_password": "Password *",
     "login_btn_submit": "Sign In to Workspace",
 
+    "err_invalid_credentials": "Invalid email or password.",
+    "err_server_unreachable": "Interface error. Server unreachable.",
+
     "sandbox_banner": "SANDBOX MODE — LIMITS ACTIVE (Max {max_products} Products / {max_transactions} Transactions)",
     "workspace_subtext": "Universal Multi-Tenant Workspace",
     "status_connecting": "Connecting...",

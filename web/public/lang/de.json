@@ -12,6 +12,9 @@
     "login_label_password": "Passwort *",
     "login_btn_submit": "Im Workspace anmelden",
 
+    "err_invalid_credentials": "Ungültige E-Mail oder falsches Passwort.",
+    "err_server_unreachable": "Schnittstellen-Fehler. Server nicht erreichbar.",
+
     "sandbox_banner": "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
     "workspace_subtext": "Universeller Mandanten-Workspace",
     "status_connecting": "Verbinde...",

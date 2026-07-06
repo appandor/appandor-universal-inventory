@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # --- CONTAINER 1: POSTGRESQL DATABASE (MULTI-TENANCY READY) ---
   postgres-db:

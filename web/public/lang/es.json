@@ -12,6 +12,9 @@
     "login_label_password": "Contraseña *",
     "login_btn_submit": "Iniciar sesión en el Workspace",
 
+    "err_invalid_credentials": "Correo electrónico o contraseña inválidos.",
+    "err_server_unreachable": "Error de interfaz. Servidor no disponible.",
+
     "sandbox_banner": "MODO SANDBOX — LÍMITES ACTIVOS (Máx. {max_products} productos / {max_transactions} transacciones)",
     "workspace_subtext": "Espacio de trabajo multi-inquilino universal",
     "status_connecting": "Conectando...",

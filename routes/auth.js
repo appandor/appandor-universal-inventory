@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const JWT_SECRET = 'AppandorSecureCoreSecret2026!!!';
 
@@ -21,9 +22,12 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
+        // KORREKTUR: Das ERSTE Element [0] aus den Datenbank-Zeilen ziehen!
         const user = result.rows[0];
 
-        if (password !== user.password_hash) {
+        // KORREKTUR: Sicherer Bcrypt-Vergleich auf das exakte Datenbank-Objekt!
+        const match = await bcrypt.compare(password, user.password_hash);
+        if (!match) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
@@ -32,7 +36,7 @@ router.post('/login', async (req, res) => {
                 user_id: user.user_id, 
                 tenant_id: user.tenant_id, 
                 tenant_name: user.tenant_name,
-                email: user.email, // E-Mail fest im Ticket verschweißen
+                email: user.email, 
                 role: user.role 
             }, 
             JWT_SECRET, 
@@ -52,7 +56,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// 2. API: SCHARFER SESSION-VERIFY (Erweitert um E-Mail Durchreichung)
+// 2. API: SCHARFER SESSION-VERIFY
 router.get('/verify-session', async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -65,7 +69,6 @@ router.get('/verify-session', async (req, res) => {
     try {
         const decoded = jwt.verify(tokenArray[1], JWT_SECRET);
         
-        // SCHARFE ERWEITERUNG: E-Mail fließt zurück zum Frontend
         res.json({ 
             tenant_name: decoded.tenant_name, 
             role: decoded.role,
