@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <li><a href="outbound.html" id="nav-link-outbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_outbound">Goods Outbound</a></li>
                 <li><a href="dashboard.html" id="nav-link-dashboard" style="color: #aaa; text-decoration: none;" data-i18n="nav_inventory">Live Inventory</a></li>
                 ${settingsMenuHTML}
+                <li><a href="legal.html" id="nav-link-legal" style="color: #aaa; text-decoration: none;" data-i18n="nav_legal">Legal / Info</a></li>
             </ul>
         </nav>
     `;
@@ -74,7 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // KORREKTUR: Wenn wir in den Stammdaten sind, bleibt "Einstellungen" fett verankert!
         const el = document.getElementById("nav-link-settings");
         if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
+    } else if (path.includes("legal.html")) {
+        const el = document.getElementById("nav-link-legal");
+        if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
     }
+
 
     // 3. SCHARFER TRIGGGER FÜR DIE CORES.JS (KORREKTUR: Zwingt core.js zum sofortigen Übersetzen des frischen Headers!)
     const activeLang = localStorage.getItem('appandor_lang') || 'en';
@@ -114,6 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 5. ABMELDUNG (LOGOUT) WITH CUSTOM BEAUTIFUL MODAL
     const badgeElement = document.getElementById("connection-status");
+
+
     if (badgeElement) {
         badgeElement.addEventListener("click", () => {
             const liveLang = localStorage.getItem('appandor_lang') || 'en';
@@ -122,27 +129,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(r => r.json())
                 .then(t => {
                     const logoutMsg = t["msg_logout_confirm"] || "Do you really want to sign out?";
-                    const btnYes = liveLang === 'de' ? 'Ja, Abmelden' : liveLang === 'es' ? 'Sí, salir' : 'Yes, Sign Out';
-                    const btnNo = liveLang === 'de' ? 'Abbrechen' : liveLang === 'es' ? 'Cancelar' : 'Cancel';
+                    
+                    // KORREKTUR: Nutzt jetzt deine zentralen, existierenden JSON-Schlüssel!
+                    const btnYes = t["btn_modal_confirm"] || (liveLang === 'es' ? 'Confirmar' : 'Confirm');
+                    const btnNo = t["btn_modal_cancel"] || (liveLang === 'es' ? 'Cancelar' : 'Cancel');
 
-                    // Erstelle das fliegende CSS-Overlay
+                    // KORREKTUR: Nutzt jetzt das universelle, per ESC schließbare CSS-Overlay
                     const modalOverlay = document.createElement("div");
                     modalOverlay.id = "custom-logout-modal";
-                    modalOverlay.style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(3px);";
+                    modalOverlay.className = "appandor-modal-overlay"; 
 
+                    // KORREKTUR: Befreit von Inline-Styles, nutzt Klassen & repariert den Text-Kontrast!
                     modalOverlay.innerHTML = `
-                        <div style="background: var(--card-bg, #1e1e1e); border: 1px solid var(--border-color, #333); padding: 30px; border-radius: 8px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-family: sans-serif;">
-                            <p style="color: var(--text-color, #fff); font-size: 16px; font-weight: bold; margin: 0 0 25px 0;">${logoutMsg}</p>
+                        <div class="appandor-modal-box" style="max-width: 400px; text-align: center;">
+                            <p style="color: var(--text-color); font-size: 16px; font-weight: bold; margin: 0 0 25px 0;">${logoutMsg}</p>
                             <div style="display: flex; justify-content: center; gap: 15px;">
-                                <button id="modal-confirm-yes" style="padding: 10px 20px; background: #c62828; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s;">${btnYes}</button>
-                                <button id="modal-confirm-no" style="padding: 10px 20px; background: var(--input-bg, #333); border: 1px solid var(--border-color, #444); color: #ffffff; border-radius: 4px; font-weight: bold; cursor: pointer;">${btnNo}</button>
+                                <button id="modal-confirm-no" style="padding: 10px 20px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; font-weight: bold; cursor: pointer;">
+                                    ${btnNo}
+                                </button>
+                                <button id="modal-confirm-yes" style="padding: 10px 20px; background: #c62828; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s;">
+                                    ${btnYes}
+                                </button>
                             </div>
                         </div>
                     `;
-
                     document.body.appendChild(modalOverlay);
 
-                    // Event-Listener für die neuen Custom-Buttons
                     document.getElementById("modal-confirm-yes").addEventListener("click", () => {
                         localStorage.removeItem('appandor_jwt_token');
                         window.location.href = "index.html";

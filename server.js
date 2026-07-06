@@ -29,6 +29,14 @@ const publicPath = path.join(__dirname, 'web', 'public');
 app.use(express.static(publicPath));
 
 // =============================================================================
+// ZENTRALE SUCHMASCHINEN-SPERRE: Blockiert Google & Co. für das gesamte System
+// =============================================================================
+app.use((req, res, next) => {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    next();
+});
+
+// =============================================================================
 // SLIDING SESSION MIDDLEWARE (KORREKTUR: ROLLE UNVERLIERBAR MITGEBEN!)
 // =============================================================================
 app.use((req, res, next) => {

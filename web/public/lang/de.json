@@ -33,6 +33,7 @@
     "nav_outbound": "Warenausgang",
     "nav_products": "Produkt-Stammdaten",
     "nav_settings": "Einstellungen",
+    "nav_legal": "Impressum & Datenschutz",
 
     "title_dashboard": "Warenbestand",
     "title_inbound": "Wareneingang",
@@ -104,8 +105,12 @@
     "btn_receive": "Einbuchen",
 
     "modal_receive_title": "Menge bestätigen",
-    "btn_modal_confirm": "Einbuchen",
+
+    "btn_inbound_confirm": "Einbuchen",
+    "btn_modal_confirm": "Abmelden",
+
     "btn_modal_cancel": "Abbrechen",
+
 
     "inbound_form_title": "Einkauf / Bestellung verbuchen",
     "inbound_label_template": "Artikelvorlage *",
@@ -117,5 +122,13 @@
     "theme_light": "Heller Modus",
     "theme_dark": "Dunkler Modus",
     "tooltip_logout": "Klicken zum Abmelden / Abbrechen der Sitzung",
-    "sys_not_applicable": "N/A"
+    "sys_not_applicable": "N/A",
+
+    "legal_title_imprint": "Impressum",
+    "legal_title_privacy": "Datenschutzerklärung",
+
+    "modal_forgot_password_title": "Passwort zurücksetzen",
+    "login_label_email_reset": "Geben Sie Ihre E-Mail-Adresse ein",
+    "btn_modal_send": "Link anfordern"
+
 }

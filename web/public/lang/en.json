@@ -32,6 +32,7 @@
     "nav_outbound": "Goods Outbound",
     "nav_products": "Product Masters",
     "nav_settings": "Workspace Settings",
+    "nav_legal": "Legal / Info",
 
     "title_dashboard": "Live Inventory",
     "title_inbound": "Goods Inbound",
@@ -103,8 +104,12 @@
     "btn_receive": "Confirm",
 
     "modal_receive_title": "Confirm Quantity",
+
+    "btn_inbound_confirm": "Confirm",
     "btn_modal_confirm": "Confirm",
+
     "btn_modal_cancel": "Cancel",
+
 
     "inbound_form_title": "Log Inbound Purchase",
     "inbound_label_template": "Product Template *",
@@ -116,5 +121,13 @@
     "theme_light": "Light Mode",
     "theme_dark": "Dark Mode",
     "tooltip_logout": "Click to sign out / terminate active session",
-    "sys_not_applicable": "NA"
+    "sys_not_applicable": "NA",
+
+    "legal_title_imprint": "Imprint / Legal Notice",
+    "legal_title_privacy": "Privacy Policy",
+
+    "modal_forgot_password_title": "Reset Password",
+    "login_label_email_reset": "Enter your email address",
+    "btn_modal_send": "Request Link"
+
 }

@@ -1,3 +1,12 @@
+#
+#
+# GIT UPDATE:
+#
+# git add . && git commit -m "Message for Update" && git push origin main
+#
+#
+
+
 # Universal Inventory Platform
 
 This repository contains the core software architecture and infrastructure for a universal, multi-tenancy ready inventory and tracking system. It is designed to run efficiently inside Docker on an Ubuntu LTS server.

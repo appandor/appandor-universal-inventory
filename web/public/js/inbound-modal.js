@@ -11,7 +11,7 @@ window.openReceiveModal = function(trackedId, maxQty) {
         .then(res => res.json())
         .then(translations => {
             const modalTitle = translations.modal_receive_title || 'Confirm Quantity';
-            const btnConfirm = translations.btn_modal_confirm || 'Confirm';
+            const btnConfirm = translations.btn_inbound_confirm || 'Confirm';
             const btnCancel = translations.btn_modal_cancel || 'Cancel';
 
             const modalOverlay = document.createElement("div");

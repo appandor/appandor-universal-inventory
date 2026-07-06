@@ -1,0 +1,50 @@
+=============================================================================
+             APPANDOR CORE SYSTEM — SYSTEMWEITE TODO-LISTE (2026)
+=============================================================================
+
+ 🟢 PRIORITÄT 1: WARENEINGANG & MENGEN-SPLITTING (Kaufmännischer Core)
+-----------------------------------------------------------------------------
+[ ] Backend-Route POST /api/inbound/receive in routes/inbound.js anlegen.
+[ ] SQL-Transaktion für Szenario A (Teillieferung): Restmenge auf ORDERED 
+    reduzieren und neue Zeile auf RECEIVED erzeugen.
+[ ] SQL-Transaktion für Szenario B (Vollständige Lieferung): Reines Status- 
+    und Datums-Update des bestehenden Eintrags durchführen.
+[ ] Automatische Schleife zur fortlaufenden Box-ID-Generierung 
+    (APP-BOX-xxx) in der Tabelle boxes für jedes gelieferte Stück einbauen.
+[ ] Integration der neuen Route in die js/inbound-modal.js zur Auflösung 
+    der roten Fehler-Zone im Frontend.
+
+ 🟡 PRIORITÄT 2: PASSWORT-VERGESSEN-ABLAUF (Reset Flow)
+-----------------------------------------------------------------------------
+[ ] Passwort-Vergessen-Verlinkung in der login.html finalisieren und an das 
+    zentrale i18n-Sprachsystem koppeln.
+[x] Modales Fenster openForgotPasswordModal() im Frontend visuell aufbauen, 
+    inklusive zentralem CSS-Layout und korrekter Button-Symmetrie (links).
+[ ] Absendefunktion (API-Fetch) im Passwort-Modal integrieren, um die E-Mail 
+    physisch an das Backend zu übergeben.
+[ ] API-Endpunkt POST /api/auth/forgot-password in routes/auth.js für 
+    E-Mail-Prüfung und Token-Generierung erstellen.
+[ ] API-Endpunkt POST /api/auth/reset-password in routes/auth.js für das 
+    Überschreiben des gehashten Passworts in PostgreSQL erstellen.
+[ ] Installation und Konfiguration von nodemailer im Node.js-Backend zur 
+    Anbindung an dein Netcup-Domain-Postfach.
+[ ] Neue, eigenständige HTML-Maske web/public/reset-password.html für die 
+    Eingabe des neuen Passworts erstellen.
+
+ 🔵 PRIORITÄT 3: SICHERHEITS-HÄRTUNG (Security Headers & CORS)
+-----------------------------------------------------------------------------
+[ ] Einbindung von helmet in der server.js zur Absicherung der HTTP-
+    Antworten (Content-Security-Policy).
+[ ] Konfiguration der CORS-Middleware in der server.js zur strikten 
+    Begrenzung der API-Anfragen auf deine Domain inventory.appandor.de.
+
+ ⚪ PRIORITÄT 4: SYSTEMWEITE FEHLER-SEITEN (UX-Abrundung)
+-----------------------------------------------------------------------------
+[ ] Design und Erstellung einer einheitlichen web/public/404.html für 
+    ungültige URLs im Appandor-Layout.
+[ ] Design und Erstellung einer einheitlichen web/public/500.html für 
+    unerwartete Server- oder Datenbank-Abstürze.
+
+=============================================================================
+         ENDE DER ENTWICKLER-CHECKLISTE — APPANDOR INVENTORY
+=============================================================================

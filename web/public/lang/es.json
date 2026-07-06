@@ -29,7 +29,8 @@
     "nav_outbound": "Salida de mercancías",
     "nav_products": "Maestros de producto",
     "nav_settings": "Configuración",
-
+    "nav_legal": "Aviso legal y privacidad",
+    
     "title_dashboard": "Inventario",
     "title_inbound": "Entrada de mercancías",
     "title_outbound": "Salida de mercancías",
@@ -100,7 +101,10 @@
     "btn_receive": "Confirmar",
 
     "modal_receive_title": "Confirmar cantidad",
+
+    "btn_inbound_confirm": "Confirmar",
     "btn_modal_confirm": "Confirmar",
+
     "btn_modal_cancel": "Cancelar",
 
     
@@ -115,5 +119,13 @@
     "theme_light": "Modo claro",
     "theme_dark": "Modo oscuro",
     "tooltip_logout": "Haga clic para cerrar sesión / cancelar la sesión activa",
-    "sys_not_applicable": "N/A"
+    "sys_not_applicable": "N/A",
+
+    "legal_title_imprint": "Aviso Legal",
+    "legal_title_privacy": "Política de Privacidad",
+
+    "modal_forgot_password_title": "Restablecer contraseña",
+    "login_label_email_reset": "Introduzca su correo electrónico",
+    "btn_modal_send": "Enviar enlace"
+
 }
