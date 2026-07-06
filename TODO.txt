@@ -20,7 +20,7 @@
     zentrale i18n-Sprachsystem koppeln.
 [x] Modales Fenster openForgotPasswordModal() im Frontend visuell aufbauen, 
     inklusive zentralem CSS-Layout und korrekter Button-Symmetrie (links).
-[ ] Absendefunktion (API-Fetch) im Passwort-Modal integrieren, um die E-Mail 
+[ ] Absendefunktion (API-Fetch) im Passwort-Modal integrate, um die E-Mail 
     physisch an das Backend zu übergeben.
 [ ] API-Endpunkt POST /api/auth/forgot-password in routes/auth.js für 
     E-Mail-Prüfung und Token-Generierung erstellen.
@@ -31,8 +31,10 @@
 [ ] Neue, eigenständige HTML-Maske web/public/reset-password.html für die 
     Eingabe des neuen Passworts erstellen.
 
- 🔵 PRIORITÄT 3: SICHERHEITS-HÄRTUNG (Security Headers & CORS)
+ 🔵 PRIORITÄT 3: ARCHITEKTUR, RECHTLICHES & SICHERHEIT
 -----------------------------------------------------------------------------
+[ ] CSS-Refactoring finalisieren: Reste aus style_backup.css schrittweise 
+    eliminieren und sauber in variables, components, tables und modals aufteilen.
 [ ] Einbindung von helmet in der server.js zur Absicherung der HTTP-
     Antworten (Content-Security-Policy).
 [ ] Konfiguration der CORS-Middleware in der server.js zur strikten 
@@ -46,5 +48,5 @@
     unerwartete Server- oder Datenbank-Abstürze.
 
 =============================================================================
-         ENDE DER ENTWICKLER-CHECKLISTE — APPANDOR INVENTORY
+         ENDE DER INTERNEN ENTWICKLER-CHECKLISTE — APPANDOR INVENTORY
 =============================================================================
