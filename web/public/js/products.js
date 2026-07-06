@@ -49,26 +49,29 @@ document.addEventListener("DOMContentLoaded", () => {
                         productsContainer.innerHTML = "";
 
                         if (products.length === 0 || products.error) {
-                            productsContainer.innerHTML = `<li style="color: #888; font-style: italic; list-style: none;">No product master templates registered.</li>`;
+                            productsContainer.innerHTML = `<li style="color: var(--text-muted); font-style: italic; list-style: none;">No product master templates registered.</li>`;
                             return;
                         }
 
                         products.forEach(prod => {
+                            // KORREKTUR: Saubere CSS-Klasse statt einbetonierter Inline-Styles!
                             const li = document.createElement("li");
-                            li.style.cssText = "background: #1e1e1e; padding: 15px; margin-bottom: 10px; border-radius: 4px; border-left: 4px solid #2e7d32; list-style: none; display: flex; justify-content: space-between; align-items: center;";
+                            li.className = "product-template-card";
                             
-                            const catBadge = prod.category_name ? ` <span style="background: #2a2a2a; color: #888; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px;">${prod.category_name}</span>` : '';
+                            // KORREKTUR: Badge nutzt jetzt CSS-Variablen statt hartem Hex-Code
+                            const catBadge = prod.category_name ? ` <span class="product-template-badge">${prod.category_name}</span>` : '';
                             
                             const alertText = translations.prod_alert_at || "Alert at:";
                             const unitText = translations.unit_pcs || "pcs";
 
+                            // KORREKTUR: Alle Farben komplett auf var(--text-color) und var(--text-muted) umgerüstet
                             li.innerHTML = `
                                 <div>
-                                    <strong style="color: #fff; font-size: 15px;">${prod.name}</strong>${catBadge}
-                                    <div style="font-size: 12px; color: #888; margin-top: 4px; font-family: monospace;">EAN: ${prod.barcode || '-'}</div>
+                                    <strong style="color: var(--text-color); font-size: 15px;">${prod.name}</strong>${catBadge}
+                                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px; font-family: monospace;">EAN: ${prod.barcode || '-'}</div>
                                 </div>
                                 <div style="text-align: right;">
-                                    <span style="font-size: 11px; color: var(--text-muted);">${alertText}</span>
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 2px;">${alertText}</span>
                                     <strong style="color: #fbc02d; font-family: monospace; display: block; font-size: 14px;">${prod.minimum_stock} ${unitText}</strong>
                                 </div>
                             `;
@@ -85,9 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderProductsInterface();
 
-    window.addEventListener('appandor_language_changed', () => {
-        renderProductsInterface();
-    });
+    // KORREKTUR: Lauscht auf den globalen Sprach- UND Theme-Wechsel für sofortiges UI-Update!
+    window.addEventListener('appandor_language_changed', () => renderProductsInterface());
+    window.addEventListener('appandor_theme_changed', () => renderProductsInterface());
 
     if (productForm) {
         productForm.addEventListener("submit", (e) => {
@@ -110,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // SCHARFE TOKEN-ÜBERGABE BEIM SPEICHERN!
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(payload)
             })

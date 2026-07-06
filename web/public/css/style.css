@@ -261,25 +261,48 @@ button:hover {
 }
 
 /* ==========================================================================
-   APPANDOR CORE: SETTINGS TILES (LIGHT / DARK THEME VARIATION)
-   ========================================================================== */
-/* ==========================================================================
    APPANDOR CORE: SETTINGS TILES (CONTRAST POLISH)
    ========================================================================== */
+/* ==========================================================================
+   APPANDOR CORE: SYSTEM GLOBAL VARIATION (LIGHT / DARK THEME PAPERS)
+   ========================================================================== */
 :root {
-    /* LIGHT MODE: Die Boxen werden etwas dunkler (ein ganz zartes, edles Grau) */
-    --tile-bg: #eaeaea; 
-    --tile-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 2px 6px rgba(0, 0, 0, 0.05);
-    --tile-hover-border: #2e7d32;
-    --tile-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* HELLER MODUS: Keine zu dunklen Kontraste, edles Appandor-Industriegrün */
+    --card-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --text-color: #1a1a1a;       /* SCHARFES FINSTER-GRAU: Perfekt lesbar auf weißem Grund */
+    --text-muted: #666666;       /* GRAU: Klare Sichtbarkeit für sekundäre Texte, nicht zu hell */
+    --input-bg: #f5f5f5;
+    
+    /* Die Tab-Farbe für den aktiven Reiter im Hellen Modus */
+    --theme-primary-green: #2e7d32; /* Das echte, edle Appandor-Grün */
 }
 
 [data-theme="dark"] {
-    /* DARK MODE: Die Boxen werden etwas heller als der tiefschwarze Hintergrund */
-    --tile-bg: #222222; 
-    --tile-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --tile-hover-border: #4caf50;
-    --tile-hover-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    /* DUNKLER MODUS: Gewohntes, augenschonendes Anthrazit */
+    --card-bg: #1e1e1e;
+    --border-color: #333333;
+    --text-color: #e0e0e0;
+    --text-muted: #aaaaaa;
+    --input-bg: #222222;
+    
+    /* Die Tab-Farbe für den aktiven Reiter im Dunklen Modus */
+    --theme-primary-green: #4caf50; /* Ein etwas helleres, strahlendes Grün für dunklen Grund */
+}
+
+/* ==========================================================================
+   ANPASSUNG DER REGISTRIERKARTEN (SUB-NAVIGATION) VIA VARIABLEN
+   ========================================================================== */
+.settings-tab-item.active {
+    background-color: var(--theme-primary-green) !important;
+    color: #ffffff !important;
+}
+
+/* Korrektur für die inaktiven, ausgegrauten Reiter im hellen Modus */
+.settings-tab-item.disabled {
+    color: var(--text-muted);
+    opacity: 0.45; /* Ausreichend Kontrast im hellen Modus, trotzdem als inaktiv erkennbar */
+    cursor: not-allowed;
 }
 
 .settings-grid {
@@ -304,4 +327,114 @@ button:hover {
     transform: translateY(-3px);
     border-color: var(--tile-hover-border);
     box-shadow: var(--tile-hover-shadow);
+}
+
+/* ==========================================================================
+   APPANDOR CORE: SUB-NAVIGATION TABS (HIGH-END MINIMALIST DESIGN)
+   ========================================================================== */
+.settings-tab-container {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0 25px 0;
+    padding: 0;
+    background: transparent; /* Kasten-Hintergrund komplett entfernen */
+    border: none;
+    border-bottom: 2px solid var(--border-color); /* Eine saubere, durchgehende Führungslinie */
+    list-style: none;
+}
+
+.settings-tab-item {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent; /* Unsichtbarer Rahmen als Ausgleich */
+    margin-bottom: -2px; /* Zieht den aktiven Strich exakt AUF die Führungslinie */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* Der aktive Zustand: Keine wuchtige Box mehr, sondern eine edle Unterlinie! */
+.settings-tab-item.active {
+    background-color: transparent !important; /* Wuchtigen Kasten vernichten */
+    color: var(--text-color) !important;       /* Schriftfarbe folgt dem Modus */
+    font-weight: 700;
+    border-bottom: 3px solid #2e7d32 !important; /* Dein echtes Appandor-Grün als Fokus-Strich */
+}
+
+/* Hover-Effekt für klickbare, inaktive Reiter */
+.settings-tab-item:not(.active):not(.disabled):hover {
+    color: var(--text-color);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.settings-tab-item.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+
+
+
+
+/* Hover-Effekt für klickbare, inaktive Tabs */
+.settings-tab-item:not(.active):not(.disabled):hover {
+    background-color: var(--input-bg, #eaeaea);
+    color: var(--text-color);
+}
+
+/* ==========================================================================
+   APPANDOR CORE: PRODUCT TEMPLATE CARDS (LIGHT / DARK THEME COMPATIBLE)
+   ========================================================================== */
+.product-template-card {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    list-style: none;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+[data-theme="dark"] .product-template-card {
+    background-color: #1e1e1e !important; /* Gewohntes dunkles Anthrazit im Dark Mode */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.product-template-badge {
+    background-color: var(--input-bg);
+    color: var(--text-muted);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+/* ==========================================================================
+   APPANDOR CORE: PRIMARY SUBMIT BUTTONS (CENTRALIZED CSS POLISH)
+   ========================================================================== */
+.btn-primary-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #2e7d32 !important; /* Dein echtes, edles Appandor-Grün */
+    color: #ffffff !important;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
+}
+
+.btn-primary-submit:hover {
+    background-color: #1b5e20 !important; /* Etwas dunkleres Grün beim Drüberfahren */
+}
+
+.btn-primary-submit:active {
+    transform: scale(0.98); /* Minimales haptisches Feedback beim Klick */
 }
