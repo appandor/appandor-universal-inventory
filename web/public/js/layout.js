@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </nav>
     `;
 
-    // 2. AKTIVEN REITER OPTISCH HERVORHEBEN
+    // 2. AKTIVEN REITER OPTISCH HERVORHEBEN (KORREKTUR: Bleibt auch bei Unterseiten aktiv!)
     if (path.includes("dashboard.html")) {
         const el = document.getElementById("nav-link-dashboard");
         if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
@@ -70,7 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (path.includes("outbound.html")) {
         const el = document.getElementById("nav-link-outbound");
         if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
-    } else if (path.includes("settings.html")) {
+    } else if (path.includes("settings.html") || path.includes("products.html")) {
+        // KORREKTUR: Wenn wir in den Stammdaten sind, bleibt "Einstellungen" fett verankert!
         const el = document.getElementById("nav-link-settings");
         if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
     }
