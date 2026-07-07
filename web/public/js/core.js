@@ -1,6 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
     
+
+
+    // EINZELSCHRITT-SCHUTZSCHILD: Auf der Landingpage tut die alte core.js ab jetzt absolut gar nichts mehr!
+    if (path.includes("index.html") || path === "/") return;
+
+
+
+
     let pageKey = "title_dashboard";
     if (path.includes("index.html") || path === "/") pageKey = "lp_title";
     if (path.includes("login.html")) pageKey = "login_title";

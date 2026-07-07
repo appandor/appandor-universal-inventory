@@ -52,6 +52,7 @@ window.changeLanguage = function(lang) {
         });
 };
 
+
 // Startet sofort beim Laden der Datei über die config.js
 let currentLang = localStorage.getItem('appandor_lang') || 'en';
 window.changeLanguage(currentLang);

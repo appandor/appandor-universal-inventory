@@ -1,0 +1,97 @@
+/* =============================================================================
+   APPANDOR LOGISTICS: LANDINGPAGE SPECIFIC STYLES
+   ============================================================================= */
+.lp-body {
+  font-family: sans-serif;
+  padding: 40px;
+  text-align: center;
+}
+
+.lp-lang-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lp-select {
+  background: var(--card-bg, #222);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #444);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.lp-container {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 40px;
+  background: var(--card-bg, #1e1e1e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.lp-header {
+  margin-bottom: 40px;
+}
+
+.lp-main-title {
+  font-size: 42px;
+  color: var(--text-color, #ffffff);
+  margin: 0;
+}
+
+/* KORREKTUR: Nutzt jetzt die gedimmte Textvariable der style.css für lesbaren Kontrast */
+.lp-subtitle {
+  font-size: 16px;
+  color: var(--text-muted, #888);
+  margin-top: 8px;
+}
+
+/* KORREKTUR: Reagiert nun dynamisch auf den Hintergrundwechsel */
+.lp-section {
+  margin-bottom: 50px;
+  line-height: 1.6;
+  color: var(--text-color, #b0b0b0);
+}
+
+.lp-highlight-box {
+  margin-top: 15px;
+}
+
+.lp-highlight {
+  color: #2e7d32;
+}
+
+.lp-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.lp-btn-primary {
+  display: inline-block;
+  padding: 15px 35px;
+  background: #2e7d32;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(46,125,50,0.3);
+}
+
+.lp-btn-secondary {
+  display: inline-block;
+  padding: 15px 35px;
+  background: var(--input-bg, #333);
+  color: var(--text-color, #ccc);
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 6px;
+}
