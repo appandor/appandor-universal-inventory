@@ -1,4 +1,9 @@
 {
+
+    "lang_de": "Alemán",
+    "lang_en": "Inglés",
+    "lang_es": "Español",
+
     "lp_title": "Appandor Core",
     "lp_subtitle": "El motor de inventario y logística universal de próxima generación",
     "lp_description": "Gestione inventarios físicos, cajas de protección a medida y logística multilocación en tiempo real. Arquitectura API-first ultrarrápida y totalmente aislada para empresas en crecimiento.",

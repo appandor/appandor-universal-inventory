@@ -1,4 +1,8 @@
 {
+    "lang_de": "German",
+    "lang_en": "English",
+    "lang_es": "Spanish",
+
     "lp_title": "Appandor Core",
     "lp_subtitle": "The Next-Generation Universal Inventory & Logistics Engine",
     "lp_description": "Manage physical stock, custom protective boxes, and multi-location logistics in real time. Fully multi-tenant isolated, ultra-fast API-first architecture designed for scaling businesses.",

@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (path.includes("products.html")) pageKey = "title_products";
     if (path.includes("settings.html")) pageKey = "title_settings";
 
-    // KORREKTUR: Spanisch ('es') explizit in der Whitelist freischalten!
     let currentLang = localStorage.getItem('appandor_lang') || navigator.language.slice(0, 2) || 'en';
     if (currentLang !== 'de' && currentLang !== 'en' && currentLang !== 'es') { currentLang = 'en'; }
 

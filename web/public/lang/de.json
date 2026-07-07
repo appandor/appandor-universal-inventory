@@ -1,4 +1,8 @@
 {
+    "lang_de": "Deutsch",
+    "lang_en": "Englisch",
+    "lang_es": "Spanisch",
+
     "lp_title": "Appandor Core",
     "lp_subtitle": "Die universelle Bestands- und Logistik-Engine der nächsten Generation",
     "lp_description": "Verwalten Sie physische Bestände, maßgeschneiderte Schutzboxen und Multi-Location-Logistik in Echtzeit. Vollkommen mandantenfähig isolierte, ultraschnelle API-First-Architektur für skalierende Unternehmen.",
