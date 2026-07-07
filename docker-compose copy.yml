@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: EinSicheresDatenbankPasswort123!
       POSTGRES_DB: appandor_universal_inventory
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data  # Wieder dein gewohnter, sichtbarer Festplatten-Ordner!
+      - ./postgres_data:/var/lib/postgresql/data
       - ./init_sql:/docker-entrypoint-initdb.d
 
   # --- CONTAINER 2: API-FIRST NODE.JS BACKEND ---
@@ -25,8 +25,7 @@ services:
       - NODE_ENV=production
       - JWT_SECRET=EinSuperGeheimesZufallsPasswortFuerDieTokenGenerierung2026!
       - JWT_EXPIRATION_MINUTES=15
-    # KORREKTUR: sleep 5 zwingt Node zu warten, bis Postgres die SQL-Dateien vollständig eingelesen hat!
-    command: sh -c "sleep 5 && npm install && node server.js"
+    command: sh -c "npm install && node server.js"
     volumes:
       - .:/usr/src/app
       - /etc/letsencrypt:/etc/letsencrypt:ro

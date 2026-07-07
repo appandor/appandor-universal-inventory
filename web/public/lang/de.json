@@ -129,6 +129,22 @@
 
     "modal_forgot_password_title": "Passwort zurücksetzen",
     "login_label_email_reset": "Geben Sie Ihre E-Mail-Adresse ein",
-    "btn_modal_send": "Link anfordern"
+    "btn_modal_send": "Link anfordern",
+
+    "lbl_modal_location": "Regalplatz scannen / eingeben",
+    "lbl_modal_box": "Physische Box scannen (Optional)",
+    "lbl_modal_expiry": "Mindesthaltbarkeitsdatum (MHD)",
+    "ERR_LOCATION_CODE_NOT_FOUND": "Lagerplatz-Code existiert nicht im System.",
+    "ERR_LOCATION_MANUALLY_LOCKED": "Dieser Lagerplatz wurde manuell als VOLL gesperrt.",
+    "ERR_BOX_NOT_FOUND": "Die gescannte Box-ID existiert nicht.",
+    "ERR_BOX_LOCATION_MISMATCH": "Diese Kiste steht laut System auf einem anderen Regalbrett.",
+    "ERR_ENVIRONMENT_MISMATCH": "Klima-Konflikt: Das Produkt verträgt die Temperatur dieses Platzes nicht.",
+    "ERR_BOX_ENVIRONMENT_MISMATCH": "Die gewählte Box ist für das Klima dieses Lagerplatzes nicht zugelassen.",
+    "ERR_PHYSICAL_PROTECTION_REQUIRED": "Schutz-Sperre: Dieses Produkt darf nicht lose (ohne dichte Box) gelagert werden.",
+    "ERR_BOX_NOT_AIRTIGHT": "Buchung verweigert: Das Produkt erfordert eine luftdichte Box.",
+    "ERR_BOX_NOT_OPAQUE": "Buchung verweigert: Das Produkt erfordert eine blickdichte Box.",
+    "ERR_BOX_NOT_HOMOGENEOUS": "Sortenreinheits-Konflikt: In dieser Box liegt bereits ein anderes Produkt.",
+    "ERR_BOX_OVERFLOW": "Die physische Kiste ist voll! Maximale Stückzahl überschritten.",
+    "ERR_LOCATION_VOLUME_OVERFLOW": "Das Regalbrett ist voll! Nicht genügend Rest-Volumen frei."
 
 }

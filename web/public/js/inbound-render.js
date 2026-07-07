@@ -49,7 +49,7 @@ window.renderInboundTable = function(data, targetContainer) {
                 if (row.status === 'ORDERED') {
                     const currentQty = row.quantity || 1;
                     actionCellHTML = `
-                        <button class="btn-receive-action" onclick="openReceiveModal(${row.tracked_id}, ${currentQty})">
+                        <button class="btn-receive-action" onclick="openReceiveModal(${row.tracked_id}, ${currentQty}, ${row.product_id})">
                             ${actionBtnText}
                         </button>
                     `;

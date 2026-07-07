@@ -4,7 +4,21 @@
 #
 # git add . && git commit -m "Message for Update" && git push origin main
 #
+# docker compose restart node-app
 #
+# 1. Struktur neu aufbauen
+# docker compose exec -T postgres-db psql -U appandor_admin -d appandor_universal_inventory -f /docker-entrypoint-initdb.d/01_init_tables.sql
+#
+# 2. Testdaten und Logins einspielen
+# docker compose exec -T postgres-db psql -U appandor_admin -d appandor_universal_inventory -f /docker-entrypoint-initdb.d/02_test_data.sql
+#
+# docker compose down -v
+# docker compose up -d --build
+#
+# docker compose logs -f node-app
+#
+# docker compose down && rm -rf ./postgres_data && docker compose up -d --build
+
 
 
 # Universal Inventory Platform

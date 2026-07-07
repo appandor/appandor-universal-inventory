@@ -128,6 +128,23 @@
 
     "modal_forgot_password_title": "Reset Password",
     "login_label_email_reset": "Enter your email address",
-    "btn_modal_send": "Request Link"
+    "btn_modal_send": "Request Link",
+
+    "lbl_modal_location": "Scan / Enter Shelf Slot",
+    "lbl_modal_box": "Scan Physical Box (Optional)",
+    "lbl_modal_expiry": "Best-Before Date (MHD)",
+    "ERR_LOCATION_CODE_NOT_FOUND": "Lagerplatz-Code does not exist.",
+    "ERR_LOCATION_MANUALLY_LOCKED": "This shelf location has been manually locked as FULL.",
+    "ERR_BOX_NOT_FOUND": "The scanned box ID does not exist.",
+    "ERR_BOX_LOCATION_MISMATCH": "This box is registered at a different shelf slot.",
+    "ERR_ENVIRONMENT_MISMATCH": "Climate mismatch: Product cannot be stored at this location's temperature.",
+    "ERR_BOX_ENVIRONMENT_MISMATCH": "The chosen box is not rated for this location's environment.",
+    "ERR_PHYSICAL_PROTECTION_REQUIRED": "Protection required: This item cannot be stored loosely without a proper box.",
+    "ERR_BOX_NOT_AIRTIGHT": "Booking denied: Product requires an airtight container.",
+    "ERR_BOX_NOT_OPAQUE": "Booking denied: Product requires an opaque container.",
+    "ERR_BOX_NOT_HOMOGENEOUS": "Homogeneity conflict: This box already contains a different product template.",
+    "ERR_BOX_OVERFLOW": "Physical box overflow! Maximum quantity exceeded.",
+    "ERR_LOCATION_VOLUME_OVERFLOW": "Shelf slot overflow! Insufficient volume capacity remaining."
+
 
 }

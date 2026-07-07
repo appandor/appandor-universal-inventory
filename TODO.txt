@@ -1,52 +1,31 @@
 =============================================================================
-             APPANDOR CORE SYSTEM — SYSTEMWEITE TODO-LISTE (2026)
+             APPANDOR CORE SYSTEM — INBOUND & LOGISTICS TODO (2026)
 =============================================================================
 
- 🟢 PRIORITÄT 1: WARENEINGANG & MENGEN-SPLITTING (Kaufmännischer Core)
+ 🟢 PRIORITÄT 1: WARENEINGANG, DATENMODELL & VALIDIERUNG (Heutiger Fokus)
 -----------------------------------------------------------------------------
-[ ] Backend-Route POST /api/inbound/receive in routes/inbound.js anlegen.
-[ ] SQL-Transaktion für Szenario A (Teillieferung): Restmenge auf ORDERED 
-    reduzieren und neue Zeile auf RECEIVED erzeugen.
-[ ] SQL-Transaktion für Szenario B (Vollständige Lieferung): Reines Status- 
-    und Datums-Update des bestehenden Eintrags durchführen.
-[ ] Automatische Schleife zur fortlaufenden Box-ID-Generierung 
-    (APP-BOX-xxx) in der Tabelle boxes für jedes gelieferte Stück einbauen.
-[ ] Integration der neuen Route in die js/inbound-modal.js zur Auflösung 
-    der roten Fehler-Zone im Frontend.
+[ ] Aktualisierten SQL-Blueprint in PostgreSQL einspielen, um scanbare 
+    Locations, Zwischentabellen und Schutz-Flags zu aktivieren.
+[ ] Inbound-Route POST /api/inbound/receive in routes/inbound.js erstellen.
+[ ] Validierung A einbauen: Prüfung auf Umgebungsbedingungen (Zulässigkeit 
+    von Box und Produkt auf dem gewählten locations.environment_type).
+[ ] Validierung B einbauen: Prüfung auf physischen Schutz (Erzwingen von 
+    is_airtight/is_opaque bei echten Boxen, falls das Produkt es fordert).
+[ ] Validierung C einbauen: Atmende Volumen-Prüfung des Regalplatzes unter 
+    Berücksichtigung des manuellen Blocks (is_locked = TRUE).
+[ ] SQL-Mengen-Splitting: Ursprungseintrag bei Teillieferung reduzieren; 
+    neue Zeile in tracked_products mit spezifischem expiry_date (MHD) anlegen.
+[ ] Automatisches Handling Virtueller Boxen: Wenn keine Box gescannt wird, 
+    eine VBOX-xxxxx auf dem Platz erzeugen (oder bestehende VBox erweitern).
+[ ] Verknüpfung in der Zwischentabelle box_contents sicherstellen und dabei 
+    die Sortenreinheit bei echten physischen Boxen erzwingen.
+[ ] Integration des neuen Endpunkts in die js/inbound-modal.js zur finalen 
+    Auflösung der roten Fehler-Zone im Frontend.
 
- 🟡 PRIORITÄT 2: PASSWORT-VERGESSEN-ABLAUF (Reset Flow)
+ 🟡 PRIORITÄT 2: PASSWORT-VERGESSEN-ABLAUF (Reset Flow - Geparkt)
 -----------------------------------------------------------------------------
-[ ] Passwort-Vergessen-Verlinkung in der login.html finalisieren und an das 
-    zentrale i18n-Sprachsystem koppeln.
-[x] Modales Fenster openForgotPasswordModal() im Frontend visuell aufbauen, 
-    inklusive zentralem CSS-Layout und korrekter Button-Symmetrie (links).
-[ ] Absendefunktion (API-Fetch) im Passwort-Modal integrate, um die E-Mail 
-    physisch an das Backend zu übergeben.
-[ ] API-Endpunkt POST /api/auth/forgot-password in routes/auth.js für 
-    E-Mail-Prüfung und Token-Generierung erstellen.
-[ ] API-Endpunkt POST /api/auth/reset-password in routes/auth.js für das 
-    Überschreiben des gehashten Passworts in PostgreSQL erstellen.
-[ ] Installation und Konfiguration von nodemailer im Node.js-Backend zur 
-    Anbindung an dein Netcup-Domain-Postfach.
-[ ] Neue, eigenständige HTML-Maske web/public/reset-password.html für die 
-    Eingabe des neuen Passworts erstellen.
+[ ] Absendefunktion (API-Fetch) im Passwort-Modal integrieren.
+[ ] API-Endpunkte in routes/auth.js für Reset-Flow erstellen.
+[ ] Nodemailer-Konfiguration für Netcup-Domain-Postfach hinterlegen.
 
- 🔵 PRIORITÄT 3: ARCHITEKTUR, RECHTLICHES & SICHERHEIT
------------------------------------------------------------------------------
-[ ] CSS-Refactoring finalisieren: Reste aus style_backup.css schrittweise 
-    eliminieren und sauber in variables, components, tables und modals aufteilen.
-[ ] Einbindung von helmet in der server.js zur Absicherung der HTTP-
-    Antworten (Content-Security-Policy).
-[ ] Konfiguration der CORS-Middleware in der server.js zur strikten 
-    Begrenzung der API-Anfragen auf deine Domain inventory.appandor.de.
-
- ⚪ PRIORITÄT 4: SYSTEMWEITE FEHLER-SEITEN (UX-Abrundung)
------------------------------------------------------------------------------
-[ ] Design und Erstellung einer einheitlichen web/public/404.html für 
-    ungültige URLs im Appandor-Layout.
-[ ] Design und Erstellung einer einheitlichen web/public/500.html für 
-    unerwartete Server- oder Datenbank-Abstürze.
-
-=============================================================================
-         ENDE DER INTERNEN ENTWICKLER-CHECKLISTE — APPANDOR INVENTORY
 =============================================================================
