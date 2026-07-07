@@ -1,12 +1,9 @@
-// Zentrale Definition aller gültigen Sprachen
-const SUPPORTED_LANGUAGES = ['de', 'en', 'es'];
-
 window.appTranslations = {};
 
-// Ersetzt alle data-i18n Elemente auf einer Seite
 window.translatePage = function() {
     const translations = window.appTranslations || {};
     
+    // 1. Statische Texte ersetzen
     document.querySelectorAll("[data-i18n]").forEach(element => {
         const key = element.getAttribute("data-i18n");
         if (translations[key]) {
@@ -14,13 +11,14 @@ window.translatePage = function() {
         }
     });
     
-    // Dynamischer Aufbau des Language-Selectors
+    // 2. KORREKTUR: Dynamischer Aufbau des Selectors NUR WENN ER EXISITIERT!
     const langSelector = document.getElementById("language-selector");
     if (langSelector) {
-        const currentActive = localStorage.getItem('appandor_lang') || 'en';
+        const supportedLangs = window.appConfig.supported_languages || ['en'];
+        const currentActive = localStorage.getItem('appandor_lang') || window.appConfig.default_language || 'en';
         let dropdownHTML = '';
         
-        SUPPORTED_LANGUAGES.forEach(langCode => {
+        supportedLangs.forEach(langCode => {
             const localizedName = translations[`lang_${langCode}`] || `#lang_${langCode}#`;
             dropdownHTML += `<option value="${langCode}">${localizedName}</option>`;
         });
@@ -28,27 +26,19 @@ window.translatePage = function() {
         langSelector.innerHTML = dropdownHTML;
         langSelector.value = currentActive;
     }
+    console.log("[lang.js]: Seiten-Texte synchronisiert.");
 };
 
-// Zentrale Funktion für den Sprachwechsel
 window.changeLanguage = function(lang) {
-
-    if (!SUPPORTED_LANGUAGES.includes(lang)) { 
-        lang = 'en'; 
-    }    
+    const supportedLangs = window.appConfig.supported_languages || ['en'];
+    if (!supportedLangs.includes(lang)) { lang = 'en'; }
+    
     localStorage.setItem('appandor_lang', lang);
 
     fetch(`lang/${lang}.json`)
         .then(res => { 
-            if (!res.ok) {
-                console.warn(`[i18n Core Warning]: Language file '${lang}.json' missing.`);
-                return {}; 
-            }
-            const contentType = res.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-                return res.json();
-            }
-            return {};
+            if (!res.ok) return {}; 
+            return res.json();
         })
         .then(translations => {
             window.appTranslations = translations || {};
@@ -56,21 +46,19 @@ window.changeLanguage = function(lang) {
             window.dispatchEvent(new CustomEvent('appandor_language_changed', { detail: { lang: lang } }));
         })
         .catch(err => {
-            console.error("[i18n Core Error]:", err.message);
+            console.error("[lang.js Error]:", err.message);
             window.appTranslations = {};
             window.translatePage();
-            window.dispatchEvent(new CustomEvent('appandor_language_changed', { detail: { lang: lang } }));
         });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    let currentLang = localStorage.getItem('appandor_lang') || navigator.language.slice(0, 2) || 'en';
-    
-    window.changeLanguage(currentLang);
+// Startet sofort beim Laden der Datei über die config.js
+let currentLang = localStorage.getItem('appandor_lang') || 'en';
+window.changeLanguage(currentLang);
 
-    document.addEventListener("change", (e) => {
-        if (e.target && e.target.id === "language-selector") {
-            window.changeLanguage(e.target.value);
-        }
-    });
+// Globaler Wächter für das Dropdown, sobald es geladen wurde
+document.addEventListener("change", (e) => {
+    if (e.target && e.target.id === "language-selector") {
+        window.changeLanguage(e.target.value);
+    }
 });

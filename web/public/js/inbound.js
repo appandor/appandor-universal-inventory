@@ -111,3 +111,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+        document.getElementById("inbound-toggle-header").addEventListener("click", () => {
+            const form = document.getElementById("inbound-add-form");
+            const btn = document.getElementById("inbound-toggle-btn");
+
+            if (form.style.display === "none") {
+                form.style.display = "flex";
+                btn.setAttribute("data-i18n", "btn_collapse");
+                btn.style.color = "#2e7d32";
+            } else {
+                form.style.display = "none";
+                btn.setAttribute("data-i18n", "btn_expand");
+                btn.style.color = "#fbc02d";
+            }
+            
+            const currentLang = localStorage.getItem('appandor_lang') || 'en';
+            fetch(`lang/${currentLang}.json`)
+                .then(r => r.json())
+                .then(t => {
+                    const key = btn.getAttribute("data-i18n");
+                    if (t[key]) btn.innerText = t[key];
+                });
+        });
+

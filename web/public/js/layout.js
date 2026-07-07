@@ -168,14 +168,5 @@ document.addEventListener("DOMContentLoaded", () => {
         badgeElement.addEventListener("mouseover", () => badgeElement.style.opacity = "0.8");
         badgeElement.addEventListener("mouseout", () => badgeElement.style.opacity = "1.0");
     }
-
-    // UNIVERSAL: Schließt JEDES geöffnete Appandor-Modal im System per ESC-Taste
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" || e.key === "Esc") {
-            // Findet alle aktiven Modale über die universelle Overlay-Klasse
-            const activeModals = document.querySelectorAll(".appandor-modal-overlay");
-            activeModals.forEach(modal => modal.remove());
-        }
-    });
     
 });

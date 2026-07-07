@@ -1,0 +1,14 @@
+{
+    "supported_languages": ["de", "en", "es"],
+    "default_language": "en",
+    "date_formats": {
+        "de": "DD.MM.YYYY",
+        "en": "YYYY-MM-DD",
+        "es": "DD/MM/YYYY"
+    },
+    "currency_formats": {
+        "de": { "symbol": "€", "position": "suffix" },
+        "en": { "symbol": "$", "position": "prefix" },
+        "es": { "symbol": "€", "position": "suffix" }
+    }
+}
