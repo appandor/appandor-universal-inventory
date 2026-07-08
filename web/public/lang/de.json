@@ -10,6 +10,33 @@
     "lp_btn_enter": "Workspace betreten",
     "lp_btn_pricing": "Preise ansehen (Nutzer-Lizenzmodell)",
     
+  "lp_info_title": "Was ist die Appandor App?",
+  "lp_info_subtitle": "Die Appandor App ist ein digitaler, einfach zu bedienender Ordnungshelfer für alles, was du lagerst, verbrauchst oder einkaufst. Sie funktioniert am PC genauso wie auf dem Smartphone und behält für dich den Überblick über deine Bestände – egal ob zu Hause, in der Werkstatt oder im Betrieb.",
+  "lp_info_usecases_title": "Wafür kann man sie gebrauchen?",
+  "lp_info_use_cellar_title": "Für den Vorratskeller:",
+  "lp_info_use_cellar_desc": "Nie wieder vergessen, wie viele Packungen Nudeln, Linsen oder Konserven noch im Regal stehen. Du siehst sofort, was bald abläuft oder nachgekauft werden muss.",
+  "lp_info_use_workshop_title": "Für die Hobbywerkstatt:",
+  "lp_info_use_workshop_desc": "Perfekt für Kleinteile. Du erfasst Schrauben, Dübel, Nägel oder Bohrer und weißt dank digitaler Platzierung immer genau, wo die richtige Größe liegt.",
+  "lp_info_use_shopping_title": "Für den allgemeinen Einkauf:",
+  "lp_info_use_shopping_desc": "Wenn die Milch im Kühlschrank leer ist, trägst du es ein. Dein Partner sieht es sofort auf dem Smartphone und bringt beim Heimweg das Eis oder die Einkäufe mit.",
+  "lp_info_use_pro_title": "Für Profis & Gewerbe:",
+  "lp_info_use_pro_desc": "Lückenlose Erfassung im Betrieb. Das System steuert den Wareneingang, prüft die Haltbarkeit und bucht den Warenausgang sauber ab.",
+  "lp_info_advantages_title": "Die Vorteile",
+  "lp_adv_search_title": "Kein Suchen mehr:",
+  "lp_adv_search_desc": "Die App sagt dir exakt, in welchem Raum, in welchem Regal und in welcher Kiste ein Gegenstand liegt.",
+  "lp_adv_double_title": "Keine Doppelkäufe:",
+  "lp_adv_double_desc": "Du siehst beim Einkaufen im Laden direkt auf dem Handy, was zu Hause noch da ist. Das spart Geld und verhindert, dass Lebensmittel verderben.",
+  "lp_adv_check_title": "Mitdenkende Platzprüfung:",
+  "lp_adv_check_desc": "Die App unterstützt dich bei der Organisation. Sie gibt dir einen kurzen Hinweis, wenn ein Regalplatz bereits voll ist oder bestimmte Dinge an einem anderen Platz besser aufgehoben wären.",
+  "lp_adv_share_title": "Gemeinsam nutzen:",
+  "lp_adv_share_desc": "Die App synchronisiert sich in Echtzeit. Was du einträgst, sieht deine Familie oder dein Team im selben Moment.",
+  "lp_adv_click_title": "Einfach per Klick:",
+  "lp_adv_click_desc": "Die gesamte Oberfläche ist extrem schlank gehalten und schaltet bei Bedarf sofort zwischen Deutsch, Englisch und Spanisch um.",
+
+
+
+
+
     "login_title": "Appandor Core Anmeldung",
     "login_subtitle": "Universelles Lager-Sicherheits-Journal",
     "login_label_email": "E-Mail-Adresse *",

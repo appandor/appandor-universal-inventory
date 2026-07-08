@@ -8,26 +8,55 @@
     <link rel="stylesheet" href="css/lp.css">
   </head>
   <body class="lp_body">
-    <div class="lp_lang-wrapper">
-      <select id="language-selector" class="lp_select">
-      </select>
+    <div class="lp_lang_wrapper">
+      <select id="language-selector" class="lp_select"></select>
     </div>
+    
+    <!-- Hauptkarte -->
     <div class="lp_container">
       <header class="lp_header">
-        <h1 data-i18n="lp_title" class="lp_main-title"></h1>
+        <h1 data-i18n="lp_title" class="lp_main_title"></h1>
         <p data-i18n="lp_subtitle" class="lp_subtitle"></p>
       </header>
       <section class="lp_section">
         <p data-i18n="lp_description"></p>
-        <p class="lp_highlight-box">
+        <p class="lp_highlight_box">
           <strong data-i18n="lp_sandbox_highlight" class="lp_highlight"></strong>
         </p>
       </section>
-      <div class="lp_btn-group">
-        <a href="inventory.html" data-i18n="lp_btn_enter" class="lp_btn-primary"></a>
-        <a href="#pricing" data-i18n="lp_btn_pricing" class="lp_btn-secondary"></a>
+      <div class="lp_btn_group">
+        <a href="inventory.html" data-i18n="lp_btn_enter" class="lp_btn_primary"></a>
+        <a href="#pricing" data-i18n="lp_btn_pricing" class="lp_btn_secondary"></a>
       </div>
-    </div>
+    </div> <!-- KORREKTUR: Hauptkarte schließt JETZT hier -->
+
+    <!-- INFO-BOX: Völlig eigenständig, extra unten mit eigenem Rand -->
+    <section class="lp_info_section">
+      <div class="lp_info_content">
+        
+        <h2 data-i18n="lp_info_title" class="lp_info_main_title"></h2>
+        <p data-i18n="lp_info_subtitle" class="lp_info_subtitle"></p>
+
+        <h3 data-i18n="lp_info_usecases_title" class="lp_info_section_title"></h3>
+        <ul class="lp_info_list lp_info_usecases_space">
+          <li><strong data-i18n="lp_info_use_cellar_title"></strong> <span data-i18n="lp_info_use_cellar_desc"></span></li>
+          <li><strong data-i18n="lp_info_use_workshop_title"></strong> <span data-i18n="lp_info_use_workshop_desc"></span></li>
+          <li><strong data-i18n="lp_info_use_shopping_title"></strong> <span data-i18n="lp_info_use_shopping_desc"></span></li>
+          <li><strong data-i18n="lp_info_use_pro_title"></strong> <span data-i18n="lp_info_use_pro_desc"></span></li>
+        </ul>
+
+        <h3 data-i18n="lp_info_advantages_title" class="lp_info_section_title"></h3>
+        <ul class="lp_info_list">
+          <li><strong data-i18n="lp_adv_search_title"></strong> <span data-i18n="lp_adv_search_desc"></span></li>
+          <li><strong data-i18n="lp_adv_double_title"></strong> <span data-i18n="lp_adv_double_desc"></span></li>
+          <li><strong data-i18n="lp_adv_check_title"></strong> <span data-i18n="lp_adv_check_desc"></span></li>
+          <li><strong data-i18n="lp_adv_share_title"></strong> <span data-i18n="lp_adv_share_desc"></span></li>
+          <li><strong data-i18n="lp_adv_click_title"></strong> <span data-i18n="lp_adv_click_desc"></span></li>
+        </ul>
+
+      </div>
+    </section>
+
     <script src="js/config.js"></script>
   </body>
 </html>

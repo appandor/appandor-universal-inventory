@@ -2,8 +2,12 @@
              APPANDOR INFRASTRUCTURE & REFACTORING SYSTEM TODO
 =============================================================================
 
- 🐳 INFRASTRUCTURE & DEVOPS AUTOMATION (Reproduzierbarkeit)
+ 🐳 INFRASTRUCTURE & DEVOPS AUTOMATION (Reproduzierbarkeit & Sicherheit)
 -----------------------------------------------------------------------------
+[ ] Passwörter aus Quelltext entfernen: Alle Klartext-Passwörter, API-Keys 
+    und DB-Secrets aus den JS-Dateien in eine geschützte .env-Datei auslagern.
+[ ] .gitignore-Schutz aktivieren: Sicherstellen, dass die scharfe .env-Datei 
+    niemals auf GitHub landet.
 [ ] setup_server.sh finalisieren: Das Skript muss die gesamte Umgebung 
     (Node, Docker, Netzwerke, Zertifikate) auf jedem beliebigen, nackten 
     Linux-Server vollautomatisch von Null auf bereitstellen.
@@ -11,7 +15,7 @@
     Neustart (mit Volume-Zerstörung) das komplette System inklusive der 
     PostgreSQL-Tabellenstrukturen und Initialdaten frisch aufsetzt.
 
- 🎨 FRONTEND MIGRATION (Neues i18n- & Namensraum-Format)
+ 🎨 FRONTEND MIGRATION (Neues i18n-, Namensraum- & Tabellen-Format)
 -----------------------------------------------------------------------------
 [x] lp.html / lp.css / lp.js          --> ERLEDIGT (Prefix lp_)
 [x] login.html / login.css / login.js --> ERLEDIGT (Prefix login_)
@@ -19,6 +23,25 @@
 [ ] inbound.html / inbound.js         --> OFFEN (Prefix inbound_)
 [ ] outbound.html / outbound.js        --> OFFEN (Prefix outbound_)
 [ ] settings.html / products.html     --> OFFEN (Prefix settings_ / products_)
+    -> WICHTIG: settings.html im Menü für ALLE Rollen (auch ROLE_WORKER/Lars) 
+       sichtbar machen!
+
+ 📊 UNIVERSELLE DATA-TABLE & LAYOUT ENGINE (Systemweiter Standard)
+-----------------------------------------------------------------------------
+[ ] Interaktive Spalten-Sortierung: Klickbare Tabellenköpfe (inkl. visueller 
+    Auf-/Ab-Pfeile) für alle Spalten (z. B. nach Produktname, Preis oder Status).
+[ ] Individueller Spalten-Konfigurator in den Einstellungen: Ein Auswahl-Menü 
+    unter settings.html, in dem jeder User (Hugo & Lars) unabhängig für sich 
+    selbst festlegt, welche Spalten sichtbar sind und in welcher Reihenfolge 
+    sie gelistet werden.
+[ ] Rollenbasierte Weiche in settings.html: Lars darf nur seine persönlichen 
+    Tabellen-Optionen sehen; administrative Schalter bleiben für ihn gesperrt.
+[ ] Benutzerspezifische Zustandsspeicherung: Die gewählte Tabellenkonfiguration 
+    dauerhaft und an die jeweilige User-ID gekoppelt im LocalStorage sichern.
+[ ] Globaler App-Footer (layout.js): Dynamische Injektion einer Fußzeile auf 
+    allen Plattform-Seiten für einen sauberen, einheitlichen Fenster-Abschluss.
+    -> MIGRATION: Die Links für "Impressum & Datenschutz" (legal.html) aus der 
+       oberen Navigation entfernen und fest im neuen Footer verankern.
 
  🟢 BACKEND: WARENEINGANG, DATENMODELL & VALIDIERUNG
 -----------------------------------------------------------------------------
