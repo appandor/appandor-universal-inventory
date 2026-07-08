@@ -1,11 +1,29 @@
 =============================================================================
-             APPANDOR CORE SYSTEM — INBOUND & LOGISTICS TODO (2026)
+             APPANDOR INFRASTRUCTURE & REFACTORING SYSTEM TODO
 =============================================================================
 
- 🟢 PRIORITÄT 1: WARENEINGANG, DATENMODELL & VALIDIERUNG (Heutiger Fokus)
+ 🐳 INFRASTRUCTURE & DEVOPS AUTOMATION (Reproduzierbarkeit)
 -----------------------------------------------------------------------------
-[ ] Aktualisierten SQL-Blueprint in PostgreSQL einspielen, um scanbare 
-    Locations, Zwischentabellen und Schutz-Flags zu aktivieren.
+[ ] setup_server.sh finalisieren: Das Skript muss die gesamte Umgebung 
+    (Node, Docker, Netzwerke, Zertifikate) auf jedem beliebigen, nackten 
+    Linux-Server vollautomatisch von Null auf bereitstellen.
+[ ] Docker-Clean-Routine: Docker-Compose-Konfiguration so aufbauen, dass ein 
+    Neustart (mit Volume-Zerstörung) das komplette System inklusive der 
+    PostgreSQL-Tabellenstrukturen und Initialdaten frisch aufsetzt.
+
+ 🎨 FRONTEND MIGRATION (Neues i18n- & Namensraum-Format)
+-----------------------------------------------------------------------------
+[x] lp.html / lp.css / lp.js          --> ERLEDIGT (Prefix lp_)
+[x] login.html / login.css / login.js --> ERLEDIGT (Prefix login_)
+[ ] inventory.html / inventory.js     --> IN ARBEIT (Prefix inventory_)
+[ ] inbound.html / inbound.js         --> OFFEN (Prefix inbound_)
+[ ] outbound.html / outbound.js        --> OFFEN (Prefix outbound_)
+[ ] settings.html / products.html     --> OFFEN (Prefix settings_ / products_)
+
+ 🟢 BACKEND: WARENEINGANG, DATENMODELL & VALIDIERUNG
+-----------------------------------------------------------------------------
+[ ] PostgreSQL Blueprint: Aktualisierten SQL-Blueprint in PostgreSQL einspielen, 
+    um scanbare Locations, Zwischentabellen und Schutz-Flags zu aktivieren.
 [ ] Inbound-Route POST /api/inbound/receive in routes/inbound.js erstellen.
 [ ] Validierung A einbauen: Prüfung auf Umgebungsbedingungen (Zulässigkeit 
     von Box und Produkt auf dem gewählten locations.environment_type).
@@ -24,7 +42,7 @@
 
  🟡 PRIORITÄT 2: PASSWORT-VERGESSEN-ABLAUF (Reset Flow - Geparkt)
 -----------------------------------------------------------------------------
-[ ] Absendefunktion (API-Fetch) im Passwort-Modal integrieren.
+[ ] Absendefunktion (API-Fetch) im Passwort-Modal einbauen.
 [ ] API-Endpunkte in routes/auth.js für Reset-Flow erstellen.
 [ ] Nodemailer-Konfiguration für Netcup-Domain-Postfach hinterlegen.
 
