@@ -15,7 +15,14 @@
     "login_label_email": "E-Mail-Adresse *",
     "login_label_password": "Passwort *",
     "login_btn_submit": "Im Workspace anmelden",
+    "login_forgot_password": "Passwort vergessen", 
 
+     "inventory_title": "Warenbestand",
+
+    "gen_loading_records": "Datenbank-Einträge werden abgefragt...",
+    "gen_sandbox_banner": "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
+
+    
     "msg_logout_confirm": "Möchten Sie sich wirklich abmelden?",
     "msg_error_required_fields": "Bitte füllen Sie alle Pflichtfelder aus.",
 
@@ -50,7 +57,6 @@
     "desc_outbound": "Scannen Sie Box-Barcodes, um Aufträge abzuwickeln und physische Lagerplätze freizugeben.",
     "desc_settings": "Verwalten Sie Benutzer, Systemkategorien, maßgeschneiderte Container und die Lagertopologie.",
 
-    "loading_records": "Datenbank-Einträge werden abgefragt...",
     "loading_components": "Formular-Komponenten werden initialisiert...",
     "loading_settings": "Einstellungs-Komponenten werden initialisiert...",
     "loading_products": "Produkt-Stammdaten werden geladen...",

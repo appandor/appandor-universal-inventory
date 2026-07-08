@@ -1,0 +1,121 @@
+/* =============================================================================
+   APPANDOR LOGISTICS: SIGN IN PAGE SPECIFIC STYLES (2026)
+   ============================================================================= */
+
+.login_body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.login_card {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background: var(--card-bg, #1e1e1e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.login_header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login_icon {
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+.login_main-title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 22px;
+}
+
+.login_subtitle {
+  color: var(--text-muted, #666);
+  font-size: 13px;
+  margin: 5px 0 0 0;
+}
+
+.login_error {
+  display: none;
+  background: #c62828;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.login_form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.login_label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.login_input {
+  width: 100%;
+  padding: 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.login_forgot-wrapper {
+  text-align: right;
+  margin-top: 8px;
+}
+
+.login_link-forgot {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: sans-serif;
+}
+
+.login_btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login_lang-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login_select {
+  background: var(--card-bg, #222);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #444);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}

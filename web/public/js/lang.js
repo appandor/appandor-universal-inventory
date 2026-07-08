@@ -1,15 +1,18 @@
 window.appTranslations = {};
 
 window.translatePage = function() {
-    const translations = window.appTranslations || {};
+  const translations = window.appTranslations || {};
     
-    // 1. Statische Texte ersetzen
-    document.querySelectorAll("[data-i18n]").forEach(element => {
-        const key = element.getAttribute("data-i18n");
-        if (translations[key]) {
-            element.innerText = translations[key];
-        }
-    });
+  // 1. Statische Texte ersetzen
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+    const key = element.getAttribute("data-i18n");
+    if (translations[key]) {
+      element.innerText = translations[key];
+    } else {
+      // erzwingen wir den rohen #platzhalter#, anstatt den alten Text stehenzulassen!
+      element.innerText = `#${key}#`;
+    }
+  });
     
     // 2. KORREKTUR: Dynamischer Aufbau des Selectors NUR WENN ER EXISITIERT!
     const langSelector = document.getElementById("language-selector");

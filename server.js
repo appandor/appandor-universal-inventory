@@ -72,7 +72,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
+    res.sendFile(path.join(publicPath, 'lp.html'));
 });
 
 app.get('/api/status', (req, res) => {

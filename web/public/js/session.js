@@ -78,7 +78,7 @@ function startLiveCountdown() {
 
 window.startLiveCountdown = startLiveCountdown;
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeAppandorSession() {
     const path = window.location.pathname;
     if (path.includes("index.html") || path.includes("login.html") || path === "/") return;
 
@@ -137,4 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem('appandor_jwt_token');
         window.location.href = "login.html";
     });
+};
+
+// Aktualisiert den Verbindungs-Status sofort, wenn die Sprache wechselt
+window.addEventListener('appandor_language_changed', () => {
+  if (typeof startLiveCountdown === 'function') {
+    startLiveCountdown();
+  }
 });

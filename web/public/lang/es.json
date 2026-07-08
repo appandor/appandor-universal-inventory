@@ -16,6 +16,10 @@
     "login_label_email": "Correo electrónico *",
     "login_label_password": "Contraseña *",
     "login_btn_submit": "Iniciar sesión en el Workspace",
+    "login_forgot_password": "¿Olvidó su contraseña?",
+
+
+
 
     "msg_logout_confirm": "¿Realmente desea cerrar sesión?",
     "msg_error_required_fields": "Por favor, complete todos los campos obligatorios.",

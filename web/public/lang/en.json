@@ -15,6 +15,10 @@
     "login_label_email": "Email Address *",
     "login_label_password": "Password *",
     "login_btn_submit": "Sign In to Workspace",
+    "login_forgot_password": "Forgot password?",
+
+
+
 
     "msg_logout_confirm": "Do you really want to sign out?",
     "msg_error_required_fields": "Please fill in all required fields.",

@@ -1,13 +1,30 @@
+
+// ==========================================================================
+// APPANDOR CORE: GENERAL THINGS FOR MOSTLY ALL SITES
+// ==========================================================================
+
+// Neue Welt: Zündet über das Signal der config.js
+window.addEventListener("appandor_platform_ready", () => {
+  initializeAppandorLayout();
+  initializeAppandorSession();
+});
+
+// Alte Welt (Fallback): Zündet sofort, wenn die config.js auf der Seite fehlt
+document.addEventListener("DOMContentLoaded", () => {
+  if (!window.appConfig || Object.keys(window.appConfig).length === 0) {
+    if (typeof initializeAppandorLayout === "function") initializeAppandorLayout();
+    if (typeof initializeAppandorSession === "function") initializeAppandorSession();
+  }
+});
+
+// ==========================================================================
+// ==========================================================================
+
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
     
-
-
     // EINZELSCHRITT-SCHUTZSCHILD: Auf der Landingpage tut die alte core.js ab jetzt absolut gar nichts mehr!
-    if (path.includes("index.html") || path === "/") return;
-
-
-
+    if (path.includes("lp.html") || path.includes("login.html" )) return;
 
     let pageKey = "title_dashboard";
     if (path.includes("index.html") || path === "/") pageKey = "lp_title";
@@ -60,8 +77,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 const langSelector = document.getElementById("language-selector");
-                if (langSelector) { langSelector.value = lang; }
-
+                if (langSelector) { 
+                    // =========================================================================
+                    // TODO: DEPRECATED (MIGRATION 2026)
+                    // REMOVE THIS BLOCK AS SOON AS THIS PAGE IS FULLY MIGRATED TO CONFIG.JS!
+                    // The new lang.js populates the selector automatically via manifest.
+                    // =========================================================================
+                    if (langSelector.options.length === 0) {
+                        langSelector.innerHTML = '<option value="en">English</option><option value="de">Deutsch</option><option value="es">Español</option>';
+                    }
+                    // =========================================================================
+                    
+                    langSelector.value = lang; 
+                }
                 if (typeof startLiveCountdown === 'function') startLiveCountdown();
 
                 window.dispatchEvent(new CustomEvent('appandor_language_changed', { detail: { lang: lang } }));
