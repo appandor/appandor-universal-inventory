@@ -1,0 +1,33 @@
+/* =============================================================================
+   APPANDOR LOGISTICS: SYSTEM ADMINISTRATION STYLESHEET (CRLF)
+   ============================================================================= */
+
+/* Header-Zeile: Titel links, Button rechts */
+#admin-toggle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+/* Der charakteristische, orangefarbene Klick-Link */
+#admin-toggle-btn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #ff6b00;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Verhalten im eingeklappten Zustand */
+#admin-control-card[data-state="collapsed"] {
+  padding-bottom: 12px;
+}
+
+#admin-control-card[data-state="collapsed"] #admin-toggle-header {
+  border-bottom: none;
+  margin-bottom: 0;
+}

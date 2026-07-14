@@ -3,6 +3,23 @@
     "lang_en": "Englisch",
     "lang_es": "Spanisch",
 
+    "gen_loading_records": "Datenbank-Einträge werden abgefragt...",
+    "gen_sandbox_banner": "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
+
+    "tbl_box_id": "Box-ID",
+    "tbl_storage_location": "Lagerplatz",
+    "tbl_product_name": "Artikelname",
+    "tbl_barcode": "Barcode",
+    "tbl_price_gross": "EK Brutto",
+    "tbl_logistics_status": "Logistik-Status",
+
+    "lay_status_connecting": "Verbinden...",
+    "lay_status_connected": "Verbunden",
+    "lay_status_disconnected": "Getrennt",
+    "lay_connectionStatus_tooltip": "Abmelden",
+
+
+
     "lp_title": "Appandor Core",
     "lp_subtitle": "Die universelle Bestands- und Logistik-Engine der nächsten Generation",
     "lp_description": "Verwalten Sie physische Bestände, maßgeschneiderte Schutzboxen und Multi-Location-Logistik in Echtzeit. Vollkommen mandantenfähig isolierte, ultraschnelle API-First-Architektur für skalierende Unternehmen.",
@@ -10,32 +27,28 @@
     "lp_btn_enter": "Workspace betreten",
     "lp_btn_pricing": "Preise ansehen (Nutzer-Lizenzmodell)",
     
-  "lp_info_title": "Was ist die Appandor App?",
-  "lp_info_subtitle": "Die Appandor App ist ein digitaler, einfach zu bedienender Ordnungshelfer für alles, was du lagerst, verbrauchst oder einkaufst. Sie funktioniert am PC genauso wie auf dem Smartphone und behält für dich den Überblick über deine Bestände – egal ob zu Hause, in der Werkstatt oder im Betrieb.",
-  "lp_info_usecases_title": "Wafür kann man sie gebrauchen?",
-  "lp_info_use_cellar_title": "Für den Vorratskeller:",
-  "lp_info_use_cellar_desc": "Nie wieder vergessen, wie viele Packungen Nudeln, Linsen oder Konserven noch im Regal stehen. Du siehst sofort, was bald abläuft oder nachgekauft werden muss.",
-  "lp_info_use_workshop_title": "Für die Hobbywerkstatt:",
-  "lp_info_use_workshop_desc": "Perfekt für Kleinteile. Du erfasst Schrauben, Dübel, Nägel oder Bohrer und weißt dank digitaler Platzierung immer genau, wo die richtige Größe liegt.",
-  "lp_info_use_shopping_title": "Für den allgemeinen Einkauf:",
-  "lp_info_use_shopping_desc": "Wenn die Milch im Kühlschrank leer ist, trägst du es ein. Dein Partner sieht es sofort auf dem Smartphone und bringt beim Heimweg das Eis oder die Einkäufe mit.",
-  "lp_info_use_pro_title": "Für Profis & Gewerbe:",
-  "lp_info_use_pro_desc": "Lückenlose Erfassung im Betrieb. Das System steuert den Wareneingang, prüft die Haltbarkeit und bucht den Warenausgang sauber ab.",
-  "lp_info_advantages_title": "Die Vorteile",
-  "lp_adv_search_title": "Kein Suchen mehr:",
-  "lp_adv_search_desc": "Die App sagt dir exakt, in welchem Raum, in welchem Regal und in welcher Kiste ein Gegenstand liegt.",
-  "lp_adv_double_title": "Keine Doppelkäufe:",
-  "lp_adv_double_desc": "Du siehst beim Einkaufen im Laden direkt auf dem Handy, was zu Hause noch da ist. Das spart Geld und verhindert, dass Lebensmittel verderben.",
-  "lp_adv_check_title": "Mitdenkende Platzprüfung:",
-  "lp_adv_check_desc": "Die App unterstützt dich bei der Organisation. Sie gibt dir einen kurzen Hinweis, wenn ein Regalplatz bereits voll ist oder bestimmte Dinge an einem anderen Platz besser aufgehoben wären.",
-  "lp_adv_share_title": "Gemeinsam nutzen:",
-  "lp_adv_share_desc": "Die App synchronisiert sich in Echtzeit. Was du einträgst, sieht deine Familie oder dein Team im selben Moment.",
-  "lp_adv_click_title": "Einfach per Klick:",
-  "lp_adv_click_desc": "Die gesamte Oberfläche ist extrem schlank gehalten und schaltet bei Bedarf sofort zwischen Deutsch, Englisch und Spanisch um.",
-
-
-
-
+    "lp_info_title": "Was ist die Appandor App?",
+    "lp_info_subtitle": "Die Appandor App ist ein digitaler, einfach zu bedienender Ordnungshelfer für alles, was du lagerst, verbrauchst oder einkaufst. Sie funktioniert am PC genauso wie auf dem Smartphone und behält für dich den Überblick über deine Bestände – egal ob zu Hause, in der Werkstatt oder im Betrieb.",
+    "lp_info_usecases_title": "Wafür kann man sie gebrauchen?",
+    "lp_info_use_cellar_title": "Für den Vorratskeller:",
+    "lp_info_use_cellar_desc": "Nie wieder vergessen, wie viele Packungen Nudeln, Linsen oder Konserven noch im Regal stehen. Du siehst sofort, was bald abläuft oder nachgekauft werden muss.",
+    "lp_info_use_workshop_title": "Für die Hobbywerkstatt:",
+    "lp_info_use_workshop_desc": "Perfekt für Kleinteile. Du erfasst Schrauben, Dübel, Nägel oder Bohrer und weißt dank digitaler Platzierung immer genau, wo die richtige Größe liegt.",
+    "lp_info_use_shopping_title": "Für den allgemeinen Einkauf:",
+    "lp_info_use_shopping_desc": "Wenn die Milch im Kühlschrank leer ist, trägst du es ein. Dein Partner sieht es sofort auf dem Smartphone und bringt beim Heimweg das Eis oder die Einkäufe mit.",
+    "lp_info_use_pro_title": "Für Profis & Gewerbe:",
+    "lp_info_use_pro_desc": "Lückenlose Erfassung im Betrieb. Das System steuert den Wareneingang, prüft die Haltbarkeit und bucht den Warenausgang sauber ab.",
+    "lp_info_advantages_title": "Die Vorteile",
+    "lp_adv_search_title": "Kein Suchen mehr:",
+    "lp_adv_search_desc": "Die App sagt dir exakt, in welchem Raum, in welchem Regal und in welcher Kiste ein Gegenstand liegt.",
+    "lp_adv_double_title": "Keine Doppelkäufe:",
+    "lp_adv_double_desc": "Du siehst beim Einkaufen im Laden direkt auf dem Handy, was zu Hause noch da ist. Das spart Geld und verhindert, dass Lebensmittel verderben.",
+    "lp_adv_check_title": "Mitdenkende Platzprüfung:",
+    "lp_adv_check_desc": "Die App unterstützt dich bei der Organisation. Sie gibt dir einen kurzen Hinweis, wenn ein Regalplatz bereits voll ist oder bestimmte Dinge an einem anderen Platz besser aufgehoben wären.",
+    "lp_adv_share_title": "Gemeinsam nutzen:",
+    "lp_adv_share_desc": "Die App synchronisiert sich in Echtzeit. Was du einträgst, sieht deine Familie oder dein Team im selben Moment.",
+    "lp_adv_click_title": "Einfach per Klick:",
+    "lp_adv_click_desc": "Die gesamte Oberfläche ist extrem schlank gehalten und schaltet bei Bedarf sofort zwischen Deutsch, Englisch und Spanisch um.",
 
     "login_title": "Appandor Core Anmeldung",
     "login_subtitle": "Universelles Lager-Sicherheits-Journal",
@@ -44,10 +57,8 @@
     "login_btn_submit": "Im Workspace anmelden",
     "login_forgot_password": "Passwort vergessen", 
 
-     "inventory_title": "Warenbestand",
+     "inv_title": "Warenbestand",
 
-    "gen_loading_records": "Datenbank-Einträge werden abgefragt...",
-    "gen_sandbox_banner": "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
 
     
     "msg_logout_confirm": "Möchten Sie sich wirklich abmelden?",
@@ -106,17 +117,11 @@
 
     "tbl_purchase_date": "Kaufdatum",
     "tbl_product_desc": "Artikelbezeichnung",
-    "tbl_barcode": "Barcode",
-    "tbl_price_gross": "EK Brutto",
     "tbl_quantity": "Menge",
     "tbl_estimated_delivery": "Erwartet am",
     "tbl_received_at": "Geliefert am",
     "tbl_expiry_date": "MHD",
-    "tbl_logistics_status": "Logistik-Status",
 
-    "tbl_box_id": "Box-ID",
-    "tbl_storage_location": "Lagerplatz",
-    "tbl_product_name": "Artikelname",
 
     "prod_alert_at": "Meldebestand bei:",
     "unit_pcs": "Stk",

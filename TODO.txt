@@ -1,72 +1,111 @@
-=============================================================================
-             APPANDOR INFRASTRUCTURE & REFACTORING SYSTEM TODO
-=============================================================================
+# =============================================================================
+# APPANDOR LOGISTICS: COMPLETE SYSTEM REFACTORING & MASTER ROADMAP (CRLF)
+# =============================================================================
 
- 🐳 INFRASTRUCTURE & DEVOPS AUTOMATION (Reproduzierbarkeit & Sicherheit)
------------------------------------------------------------------------------
-[ ] Passwörter aus Quelltext entfernen: Alle Klartext-Passwörter, API-Keys 
-    und DB-Secrets aus den JS-Dateien in eine geschützte .env-Datei auslagern.
-[ ] .gitignore-Schutz aktivieren: Sicherstellen, dass die scharfe .env-Datei 
-    niemals auf GitHub landet.
-[ ] setup_server.sh finalisieren: Das Skript muss die gesamte Umgebung 
-    (Node, Docker, Netzwerke, Zertifikate) auf jedem beliebigen, nackten 
-    Linux-Server vollautomatisch von Null auf bereitstellen.
-[ ] Docker-Clean-Routine: Docker-Compose-Konfiguration so aufbauen, dass ein 
-    Neustart (mit Volume-Zerstörung) das komplette System inklusive der 
-    PostgreSQL-Tabellenstrukturen und Initialdaten frisch aufsetzt.
+[ ] PRIORITY 1: RADICAL FRAMEWORK CONSOLIDATION & CLEANUP (HIGH PRIO)
+  [ ] Refactor HTML files to use unified lay_ identifiers (No module prefixes):
+    * Card Container ID: "lay_toggle-card"
+    * Klick Header ID: "lay_toggle-header"
+    * Toggle Button ID: "lay_toggle-btn"
+    * Form Grid ID: "lay_toggle-form"
+  [ ] Clean up 'inbound.html', 'products.html' and 'admin.html' HTML structures
+  [ ] Rewrite global 'js/layout.js' to handle toggle events purely via 'lay_' classes/IDs
+  [ ] Remove all legacy page-specific toggle event listeners from all module JS files
+  [ ] CRITICAL CSS CONSOLIDATION: Eliminate all duplicate and redundant styles
+    * Move all dynamic card collapse rules exclusively into global 'css/layout.css'
+    * Pure deletion of all '.card[data-state="collapsed"]' fragments from 'inbound.css', 'products.css' and 'admin.css' to prevent cache/override conflicts
+  [ ] CRITICAL I18N CONSOLIDATION: Unify all structural translation keys in 'lang/de.json' & 'lang/en.json'
+    * Enforce system-wide usage of strictly 'btn_collapse' and 'btn_expand'
+    * Purge all module-specific hiding/showing language fragments
 
- 🎨 FRONTEND MIGRATION (Neues i18n-, Namensraum- & Tabellen-Format)
------------------------------------------------------------------------------
-[x] lp.html / lp.css / lp.js          --> ERLEDIGT (Prefix lp_)
-[x] login.html / login.css / login.js --> ERLEDIGT (Prefix login_)
-[ ] inventory.html / inventory.js     --> IN ARBEIT (Prefix inventory_)
-[ ] inbound.html / inbound.js         --> OFFEN (Prefix inbound_)
-[ ] outbound.html / outbound.js        --> OFFEN (Prefix outbound_)
-[ ] settings.html / products.html     --> OFFEN (Prefix settings_ / products_)
-    -> WICHTIG: settings.html im Menü für ALLE Rollen (auch ROLE_WORKER/Lars) 
-       sichtbar machen!
+[ ] PRIORITY 2: CRITICAL CONSOLE ERRORS & INFRASTRUCTURE FIXES
+  [ ] Fix MIME-Type error for 'css/layout.css' (Currently served as text/html)
+    * Check physical existence in 'web/public/css/layout.css' via server terminal
+    * Verify Express static asset routing in 'server.js'
+  [ ] Isolate script injections in core loading chain
+    * Stop 'admin.js' from executing on 'inventory.html' (Fixes red [CORE ERROR])
+    * Fix navigation translation break for '#nav_admin#' on main index dashboard
+  [ ] Fix Inventory Status Query in 'routes/inventory.js'
+    * Ensure only 'RECEIVED' tracked products are displayed in Live Inventory
+    * Filter out pure 'ORDERED' lines to remove ghost boxes from Lars' view
+  [ ] Finalize Secure System Restart Pipeline (Toggle area backend command execution)
+    * Test host-side background trigger monitor ('restart_watcher.sh')
+    * Verify file-touch system from within node container via '.restart_trigger'
 
- 📊 UNIVERSELLE DATA-TABLE & LAYOUT ENGINE (Systemweiter Standard)
------------------------------------------------------------------------------
-[ ] Interaktive Spalten-Sortierung: Klickbare Tabellenköpfe (inkl. visueller 
-    Auf-/Ab-Pfeile) für alle Spalten (z. B. nach Produktname, Preis oder Status).
-[ ] Individueller Spalten-Konfigurator in den Einstellungen: Ein Auswahl-Menü 
-    unter settings.html, in dem jeder User (Hugo & Lars) unabhängig für sich 
-    selbst festlegt, welche Spalten sichtbar sind und in welcher Reihenfolge 
-    sie gelistet werden.
-[ ] Rollenbasierte Weiche in settings.html: Lars darf nur seine persönlichen 
-    Tabellen-Optionen sehen; administrative Schalter bleiben für ihn gesperrt.
-[ ] Benutzerspezifische Zustandsspeicherung: Die gewählte Tabellenkonfiguration 
-    dauerhaft und an die jeweilige User-ID gekoppelt im LocalStorage sichern.
-[ ] Globaler App-Footer (layout.js): Dynamische Injektion einer Fußzeile auf 
-    allen Plattform-Seiten für einen sauberen, einheitlichen Fenster-Abschluss.
-    -> MIGRATION: Die Links für "Impressum & Datenschutz" (legal.html) aus der 
-       oberen Navigation entfernen und fest im neuen Footer verankern.
+[ ] PRIORITY 3: INFRASTRUCTURE & DEVOPS AUTOMATION (.ENV & MULTI-TENANCY)
+  [ ] Passwörter aus Quelltext entfernen: Alle Klartext-Passwörter, API-Keys und DB-Secrets aus den JS-Dateien in eine geschützte .env-Datei auslagern.
+  [ ] .gitignore-Schutz aktivieren: Sicherstellen, dass die scharfe .env-Datei niemals auf GitHub landet.
+  [ ] Multi-Instance Docker-Setup: setup_server.sh so erweitern, dass für jeden neuen Mandanten (Tenant) ein komplett isolierter, eigener Docker-Container inklusive separater PostgreSQL-Datenbank aufgesetzt wird.
+  [ ] Lizenzprüfungs-Wächter (Phone-Home): Hintergrund-Dienst im Backend integrar, der alle 24 Stunden die zentrale Appandor-Lizenz-API abfragt.
+  [ ] Kulante Offline-Sperre (Grace Period): Bei Ausfall der Lizenz-API eine 7-tägige Frist gewähren. Nach Ablauf der Frist automatischen Wechsel in einen Read-Only-Modus (Schreibschutz für alle Inbound-/Outbound-Routen).
+  [ ] Docker-Clean-Routine: Docker-Compose-Konfiguration so aufbauen, dass ein Neustart (mit Volume-Zerstörung) das komplette System inklusive der PostgreSQL-Tabellenstrukturen und Initialdaten frisch aufsetzt.
 
- 🟢 BACKEND: WARENEINGANG, DATENMODELL & VALIDIERUNG
------------------------------------------------------------------------------
-[ ] PostgreSQL Blueprint: Aktualisierten SQL-Blueprint in PostgreSQL einspielen, 
-    um scanbare Locations, Zwischentabellen und Schutz-Flags zu aktivieren.
-[ ] Inbound-Route POST /api/inbound/receive in routes/inbound.js erstellen.
-[ ] Validierung A einbauen: Prüfung auf Umgebungsbedingungen (Zulässigkeit 
-    von Box und Produkt auf dem gewählten locations.environment_type).
-[ ] Validierung B einbauen: Prüfung auf physischen Schutz (Erzwingen von 
-    is_airtight/is_opaque bei echten Boxen, falls das Produkt es fordert).
-[ ] Validierung C einbauen: Atmende Volumen-Prüfung des Regalplatzes unter 
-    Berücksichtigung des manuellen Blocks (is_locked = TRUE).
-[ ] SQL-Mengen-Splitting: Ursprungseintrag bei Teillieferung reduzieren; 
-    neue Zeile in tracked_products mit spezifischem expiry_date (MHD) anlegen.
-[ ] Automatisches Handling Virtueller Boxen: Wenn keine Box gescannt wird, 
-    eine VBOX-xxxxx auf dem Platz erzeugen (oder bestehende VBox erweitern).
-[ ] Verknüpfung in der Zwischentabelle box_contents sicherstellen und dabei 
-    die Sortenreinheit bei echten physischen Boxen erzwingen.
-[ ] Integration des neuen Endpunkts in die js/inbound-modal.js zur finalen 
-    Auflösung der roten Fehler-Zone im Frontend.
+[ ] PRIORITY 4: FRONTEND MIGRATION & REFACTORING (inventory_ / inbound_ / outbound_)
+  [x] lp.html / lp.css / lp.js          --> ERLEDIGT (Prefix lp_)
+  [x] login.html / login.css / login.js --> ERLEDIGT (Prefix login_)
+  [ ] inventory.html / inventory.js     --> IN ARBEIT (Prefix inventory_)
+  [ ] inbound.html / inbound.js         --> OFFEN (Prefix inbound_)
+  [ ] outbound.html / outbound.js        --> OFFEN (Prefix outbound_)
+  [ ] settings.html / products.html     --> OFFEN (Prefix settings_ / products_)
+    -> WICHTIG: settings.html im Menü für ALLE Rollen (auch ROLE_WORKER/Lars) sichtbar machen!
 
- 🟡 PRIORITÄT 2: PASSWORT-VERGESSEN-ABLAUF (Reset Flow - Geparkt)
------------------------------------------------------------------------------
-[ ] Absendefunktion (API-Fetch) im Passwort-Modal einbauen.
-[ ] API-Endpunkte in routes/auth.js für Reset-Flow erstellen.
-[ ] Nodemailer-Konfiguration für Netcup-Domain-Postfach hinterlegen.
+[ ] PRIORITY 5: UNIVERSELLE DATA-TABLE & LAYOUT ENGINE (SYSTEM STANDARD)
+  [ ] Interaktive Spalten-Sortierung: Klickbare Tabellenköpfe (inkl. visueller Auf-/Ab-Pfeile) für alle Spalten (z. B. nach Produktname, Preis oder Status).
+  [ ] Individueller Spalten-Konfigurator in den Einstellungen: Ein Auswahl-Menü unter settings.html, in dem jeder User (Hugo & Lars) unabhängig für sich selbst festlegt, welche Spalten sichtbar sind und in welcher Reihenfolge sie gelistet werden.
+  [ ] Rollenbasierte Weiche in settings.html: Lars darf nur seine persönlichen Tabellen-Optionen sehen; administrative Schalter bleiben für ihn gesperrt.
+  [ ] Benutzerspezifische Zustandsspeicherung: Die gewählte Tabellenkonfiguration dauerhaft und an die jeweilige User-ID gekoppelt im LocalStorage sichern.
+  [ ] Globaler App-Footer (layout.js): Dynamische Injektion einer Fußzeile auf allen Plattform-Seiten für einen sauberen, einheitlichen Fenster-Abschluss.
+    -> MIGRATION: Die Links für "Impressum & Datenschutz" (legal.html) aus der oberen Navigation entfernen und fest im neuen Footer verankern.
 
-=============================================================================
+[ ] PRIORITY 6: DYNAMISCHE RECHTSTEXT-SCHNITTSTELLE (SHOPIFY-MODELL FÜR LEGAL)
+  [ ] Auflösung der Text-Fragmentierung: Alle unzähligen kleinen, statischen Text-Schlüssel aus den JSON-Sprachdateien entfernen. legal.html wird im HTML vollständig textleer geräumt und auf große Sektions-Container reduziert.
+  [ ] Kapselung von Rahmen und Inhalt: Rechtliche Standard-Überschriften und der Entwickler-Urheberhinweis ("Powered by Appandor") kommen fest aus der i18n, während lange Fließtexte dynamisch als Ganzes nachgeladen werden.
+  [ ] Strukturierte Inhaltsdateien (Übergangsphase): Auslagerung der Rechtstexte in fertig formatierte, separate HTML-Dateien je Sprache unter "web/public/lang/legal/" (z. B. impressum_de.html, privacy_en.html).
+  [ ] Asynchrone Text-Injektions-Brücke: JS-Logik implementieren, die basierend auf der aktuellen Sprache die jeweilige Großdatei via .text()-Fetch holt und unbestechlich mit einem Schlag per .innerHTML in die Container schießt.
+  [ ] Vorbereitung für DB-Anbindung: Die Lade-Infrastruktur so aufbauen, dass beim späteren Backend-Wechsel nur die URL von einer lokalen HTML-Datei auf den API-Endpunkt (GET /api/legal) umgebogen werden muss.
+
+[ ] PRIORITY 7: BACKEND DATA VALIDATION & INBOUND ROUTING
+  [ ] PostgreSQL Blueprint: Aktualisierten SQL-Blueprint in PostgreSQL einspielen, um scanbare Locations, Zwischentabellen und Schutz-Flags zu aktivieren.
+  [ ] Inbound-Route POST /api/inbound/receive in routes/inbound.js erstellen.
+  [ ] Validierung A einbauen: Prüfung auf Umgebungsbedingungen (Zulässigkeit von Box und Produkt auf dem gewählten locations.environment_type).
+  [ ] Validierung B einbauen: Prüfung auf physischen Schutz (Erzwingen von is_airtight/is_opaque bei echten Boxen, falls das Produkt es fordert).
+  [ ] Validierung C einbauen: Atmende Volumen-Prüfung des Regalplatzes unter Berücksichtigung des manuellen Blocks (is_locked = TRUE).
+  [ ] SQL-Mengen-Splitting: Ursprungseintrag bei Teillieferung reduzieren; neue Zeile in tracked_products mit spezifischem expiry_date (MHD) anlegen.
+  [ ] Automatisches Handling Virtueller Boxen: Wenn keine Box gescannt wird, eine VBOX-xxxxx auf dem Platz erzeugen (oder bestehende VBox erweitern).
+  [ ] Verknüpfung in der Zwischentabelle box_contents sicherstellen und dabei die Sortenreinheit bei echten physischen Boxen erzwingen.
+  [ ] Integration des neuen Endpunkts in die js/inbound-modal.js zur finalen Auflösung der roten Fehler-Zone im Frontend.
+  [ ] Build Server Metrics Dashboard Layout (#admin-tab-metrics)
+    * Connect switch engine to hide table select dropdown when tab is active
+    * Construct the responsive Info-Card-Grid (Weg 1) inside '#tbl_table-container'
+    * Create backend API route for hardware utility (CPU, RAM, Disk usage)
+    * Integrate active JWT user session counter and live Docker container health checks
+
+[ ] PRIORITY 8: PASSWORD RESET FLOW (GEPARKT)
+  [ ] Absendefunktion (API-Fetch) im Passwort-Modal einbauen.
+  [ ] API-Endpunkte in routes/auth.js für Reset-Flow erstellen.
+  [ ] Nodemailer-Konfiguration für Netcup-Domain-Postfach hinterlegen.
+
+
+# =============================================================================
+# EXTRA SECTION: FUTURE ARCHITECTURE BRAINSTORMING (CONCEPT STAGE)
+# =============================================================================
+[ ] REITER-ERWEITERUNG: #admin_tab_language# (Sprach- & Übersetzungs-Zentrale)
+  [ ] Daten-Modellierung in PostgreSQL:
+    * Aufbau einer relationalen i18n-Tabelle für alle System-Texte.
+    * Monetarisierungs-Weiche: Spalte 'tenant_id' einplanen. Mandanten schalten lizensierte Sprachen über DB-Flags frei oder überschreiben Standardbegriffe exklusiv.
+  [ ] Client-Side Performance-Cache (0-Latenz-Modell):
+    * Komplette Auslieferung des lizensierten Sprachpakets genau EINMAL beim Login.
+    * Das Frontend speichert das JSON im 'LocalStorage' und arbeitet im Alltag rein lokal mit 0 ms Verzögerung.
+  [ ] UI-Sicherheits-Blocker (Race-Condition-Schutz):
+    * Das Sprachwechsel-Dropdown wird im Frontend sofort auf 'disabled=true' gesetzt, sobald ein Wechsel stattfindet. Freischaltung erst nach vollständiger .innerHTML-Injektion.
+  [ ] Dead-Key-Detection (Asynchrone Bulk-Nutzungs-Analyse):
+    * Das Frontend trackt genutzte i18n-Schlüssel lautlos im RAM ('new Set()').
+    * Beim Seitenwechsel oder Logout wird das kompakte Array per asynchronem HTTP-POST im Hintergrund ans Backend gesendet.
+    * Ermöglicht das spätere Filtern und radikale Löschen ungenutzter Textfragmente (Leichen) via SQL-Zeitstempel.
+  [ ] Anti-DDoS & Stabilitäts-Panzer im Backend:
+    * Express-Rate-Limiter: Blockiert IP-Adressen hart mit Status '429', wenn die Tracking-Route mit Bots geflutet wird.
+    * In-Memory-Debounce per User-ID: Das Backend nimmt den asynchronen Bulk-Payload zwar sofort entgegen ('200 OK'), blockiert die Weiterleitung an PostgreSQL im RAM aber über eine zeitliche Sperre von z.B. 5 Minuten pro User-ID. PostgreSQL sieht maximal einen Schreibbefehl pro Nutzer alle 5 Minuten.
+
+# =============================================================================
+# END OF LEDGER FILE - ALL ROADMAPS SECURED
+# =============================================================================

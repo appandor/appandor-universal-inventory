@@ -1,3 +1,58 @@
+
+// UI-MANAGER: Wartet auf das Signal der asynchronen Seiten wenn sie fertig sind
+window.addEventListener("appandor_render_complete", () => {
+
+  if (typeof window.translatePage === "function") {    
+
+    window.translatePage();
+    const container = document.querySelector(".lay_container");
+    if (container) container.classList.add("lay_visible");
+  }
+
+  // =============================================================================
+  // GLOBAL PLATFORM COLLAPSE WATCHER (100% HARMONIZED FOR ALL MODULES)
+  // =============================================================================
+  // Sucht den Klick-Header auf jeder Seite – egal ob alte ID oder neue Klasse
+  const activeToggleHeader = document.getElementById("inbound-toggle-header") || 
+                             document.getElementById("admin-toggle-header") ||
+                             document.querySelector(".lay_toggle-header");
+
+  if (activeToggleHeader) {
+    activeToggleHeader.addEventListener("click", () => {
+      // 1. Holt die direkt umschließende Karte des Klick-Headers
+      const card = activeToggleHeader.closest('.card');
+      if (!card) return;
+
+      // 2. Findet das Formular und den Button innerhalb dieser Karte
+      const form = card.querySelector('form');
+      const btn = activeToggleHeader.querySelector('span') || 
+                  activeToggleHeader.querySelector('.lay_toggle-btn') ||
+                  document.getElementById("lay_toggle-btn") ||
+                  document.getElementById("admin-toggle-btn") ||
+                  document.getElementById("inbound-toggle-btn");
+
+      if (!form || !btn) return;
+
+      // 3. Der unbestechliche Toggle über den data-state der Karte
+      if (card.getAttribute("data-state") === "collapsed") {
+        card.removeAttribute("data-state");
+        form.style.display = "flex";
+        btn.setAttribute("data-i18n", "btn_collapse");
+        btn.removeAttribute("data-state");
+      } else {
+        card.setAttribute("data-state", "collapsed");
+        form.style.display = "none";
+        btn.setAttribute("data-i18n", "btn_expand");
+        btn.setAttribute("data-state", "collapsed");
+      }
+
+      // Startet die Übersetzung für den veränderten Button-Zustand
+      if (typeof window.translatePage === "function") window.translatePage();
+    });
+  }
+
+});
+
 function initializeAppandorLayout() {
   
   const path = window.location.pathname;
@@ -16,7 +71,7 @@ function initializeAppandorLayout() {
   } catch (e) {}
 
   const settingsMenuHTML = (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPERADMIN')
-    ? `<li><a href="settings.html" id="nav-link-settings" style="color: #aaa; text-decoration: none;" data-i18n="nav_settings">Workspace Settings</a></li>`
+    ? `<li><a href="settings.html" id="nav-link-settings" style="color: #aaa; text-decoration: none;" data-i18n="nav_settings"></a></li>`
     : '';
 
   const currentTheme = localStorage.getItem('appandor_theme') || 'dark';
@@ -40,16 +95,22 @@ function initializeAppandorLayout() {
         <div style="display: flex; align-items: center; gap: 20px;">
           <span id="theme-toggle-text" data-i18n="${themeLabelKey}" style="font-size: 12px; font-weight: bold; cursor: pointer; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; user-select: none; transition: color 0.2s;"></span>
           <select id="language-selector" style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer;"></select>
-          <div id="connection-status" class="status-badge" data-i18n="status_connecting" data-i18n-title="tooltip_logout" style="cursor: pointer; transition: opacity 0.2s;"></div>
+
+          <div id="lay_connection-status" 
+              data-i18n-val="lay_connectionStatus" 
+              data-i18n-title="lay_connectionStatus_tooltip"TEST>
+          </div>
+
       </div>
     </header>
     <nav style="margin: 20px 0; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px;">
       <ul id="main-nav-list" style="list-style: none; display: flex; gap: 20px; margin: 0; padding: 0;">
-        <li><a href="inbound.html" id="nav-link-inbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_inbound">Goods Inbound</a></li>
-        <li><a href="outbound.html" id="nav-link-outbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_outbound">Goods Outbound</a></li>
-        <li><a href="inventory.html" id="nav-link-inventory" style="color: #aaa; text-decoration: none;" data-i18n="nav_inventory">Live Inventory</a></li>
+        <li><a href="inventory.html" id="nav-link-inventory" style="color: #aaa; text-decoration: none;" data-i18n="nav_inventory"></a></li>
+        <li><a href="inbound.html" id="nav-link-inbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_inbound"></a></li>
+        <li><a href="outbound.html" id="nav-link-outbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_outbound"></a></li>
         ${settingsMenuHTML}
-        <li><a href="legal.html" id="nav-link-legal" style="color: #aaa; text-decoration: none;" data-i18n="nav_legal">Legal / Info</a></li>
+        <li><a href="admin.html" id="nav-link-admin" style="color: #aaa; text-decoration: none;" data-i18n="nav_admin"></a></li>
+        <li><a href="legal.html" id="nav-link-legal" style="color: #aaa; text-decoration: none;" data-i18n="nav_legal"></a></li>
       </ul>
     </nav>
   `;
@@ -107,11 +168,10 @@ function initializeAppandorLayout() {
               })
               .catch(err => console.error("[Theme Lang Fetch Error]:", err.message));
       });
-  }
+    }
 
-  // 5. ABMELDUNG (LOGOUT) WITH CUSTOM BEAUTIFUL MODAL
-  const badgeElement = document.getElementById("connection-status");
-
+  // 5. ABMELDUNG (LOGOUT) WITH CUSTOM BEAUTIFUL MODAL (CRLF)
+  const badgeElement = document.getElementById("lay_connection-status");
 
   if (badgeElement) {
       badgeElement.addEventListener("click", () => {
@@ -122,18 +182,15 @@ function initializeAppandorLayout() {
               .then(t => {
                   const logoutMsg = t["msg_logout_confirm"] || "Do you really want to sign out?";
                   
-                  // KORREKTUR: Nutzt jetzt deine zentralen, existierenden JSON-Schlüssel!
                   const btnYes = t["btn_modal_confirm"] || (liveLang === 'es' ? 'Confirmar' : 'Confirm');
                   const btnNo = t["btn_modal_cancel"] || (liveLang === 'es' ? 'Cancelar' : 'Cancel');
 
-                  // KORREKTUR: Nutzt jetzt das universelle, per ESC schließbare CSS-Overlay
                   const modalOverlay = document.createElement("div");
-                  modalOverlay.id = "custom-logout-modal";
-                  modalOverlay.className = "appandor-modal-overlay"; 
+                  modalOverlay.id = "lay_modal-overlay"; 
 
-                  // KORREKTUR: Befreit von Inline-Styles, nutzt Klassen & repariert den Text-Kontrast!
+                  // KONVENTIONS-ANPASSUNG: Nutzt jetzt deine neue Klasse "lay_modal-box"
                   modalOverlay.innerHTML = `
-                      <div class="appandor-modal-box" style="max-width: 400px; text-align: center;">
+                      <div class="lay_modal-box" style="max-width: 400px; text-align: center;">
                           <p style="color: var(--text-color); font-size: 16px; font-weight: bold; margin: 0 0 25px 0;">${logoutMsg}</p>
                           <div style="display: flex; justify-content: center; gap: 15px;">
                               <button id="modal-confirm-no" style="padding: 10px 20px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 4px; font-weight: bold; cursor: pointer;">
@@ -146,7 +203,7 @@ function initializeAppandorLayout() {
                       </div>
                   `;
                   document.body.appendChild(modalOverlay);
-
+                  
                   document.getElementById("modal-confirm-yes").addEventListener("click", () => {
                       localStorage.removeItem('appandor_jwt_token');
                       window.location.href = "/";
@@ -157,14 +214,12 @@ function initializeAppandorLayout() {
                   });
               });
       });
-      badgeElement.addEventListener("mouseover", () => badgeElement.style.opacity = "0.8");
-      badgeElement.addEventListener("mouseout", () => badgeElement.style.opacity = "1.0");
+      // UNBESTECHLICHE REINIGUNG: Die alten mouseover/mouseout EventListener wurden entfernt.
+      // Das regelt ab jetzt die layout.css vollautomatisch und flüssiger über #lay_connection-status:hover!
   }
 
   if (typeof window.translatePage === 'function') {
     window.translatePage();
   }
-  
-
 
 };

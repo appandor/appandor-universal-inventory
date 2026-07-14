@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("[TCG-DEBUG]: Formular geladen. E-Mail-Feld gefunden?", !!emailInput);
 
-    if (loginForm) {
+    if (loginForm) {        
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault(); 
 
@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(res => {
                 console.log("[TCG-DEBUG]: Antwort vom Server erhalten. HTTP-Status:", res.status);
-                
                 if (res.status === 401) throw new Error("Invalid credentials");
                 if (!res.ok) throw new Error("Server communication error");
                 return res.json();

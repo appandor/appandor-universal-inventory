@@ -1,77 +1,83 @@
-/* Sub-Navigation Tabs */
-.settings-tab-container {
-    display: flex;
-    gap: 5px;
-    margin: 10px 0 25px 0;
-    padding: 0;
-    border-bottom: 2px solid var(--border-color);
-    list-style: none;
+/* =============================================================================
+   GLOBAL TABLES: CORE DATA-TABLE ENGINE (CRLF)
+   ============================================================================= */
+
+#tbl_table-container p[data-i18n="gen_loading_records"] {
+  color: #888;
+  font-style: italic;
 }
 
-.settings-tab-item {
-    display: inline-block;
-    padding: 12px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--text-muted);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
+/* Die neue, universelle Tabellen-Struktur mit deinem tbl_ Namensraum */
+.tbl_table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: left;
 }
 
-.settings-tab-item.active {
-    background-color: transparent !important;
-    color: var(--text-color) !important;
-    font-weight: 700;
-    border-bottom: 3px solid var(--theme-primary-green) !important;
+.tbl_table thead tr {
+  border-bottom: 2px solid #444;
+  color: var(--text-color);
 }
 
-/* Product Cards & Badges */
-.product-template-card {
-    background-color: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    color: var(--text-color) !important;
-    padding: 15px 20px;
-    border-radius: 6px;
-    margin-bottom: 12px;
+.tbl_table th, 
+.tbl_table td {
+  padding: 12px 8px;
 }
 
-.product-template-badge {
-    background-color: var(--input-bg);
-    color: var(--text-muted);
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-left: 10px;
+.tbl_table tr {
+  border-bottom: 1px solid #333;
+  color: #ccc;
 }
 
-/* Table Actions & Status Elements */
-.btn-receive-action {
-    display: inline-block;
-    width: 105px;
-    height: 28px;
-    line-height: 28px;
-    background-color: #2e7d32;
-    color: #ffffff !important;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 12px;
+/* KONVENTIONS-ANPASSUNG: Struktur-Gliederung mit Bindestrich */
+.tbl_table .tbl_row-even {
+  background: var(--table-row-even);
+}
+
+.tbl_table .tbl_row-odd {
+  background: var(--table-row-odd);
+}
+
+/* KONVENTIONS-ANPASSUNG: Zellen-Spezifikationen mit Bindestrich */
+.tbl_table .tbl_cell-box-id {
+  font-family: monospace;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.tbl_table .tbl_cell-product {
+  color: #fff;
+}
+
+.tbl_table .tbl_cell-barcode {
+  font-family: monospace;
+  color: #888;
+}
+
+/* KONVENTIONS-ANPASSUNG: Universelle Hilfsklassen mit Bindestrich */
+.tbl_text-right { 
+  text-align: right; 
+}
+
+.tbl_text-center { 
+  text-align: center; 
+}
+
+.tbl_text-bold { 
+  font-weight: bold; 
+}
+
+.tbl_msg-empty {
+    color: var(--text-muted, #888888);
+    font-style: italic;
     text-align: center;
-    box-sizing: border-box;
+    padding: 20px;
 }
 
-.status-badge-container {
-    display: inline-block;
-    width: 105px;
-    height: 28px;
-    line-height: 26px;
+.tbl_msg-error {
+    color: var(--danger-color, #c62828);
     text-align: center;
-    font-size: 11px;
-    font-weight: bold;
-    border-radius: 4px;
-    box-sizing: border-box;
+    padding: 20px;
 }

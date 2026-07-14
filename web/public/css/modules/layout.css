@@ -1,0 +1,135 @@
+/* =============================================================================
+   GLOBAL LAYOUT: HEADER & NAVIGATION INDICATORS (CRLF)
+   ============================================================================= */
+
+#lay_connection-status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  min-width: 100px;
+  transition: opacity 0.2s, background 0.3s ease;
+  background: #333333;
+  color: #ffffff;
+}
+
+#lay_connection-status:hover {
+  opacity: 0.85;
+}
+
+#lay_connection-status[data-state="lay_status_connecting"] { background: #fbc02d; color: #000000; }
+#lay_connection-status[data-state="lay_status_connected"]  { background: #2e7d32; color: #ffffff; }
+#lay_connection-status[data-state="lay_status_disconnected"] { background: #c62828; color: #ffffff; }
+
+
+/* =============================================================================
+   GLOBAL LAYOUT: UNIVERSAL WINDOW & MODAL ENGINE (CRLF)
+   ============================================================================= */
+
+/* Das dunkle Hintergrund-Overlay (ID, weil es davon zeitgleich nur eins gibt) */
+#lay_modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+/* KONVENTIONS-ANPASSUNG: Radikal auf den lay_ Namensraum konsolidiert */
+#lay_modal-overlay .lay_modal-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 25px;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+#lay_modal-overlay .lay_modal-title {
+  color: var(--text-color);
+  margin: 0 0 15px 0;
+  font-size: 16px;
+}
+
+#lay_modal-overlay .lay_modal-input {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.lay_container {
+    flex: 1 0 auto; /* Drückt den Footer unbarmherzig an den absoluten unteren Rand */
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+}
+
+/* Der Vorhang-Öffner: Zündet, sobald Tabelle und Timer synchron bereitstehen */
+.lay_container.lay_visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =============================================================================
+   GLOBAL LAYOUT: UNIVERSAL COLLAPSE & FORM GRID ENGINE (CRLF)
+   ============================================================================= */
+
+/* Das universelle, flache Formular-Raster für einzeilige Eingaben */
+.lay_form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+/* Der flexible Klick-Header: Titel links, Button rechts */
+.lay_toggle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+/* Der charakteristische, orangefarbene Klick-Link des Frameworks */
+.lay_toggle-btn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #ff6b00;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Verhalten von einklappbaren Karten im minimierten Zustand */
+.card[data-state="collapsed"] {
+  padding-bottom: 12px;
+}
+
+.card[data-state="collapsed"] .lay_toggle-header {
+  border-bottom: none;
+  margin-bottom: 0;
+}

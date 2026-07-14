@@ -2,15 +2,37 @@ window.appTranslations = {};
 
 window.translatePage = function() {
   const translations = window.appTranslations || {};
+
+  // 1. Statische Texte ersetzen (entweder aus i18n oder aus variable falls i18n-val existiert)
+  // 2. Tooltip Texte übersetzen
+  document.querySelectorAll("[data-i18n], [data-i18n-val], [data-i18n-title]").forEach(element => {
+  
+    let key = element.getAttribute("data-i18n"); // Kann existieren, muss aber nicht
     
-  // 1. Statische Texte ersetzen
-  document.querySelectorAll("[data-i18n]").forEach(element => {
-    const key = element.getAttribute("data-i18n");
-    if (translations[key]) {
-      element.innerText = translations[key];
-    } else {
-      // erzwingen wir den rohen #platzhalter#, anstatt den alten Text stehenzulassen!
-      element.innerText = `#${key}#`;
+    if (element.hasAttribute('data-i18n-val')) {
+      const stateVariable = element.getAttribute('data-i18n-val'); // z.B. "lay_connectionStatus"
+      if (stateVariable && window.appState && window.appState[stateVariable]) {
+        key = window.appState[stateVariable]; // Holt z.B. "lay_status_connecting"
+        element.setAttribute("data-state", key);
+      }
+    }
+    
+    if (key) {
+      if (translations && translations[key]) {
+        element.innerText = translations[key];
+      } else {
+        element.innerText = `#${key}#`; // Sichtbarer Alarm bei fehlendem JSON-Eintrag
+      }
+    }
+
+    if (element.hasAttribute("data-i18n-title")) {
+      const titleKey = element.getAttribute("data-i18n-title"); // z.B. "lay_connectionStatus_tooltip"
+      
+      if (translations && translations[titleKey]) {
+        element.setAttribute("title", translations[titleKey]);
+      } else {
+        element.setAttribute("title", `#${titleKey}#`); // Sichtbarer Alarm im Tooltip
+      }
     }
   });
     

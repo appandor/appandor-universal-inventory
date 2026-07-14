@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="nav_products"></title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <!-- Sandbox Notice Bar -->
+    <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner"></div>
+
+    <!-- Das universelle, unsichtbare Schutzschild für den Gleichschritt -->
+    <div class="lay_container">
+      <!-- Universeller dynamischer Header -->
+      <div id="appandor-header"></div>
+
+      <!-- HORIZONTALE TAB-REIHE (SUBMENÜ) -->
+      <ul class="settings-tab-container">
+        <li>
+          <a href="products.html" class="settings-tab-item active" data-i18n="nav_products">Produkt-Stammdaten</a>
+        </li>
+        <li>
+          <span class="settings-tab-item disabled" data-i18n="set_tab_categories">Kategorien</span>
+        </li>
+        <li>
+          <span class="settings-tab-item disabled" data-i18n="set_tab_users">Nutzer & Lizenzen</span>
+        </li>
+        <li>
+          <span class="settings-tab-item disabled" data-i18n="tbl_storage_location">Lagerplatz</span>
+        </li>
+      </ul>
+
+      <!-- DAS HAUPT-GRID MIT DEN ARBEITSKARTEN -->
+      <div class="grid">
+        <div class="card">
+          <h2 data-i18n="prod_add_title">Stammdaten-Artikel anlegen</h2>
+          <form id="product-form">
+            <div class="form-group">
+              <label for="name" data-i18n="prod_label_name">Product Name *</label>
+              <input type="text" id="name" required data-i18n-placeholder="prod_placeholder_name" placeholder="e.g. One Piece OP-05 Display">
+            </div>
+            <div class="form-group">
+              <label for="barcode" data-i18n="prod_label_barcode">Barcode / EAN</label>
+              <input type="text" id="barcode" data-i18n-placeholder="prod_placeholder_barcode" placeholder="Scan or type barcode">
+            </div>
+            <div class="form-group">
+              <label for="category" data-i18n="prod_label_category">Category *</label>
+              <select id="category" required></select>
+            </div>
+            <div class="form-group">
+              <label for="minimum_stock" data-i18n="prod_label_minstock">Minimum Alert Stock</label>
+              <input type="number" id="minimum_stock" value="0" min="0">
+            </div>
+            <button type="submit" class="btn-primary-submit" data-i18n="prod_btn_save">Save Product Master</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 data-i18n="prod_list_title">Product Master Templates</h2>
+          <ul id="products-container" class="product-list">
+            <li style="color: #888; font-style: italic; list-style: none;" data-i18n="loading_products">Querying product masters...</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHARFE LADEKETTE: config.js steuert das System -->
+    <script src="js/config.js"></script>
+    <script src="js/products.js" defer></script>
+  </body>
+</html>

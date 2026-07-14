@@ -1,72 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Einstellungen</title>
+    <title data-i18n="nav_settings"></title>
     <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <!-- Sandbox Notice Bar -->
-    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
-        Loading Sandbox Mode...
-    </div>
+    <link rel="stylesheet" href="css/settings.css">
+  </head>
+  <body>
+    <!-- Sandbox Notice Bar — ID an eure globale Konvention angepasst -->
+    <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner"></div>
 
-    <div class="container">
-        <!-- Universeller dynamischer Header -->
-        <div id="appandor-header"></div>
+    <!-- Das universelle, unsichtbare Schutzschild für den Gleichschritt -->
+    <div class="lay_container">
+      <!-- Der identische Injektionsort für das Core-Layout -->
+      <div id="appandor-header"></div>
 
-        <div class="card" style="margin-top: 20px; background: var(--card-bg); border: 1px solid var(--border-color);">
-            <p data-i18n="desc_settings" style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Manage users, system categories, custom containers, and storage topology.</p>
-            
-            <div class="settings-grid">
-                <!-- KACHEL 1: PRODUKT-STAMMDATEN (AKTIV) -->
-                <a href="products.html" id="tile-products" class="settings-tile" style="color: var(--text-color); text-decoration: none; font-weight: bold; cursor: pointer;">
-                    <div style="color: #2e7d32; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;" data-i18n="set_tile_master_data">Master Data</div>
-                    <span data-i18n="title_products">Product Masters</span>
-                </a>
+      <!-- ZENTRALER HAUPTKASTEN: EINSTELLUNGEN -->
+      <div class="card">
+        <p data-i18n="desc_settings" style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;"></p>
+        
+        <div class="settings-grid">
+          <!-- KACHEL 1: PRODUKT-STAMMDATEN (AKTIV) -->
+          <a href="products.html" id="tile-products" class="settings-tile active">
+            <div class="settings-tile-category active-label" data-i18n="set_tile_master_data">Master Data</div>
+            <span data-i18n="title_products">Product Masters</span>
+          </a>
 
-                <!-- KACHEL 2: KATEGORIEN (DISABLED) -->
-                <div id="tile-categories" class="settings-tile" style="color: var(--text-muted); font-weight: bold; cursor: not-allowed; opacity: 0.5;">
-                    <div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8;" data-i18n="set_tile_config">Configurations</div>
-                    <span data-i18n="set_tab_categories">Product Categories</span>
-                </div>
+          <!-- KACHEL 2: KATEGORIEN (DISABLED) -->
+          <div id="tile-categories" class="settings-tile disabled">
+            <div class="settings-tile-category" data-i18n="set_tile_config">Configurations</div>
+            <span data-i18n="set_tab_categories">Product Categories</span>
+          </div>
 
-                <!-- KACHEL 3: USER & LIZENZEN (DISABLED) -->
-                <div id="tile-users" class="settings-tile" style="color: var(--text-muted); font-weight: bold; cursor: not-allowed; opacity: 0.5;">
-                    <div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8;">Access Control</div>
-                    <span data-i18n="set_tab_users">User Licenses</span>
-                </div>
+          <!-- KACHEL 3: USER & LIZENZEN (DISABLED) -->
+          <div id="tile-users" class="settings-tile disabled">
+            <div class="settings-tile-category">Access Control</div>
+            <span data-i18n="set_tab_users">User Licenses</span>
+          </div>
 
-                <!-- KACHEL 4: LAGERPLÄTZE (DISABLED) -->
-                <div id="tile-infrastructure" class="settings-tile" style="color: var(--text-muted); font-weight: bold; cursor: not-allowed; opacity: 0.5;">
-                    <div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8;" data-i18n="set_tile_logistics">Logistics</div>
-                    <span data-i18n="tbl_storage_location">Lagerplätze</span>
-                </div>
+          <!-- KACHEL 4: LAGERPLÄTZE (DISABLED) -->
+          <div id="tile-infrastructure" class="settings-tile disabled">
+            <div class="settings-tile-category" data-i18n="set_tile_logistics">Logistics</div>
+            <span data-i18n="tbl_storage_location">Lagerplätze</span>
+          </div>
 
-                <!-- KACHEL 5: SCHUTZBOXEN (DISABLED) -->
-                <div id="tile-boxes" class="settings-tile" style="color: var(--text-muted); font-weight: bold; cursor: not-allowed; opacity: 0.5;">
-                    <div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8;" data-i18n="set_tile_logistics">Logistics</div>
-                    <span data-i18n="tbl_box_id">Schutzboxen</span>
-                </div>
+          <!-- KACHEL 5: SCHUTZBOXEN (DISABLED) -->
+          <div id="tile-boxes" class="settings-tile disabled">
+            <div class="settings-tile-category" data-i18n="set_tile_logistics">Logistics</div>
+            <span data-i18n="tbl_box_id">Schutzboxen</span>
+          </div>
 
-                <!-- KACHEL 6: DIE CHRONIK / DASHBOARD JOURNAL (DISABLED) -->
-                <div id="tile-history" class="settings-tile" style="color: var(--text-muted); font-weight: bold; cursor: not-allowed; opacity: 0.5;">
-                    <div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8;" data-i18n="set_tile_ledger">Financial Ledger</div>
-                    <span data-i18n="title_history">Chronik / Journal</span>
-                </div>
+          <!-- KACHEL 6: DIE CHRONIK / DASHBOARD JOURNAL (DISABLED) -->
+          <div id="tile-history" class="settings-tile disabled">
+            <div class="settings-tile-category" data-i18n="set_tile_ledger">Financial Ledger</div>
+            <span data-i18n="title_history">Chronik / Journal</span>
+          </div>
 
-                <!-- SUPERADMIN KACHEL: Live Translation Override (DISABLED) -->
-                <div id="tile-superadmin" class="settings-tile" style="display: none; color: var(--text-muted); font-weight: bold; cursor: not-allowed; opacity: 0.5;">
-                    <div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8;" data-i18n="set_tile_core">Core Engine</div>
-                    <span data-i18n="set_tab_superadmin">Live Translation Override</span>
-                </div>
-            </div>
+          <!-- SUPERADMIN KACHEL: Live Translation Override (DISABLED — Standardmäßig über CSS ausgeblendet) -->
+          <div id="tile-superadmin" class="settings-tile disabled superadmin-only">
+            <div class="settings-tile-category" data-i18n="set_tile_core">Core Engine</div>
+            <span data-i18n="set_tab_superadmin">Live Translation Override</span>
+          </div>
         </div>
+      </div>
     </div>
 
-    <script src="js/session.js"></script>
-    <script src="js/layout.js"></script>
-    <script src="js/core.js"></script>
-</body>
+    <!-- SCHARFE LADEKETTE: config.js steuert auch das Einstellungs-System -->
+    <script src="js/config.js"></script>
+    
+    <!-- Ein kleiner, unbestechlicher UI-Wächter direkt inline für die Inbound-Rolle -->
+    <script>
+      window.addEventListener("appandor_platform_ready", () => {
+        // Falls die Seite fertig übersetzt ist, öffnen wir sofort den Vorhang
+        window.dispatchEvent(new Event("appandor_render_complete"));
+      });
+    </script>
+  </body>
 </html>

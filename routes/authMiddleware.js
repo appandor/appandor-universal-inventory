@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'AppandorSecureCoreSecret2026!!!';
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -14,12 +13,12 @@ function authenticateToken(req, res, next) {
 
     try {
         const token = tokenArray[1];
-        const decoded = jwt.verify(token, JWT_SECRET);
         
-        // Wir hängen die decodierten User-Daten direkt an das Request-Objekt an!
-        // Ab jetzt kann jede Route im System über 'req.user.tenant_id' darauf zugreifen.
+        // KORREKTUR: Prüft das Token unbestechlich mit dem Docker-Schlüssel!
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
         req.user = decoded; 
-        next(); // Wächter passiert -> Weiter zur eigentlichen Route
+        next();
     } catch (err) {
         console.error("[Auth Middleware Token Error]:", err.message);
         return res.status(401).json({ error: "Invalid or expired session token." });

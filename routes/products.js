@@ -1,101 +1,92 @@
+// =============================================================================
+// APPANDOR LOGISTICS: PRODUCT MASTER TRANSACTIONS (CRLF)
+// =============================================================================
+
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'AppandorSecureCoreSecret2026!!!';
+// KORREKTUR: Lädt den unbestechlichen Routen-Wächter aus eurem zentralen Modul!
+const authenticateToken = require('./authMiddleware'); 
 
-// Hilfsfunktion: Überprüft das Ticket und liefert die scharfe tenant_id zurück
-function getTenantId(req) {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
-    const token = authHeader.split(' ')[1];
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        return decoded.tenant_id;
-    } catch (err) {
-        return null;
-    }
-}
-
+// =============================================================================
 // 1. API: Holt die dynamischen Kategorien für das Dropdown
-router.get('/categories', async (req, res) => {
-    const pool = req.app.get('db_pool');
-    const activeTenantId = getTenantId(req);
+// =============================================================================
+router.get('/categories', authenticateToken, async (req, res) => {
+  const pool = req.app.get('db_pool');
+  const activeTenantId = req.user.tenant_id; // Greift direkt auf den Wächter-Wert zu
 
-    if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
-
-    try {
-        const query = `
-            SELECT category_id, category_code, display_name 
-            FROM product_categories 
-            WHERE tenant_id = $1 
-            ORDER BY display_name ASC;
-        `;
-        const result = await pool.query(query, [activeTenantId]);
-        res.json(result.rows);
-    } catch (err) {
-        console.error("[API Categories Error]:", err.message);
-        res.status(500).json({ error: "Failed to fetch categories" });
-    }
+  try {
+    const query = `
+      SELECT category_id, category_code, display_name 
+      FROM product_categories 
+      WHERE tenant_id = $1 
+      ORDER BY display_name ASC;
+    `;
+    const result = await pool.query(query, [activeTenantId]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("[API Categories Error]:", err.message);
+    res.status(500).json({ error: "Failed to fetch categories" });
+  }
 });
 
+// =============================================================================
 // 2. API: Holt die Produkt-Stammdatenliste für die rechte Tabellenhälfte
-router.get('/masters', async (req, res) => {
-    const pool = req.app.get('db_pool');
-    const activeTenantId = getTenantId(req);
+// =============================================================================
+router.get('/masters', authenticateToken, async (req, res) => {
+  const pool = req.app.get('db_pool');
+  const activeTenantId = req.user.tenant_id;
 
-    if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
-
-    try {
-        const query = `
-            SELECT p.product_id, p.name, p.barcode, p.minimum_stock, c.display_name AS category_name
-            FROM product_master p
-            LEFT JOIN product_categories c ON p.category_id = c.category_id
-            WHERE p.tenant_id = $1
-            ORDER BY p.created_at DESC;
-        `;
-        const result = await pool.query(query, [activeTenantId]);
-        res.json(result.rows);
-    } catch (err) {
-        console.error("[API Product Masters Error]:", err.message);
-        res.status(500).json({ error: "Failed to fetch product masters" });
-    }
+  try {
+    const query = `
+      SELECT p.product_id, p.name, p.barcode, p.minimum_stock, c.display_name AS category_name
+      FROM product_master p
+      LEFT JOIN product_categories c ON p.category_id = c.category_id
+      WHERE p.tenant_id = $1
+      ORDER BY p.created_at DESC;
+    `;
+    const result = await pool.query(query, [activeTenantId]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("[API Product Masters Error]:", err.message);
+    res.status(500).json({ error: "Failed to fetch product masters" });
+  }
 });
 
-// 3. API: Speichert ein neues Produkt scharf unter der ID des angemeldeten Benutzers
-router.post('/add', async (req, res) => {
-    const pool = req.app.get('db_pool');
-    const activeTenantId = getTenantId(req);
+// =============================================================================
+// 3. API: Speichert ein neues Produkt scharf unter der ID des angemeldeten Mandanten
+// =============================================================================
+router.post('/add', authenticateToken, async (req, res) => {
+  const pool = req.app.get('db_pool');
+  const activeTenantId = req.user.tenant_id;
+  
+  const { name, barcode, category_id, minimum_stock } = req.body;
 
-    if (!activeTenantId) return res.status(401).json({ error: "Unauthorized session token" });
+  if (!name || !category_id) {
+    return res.status(400).json({ error: "Product name and category are required" });
+  }
+
+  try {
+    const query = `
+      INSERT INTO product_master (tenant_id, category_id, barcode, name, minimum_stock)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING product_id, name;
+    `;
     
-    const { name, barcode, category_id, minimum_stock } = req.body;
-
-    if (!name || !category_id) {
-        return res.status(400).json({ error: "Product name and category are required" });
-    }
-
-    try {
-        const query = `
-            INSERT INTO product_master (tenant_id, category_id, barcode, name, minimum_stock)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING product_id, name;
-        `;
-        
-        const values = [
-            activeTenantId, 
-            parseInt(category_id), 
-            barcode || null, 
-            name.trim(), 
-            parseInt(minimum_stock) || 0
-        ];
-        
-        const result = await pool.query(query, values);
-        res.status(201).json({ message: "Product master successfully created", product: result.rows[0] });
-    } catch (err) {
-        console.error("[API Product Add Error]:", err.message);
-        res.status(500).json({ error: "Failed to inject product into database" });
-    }
+    const values = [
+      activeTenantId, 
+      parseInt(category_id), 
+      barcode || null, 
+      name.trim(), 
+      parseInt(minimum_stock) || 0
+    ];
+    
+    const result = await pool.query(query, values);
+    res.status(201).json({ message: "Product master successfully created", product: result.rows[0] });
+  } catch (err) {
+    console.error("[API Product Add Error]:", err.message);
+    res.status(500).json({ error: "Failed to inject product into database" });
+  }
 });
 
 module.exports = router;

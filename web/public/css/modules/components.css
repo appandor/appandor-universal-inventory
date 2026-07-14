@@ -1,16 +1,31 @@
+/* =============================================================================
+   GLOBAL COMPONENTS: 
+   ============================================================================= */
+
 /* Cards & Containers */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-top: 20px; /* HIER INTEGRIERT: Jede Hauptkarte erhält nun automatisch den sauberen Abstand nach oben */
+}
+
+#gen_sandbox-banner {
+  display: none;
+  background: #fbc02d;
+  color: #000;
+  text-align: center;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 /* Form Elements */
@@ -38,4 +53,86 @@
 
 .btn-primary-submit:active {
     transform: scale(0.98);
+}
+
+/* =============================================================================
+   GLOBAL COMPONENTS: EVACUATED UI BUILD BLOCKS (CRLF)
+   ============================================================================= */
+
+/* Sub-Navigation Tabs */
+.settings-tab-container {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0 25px 0;
+    padding: 0;
+    border-bottom: 2px solid var(--border-color);
+    list-style: none;
+}
+
+.settings-tab-item {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.settings-tab-item.active {
+    background-color: transparent !important;
+    color: var(--text-color) !important;
+    font-weight: 700;
+    border-bottom: 3px solid var(--theme-primary-green) !important;
+}
+
+/* Product Cards & Badges */
+.product-template-card {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.product-template-badge {
+    background-color: var(--input-bg);
+    color: var(--text-muted);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+/* Actions & Status Badges */
+.btn-receive-action {
+    display: inline-block;
+    width: 105px;
+    height: 28px;
+    line-height: 28px;
+    background-color: #2e7d32;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.status-badge-container {
+    display: inline-block;
+    width: 105px;
+    height: 28px;
+    line-height: 26px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 4px;
+    box-sizing: border-box;
 }

@@ -1,75 +1,100 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("outbound-form-container");
-    if (!container) return;
+// =============================================================================
+// APPANDOR LOGISTICS: OUTBOUND TRANSACTION ENGINE (CRLF)
+// =============================================================================
 
-    function loadOutboundTable() {
-        let currentLang = localStorage.getItem('appandor_lang') || 'en';
-        const token = localStorage.getItem('appandor_jwt_token');
+function loadOutboundTable() {
+  const token = localStorage.getItem('appandor_jwt_token');
+  // KORREKTUR: Greift nun unbestechlich nach der neuen universellen Tabellen-ID
+  const tableContainer = document.getElementById("tbl_table-container");
+  if (!tableContainer) return;
 
-        fetch(`lang/${currentLang}.json`)
-            .then(res => res.json())
-            .then(translations => {
-                
-                return fetch('/api/outbound/active-boxes', {
-                    method: 'GET',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                })
-                .then(res => { if (!res.ok) throw new Error("API failed"); return res.json(); })
-                .then(data => {
-                    if (data.length === 0 || data.error) {
-                        container.innerHTML = `<p style="color: #888; font-style: italic;">No active boxed assets available for outbound fulfillment.</p>`;
-                        return;
-                    }
-
-                    let html = `
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; text-align: left;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid #444; color: #fff;">
-                                    <th style="padding: 12px 8px;">${translations.tbl_box_id || 'Box ID'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_storage_location || 'Storage Location'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_product_name || 'Product Name'}</th>
-                                    <th style="padding: 12px 8px;">${translations.tbl_barcode || 'Barcode'}</th>
-                                    <th style="padding: 12px 8px; text-align: right;">${translations.tbl_price_gross || 'Price Gross'}</th>
-                                    <th style="padding: 12px 8px; text-align: center;">${translations.tbl_action || 'Action'}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        `;
-
-                    data.forEach((row, index) => {
-                        const priceFormatted = row.price ? parseFloat(row.price).toFixed(2) + ' €' : '-';
-                        const bgStyle = index % 2 === 0 ? 'background: var(--table-row-even);' : 'background: var(--table-row-odd);';
-
-                        html += `
-                            <tr style="${bgStyle} border-bottom: 1px solid #333; color: #ccc;">
-                                <td style="padding: 12px 8px; font-family: monospace; font-weight: bold; color: var(--success-color);">${row.box_id}</td>
-                                <td style="padding: 12px 8px;">${row.storage_location || 'Unpositioned'}</td>
-                                <td style="padding: 12px 8px; color: #fff; font-weight: bold;">${row.product_name}</td>
-                                <td style="padding: 12px 8px; font-family: monospace; color: var(--text-muted);">${row.barcode || '-'}</td>
-                                <td style="padding: 12px 8px; text-align: right; font-weight: bold;">${priceFormatted}</td>
-                                <td style="padding: 12px 8px; text-align: center;">
-                                    <!-- KORREKTUR: Keine Inline-Styles! Button nutzt eine kompakte, feine CSS-Reihe aus Ihrer style.css -->
-                                    <button class="outbound-action-btn" style="width: auto; margin: 0; padding: 4px 12px; font-size: 11px; text-transform: uppercase;">
-                                        ${translations.btn_fulfill || 'Fulfill'}
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-
-                    html += `</tbody></table>`;
-                    container.innerHTML = html;
-                });
-            })
-            .catch(err => {
-                console.error("[UI Outbound Error]:", err.message);
-                container.innerHTML = `<p style="color: #c62828; font-weight: bold;">Error connecting to outbound ledger files.</p>`;
-            });
+  fetch('/api/outbound/active-boxes', {
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+  .then(res => { if (!res.ok) throw new Error("API failed"); return res.json(); })
+  .then(data => {
+    if (data.length === 0 || data.error) {
+      // KORREKTUR: Keine Inline-Styles, Nutzung der globalen Leer-Klasse
+      tableContainer.innerHTML = `<p class="tbl_msg-empty" data-i18n="desc_outbound_empty">No active boxed assets available for outbound fulfillment.</p>`;
+      if (typeof window.translatePage === "function") window.translatePage();
+      window.dispatchEvent(new Event("appandor_render_complete"));
+      return;
     }
 
-    loadOutboundTable();
+    // UNBESTECHLICH: Reines HTML gekoppelt an deine universelle table.css Konvention!
+    let html = `
+      <table class="tbl_table">
+        <thead>
+          <tr>
+            <th data-i18n="tbl_box_id"></th>
+            <th data-i18n="tbl_storage_location"></th>
+            <th data-i18n="tbl_product_name"></th>
+            <th data-i18n="tbl_barcode"></th>
+            <th class="tbl_text-right" data-i18n="tbl_price_gross"></th>
+            <th class="tbl_text-center" data-i18n="tbl_action"></th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
 
-    window.addEventListener('appandor_language_changed', () => {
-        loadOutboundTable();
+    data.forEach((row, index) => {
+      const priceFormatted = row.price ? parseFloat(row.price).toFixed(2) + ' €' : '-';
+      const rowClass = index % 2 === 0 ? 'tbl_row-even' : 'tbl_row-odd';
+
+      html += `
+        <tr class="${rowClass}">
+          <td class="tbl_cell-box-id">${row.box_id}</td>
+          <td>${row.storage_location || 'Unpositioned'}</td>
+          <td class="tbl_cell-product">${row.product_name}</td>
+          <td class="tbl_cell-barcode">${row.barcode || '-'}</td>
+          <td class="tbl_text-right tbl_text-bold">${priceFormatted}</td>
+          <td class="tbl_text-center">
+            <!-- KORREKTUR: Nutzt jetzt eure globale Action-Button-Klasse aus der components.css -->
+            <button class="btn-receive-action" data-i18n="btn_fulfill" data-box-id="${row.box_id}">
+              Fulfill
+            </button>
+          </td>
+        </tr>
+      `;
     });
+
+    html += `</tbody></table>`;
+    tableContainer.innerHTML = html;
+
+    // Nach dem erfolgreichen Rendern der Tabelle die Übersetzungs-Engine rufen
+    if (typeof window.translatePage === "function") {
+      window.translatePage();
+    }
+    
+    // Das finale Signal senden, damit das synchrone Einblenden zündet!
+    window.dispatchEvent(new Event("appandor_render_complete"));
+  })
+  .catch(err => {
+    console.error("[UI Outbound Error]:", err.message);
+    tableContainer.innerHTML = `<p class="tbl_text-bold tbl_msg-error" data-i18n="gen_ledger_error"></p>`;
+    window.dispatchEvent(new Event("appandor_render_complete"));
+  });
+}
+
+// =============================================================================
+// INITIALISIERUNG ÜBER DIE ZENTRALE LADEKETTE
+// =============================================================================
+window.addEventListener("appandor_platform_ready", () => {
+  loadOutboundTable();
+  
+  // Platz für spätere Event-Listener (z.B. Klick auf den Fulfill-Button)
+  const tableContainer = document.getElementById("tbl_table-container");
+  if (tableContainer) {
+    tableContainer.addEventListener("click", (e) => {
+      if (e.target && e.target.classList.contains("btn-receive-action")) {
+        const boxId = e.target.getAttribute("data-box-id");
+        console.log(`[Outbound]: Starte Fulfill-Prozess für Box-ID: ${boxId}`);
+        // Hier dockt später deine Fulfill-Logik an!
+      }
+    });
+  }
 });
+
+// Event-Listener für Sprachwechsel sauber unten gebunden
+window.addEventListener('appandor_language_changed', () => loadOutboundTable());

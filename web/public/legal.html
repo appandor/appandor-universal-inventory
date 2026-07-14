@@ -1,74 +1,72 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impressum & Datenschutz</title>
+    <title data-i18n="nav_legal"></title>
     <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <!-- Sandbox Notice Bar -->
-    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
-        Loading Sandbox Mode...
-    </div>
+  </head>
+  <body>
+    <!-- Sandbox Notice Bar — ID an globale Konvention angepasst -->
+    <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner"></div>
 
-    <!-- Hauptcontainer -->
-    <div class="container">
-        <!-- Universeller dynamischer Header (Baut das Menü und Logo automatisch auf!) -->
-        <div id="appandor-header"></div>
+    <!-- Das universelle, unsichtbare Schutzschild für den Gleichschritt -->
+    <div class="lay_container">
+      <!-- Der identische Injektionsort für das Core-Layout (Header & Navigation) -->
+      <div id="appandor-header"></div>
 
-        <!-- RECHTLICHER INHALT IM EINHEITLICHEN DESIGN -->
-        <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px; max-width: 900px;">
-            
-            <!-- IMPRESSUM KASTEN -->
-            <div class="card" style="padding: 25px; text-align: left;">
-                <h2 style="margin-top: 0; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--text-color);" data-i18n="legal_title_imprint">Impressum</h2>
-                <p style="color: var(--text-color);"><strong>Angaben gemäß § 5 TMG:</strong></p>
-                <p style="color: var(--text-color); line-height: 1.6;">
-                    [Dein vollständiger Vor- und Nachname]<br>
-                    [Deine Straße und Hausnummer]<br>
-                    [Deine PLZ und Wohnort]
-                </p>
-                <p style="color: var(--text-color);"><strong>Kontakt:</strong></p>
-                <p style="color: var(--text-color); line-height: 1.6;">
-                    Telefon: [Deine Telefonnummer]<br>
-                    E-Mail: [Deine E-Mail-Adresse]
-                </p>
-            </div>
-
-            <!-- DATENSCHUTZ KASTEN -->
-            <div class="card" style="padding: 25px; text-align: left;">
-                <h2 style="margin-top: 0; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--text-color);" data-i18n="legal_title_privacy">Datenschutzerklärung</h2>            
-                <h3 style="font-size: 14px; margin-top: 20px; color: var(--text-color);">1. Allgemeine Hinweise</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 13px;">Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften.</p>
-
-                <h3 style="font-size: 14px; margin-top: 20px; color: var(--text-color);">2. Datenerfassung und LocalStorage</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 13px;">Diese Website verwendet „LocalStorage“ Ihres Webbrowsers, um Sitzungsdaten lokal auf Ihrem Endgerät zu speichern. Dies ist technisch absolut notwendig, um den Login aufrechtzuerhalten. Es werden folgende Felder gespeichert:</p>
-                <ul style="padding-left: 20px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-                    <li><code>appandor_jwt_token</code>: Verifiziert Ihre aktive Anmeldung.</li>
-                    <li><code>appandor_lang</code>: Speichert Ihre gewählte Sprache.</li>
-                </ul>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 13px;">Die Speicherung erfolgt auf Grundlage von § 25 Abs. 2 Nr. 2 TDDDG (technische Notwendigkeit zum Betrieb des Dienstes).</p>
-
-                <h3 style="font-size: 14px; margin-top: 20px; color: var(--text-color);">3. Hosting</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: 13px;">Unser Node.js-Backend und die PostgreSQL-Datenbank werden bei dem deutschen Hosting-Anbieter <strong>netcup GmbH</strong> betrieben. Alle Daten verbleiben auf Servern innerhalb Deutschlands.</p>
-            </div>
-
+      <!-- RECHTLICHER INHALT IM EINHEITLICHEN FRAMEWORK-DESIGN -->
+      <div class="lay_legal-grid">
+          
+        <!-- IMPRESSUM KASTEN -->
+        <div class="card">
+          <h2 data-i18n="legal_title_imprint">Impressum</h2>
+          <p><strong>Angaben gemäß § 5 TMG:</strong></p>
+          <p class="lay_text-monospace">
+            [Dein vollständiger Vor- und Nachname]<br>
+            [Deine Straße und Hausnummer]<br>
+            [Deine PLZ und Wohnort]
+          </p>
+          <p><strong>Kontakt:</strong></p>
+          <p class="lay_text-monospace">
+            Telefon: [Deine Telefonnummer]<br>
+            E-Mail: [Deine E-Mail-Adresse]
+          </p>
         </div>
+
+        <!-- DATENSCHUTZ KASTEN -->
+        <div class="card">
+          <h2 data-i18n="legal_title_privacy">Datenschutzerklärung</h2>            
+          
+          <h3>1. Allgemeine Hinweise</h3>
+          <p class="lay_legal-text-muted">Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten very ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften.</p>
+
+          <h3>2. Datenerfassung und LocalStorage</h3>
+          <p class="lay_legal-text-muted">Diese Website verwendet „LocalStorage“ Ihres Webbrowsers, um Sitzungsdaten lokal auf Ihrem Endgerät zu speichern. Dies ist technisch absolut notwendig, um den Login aufrechtzuerhalten. Es werden folgende Felder gespeichert:</p>
+          
+          <!-- KORREKTUR: padding-left direkt hier gesetzt, damit die Aufzählungspunkte bündig einrücken -->
+          <ul class="lay_legal-list" style="padding-left: 35px;">
+            <li><code>appandor_jwt_token</code>: Verifiziert Ihre aktive Anmeldung.</li>
+            <li><code>appandor_lang</code>: Speichert Ihre gewählte Sprache.</li>
+          </ul>
+          <p class="lay_legal-text-muted">Die Speicherung erfolgt auf Grundlage von § 25 Abs. 2 Nr. 2 TDDDG (technische Notwendigkeit zum Betrieb des Dienstes).</p>
+
+          <h3>3. Hosting</h3>
+          <p class="lay_legal-text-muted">Unser Node.js-Backend und die PostgreSQL-Datenbank werden bei dem deutschen Hosting-Anbieter <strong>netcup GmbH</strong> betrieben. Alle Daten verbleiben auf Servern innerhalb Deutschlands.</p>
+        </div>
+
+      </div>
     </div>
 
-    <!-- WICHTIG: Die Core-Skripte einbinden, damit das Layout erzeugt wird -->
-    <script src="js/session.js"></script>
-    <script src="js/layout.js"></script>
-    <script src="js/core.js"></script>
+    <!-- SCHARFE LADEKETTE: Die config.js übernimmt unbestechlich das Kommando -->
+    <script src="js/config.js"></script>
+    
+    <!-- Kleiner Inline-Wächter für öffentliche Seiten ohne eigene AJAX-Tabellen -->
     <script>
-        // Startet die Sprach- und Theme-Engine für diese Seite
-        document.addEventListener("DOMContentLoaded", () => {
-            if (typeof window.dispatchEvent === 'function') {
-                const currentLang = localStorage.getItem('appandor_lang') || 'en';
-                window.dispatchEvent(new CustomEvent('appandor_language_changed', { detail: { lang: currentLang } }));
-            }
-        });
+      window.addEventListener("appandor_platform_ready", () => {
+        // Meldet das Rendering sofort als komplett, da keine Datenbank-Inhalte nachgeladen werden müssen
+        window.dispatchEvent(new Event("appandor_render_complete"));
+      });
     </script>
-</body>
+  </body>
 </html>

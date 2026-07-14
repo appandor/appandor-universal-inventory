@@ -1,74 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produkt-Stammdaten</title>
+    <title data-i18n="nav_products"></title>
     <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/inbound.css"> <!-- Nutzen dein bestehendes Inbound-Raster! -->
+  </head>
+  <body>
     <!-- Sandbox Notice Bar -->
-    <div id="sandbox-banner" style="display: none; background: #fbc02d; color: #000; text-align: center; padding: 8px; font-weight: bold; font-size: 14px;" data-i18n="sandbox_banner">
-        Loading Sandbox Mode...
-    </div>
+    <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner"></div>
 
-    <div class="container">
-        <!-- Universeller dynamischer Header -->
-        <div id="appandor-header"></div>
+    <!-- Das universelle, unsichtbare Schutzschild für den Gleichschritt -->
+    <div class="lay_container">
+      <!-- Universeller dynamischer Header -->
+      <div id="appandor-header"></div>
 
-        <!-- HORIZONTALE TAB-REIHE (SUBMENÜ: Bereinigt und zentral über CSS gesteuert) -->
-        <ul class="settings-tab-container">
-            <li>
-                <a href="products.html" class="settings-tab-item active" data-i18n="nav_products">Produkt-Stammdaten</a>
-            </li>
-            <li>
-                <span class="settings-tab-item disabled" data-i18n="set_tab_categories">Kategorien</span>
-            </li>
-            <li>
-                <span class="settings-tab-item disabled" data-i18n="set_tab_users">Nutzer & Lizenzen</span>
-            </li>
-            <li>
-                <span class="settings-tab-item disabled" data-i18n="tbl_storage_location">Lagerplatz</span>
-            </li>
-        </ul>
+      <!-- HORIZONTALE TAB-REIHE (SUBMENÜ) -->
+      <ul class="settings-tab-container">
+        <li>
+          <a href="products.html" class="settings-tab-item active" data-i18n="nav_products"></a>
+        </li>
+        <li>
+          <span class="settings-tab-item disabled" data-i18n="set_tab_categories"></span>
+        </li>
+        <li>
+          <span class="settings-tab-item disabled" data-i18n="set_tab_users"></span>
+        </li>
+        <li>
+          <span class="settings-tab-item disabled" data-i18n="tbl_storage_location"></span>
+        </li>
+      </ul>
 
-        <!-- DAS HAUPT-GRID MIT DEN ARBEITSKARTEN -->
-        <div class="grid">
-            <div class="card">
-                <h2 data-i18n="prod_add_title">Stammdaten-Artikel anlegen</h2>
-                <form id="product-form">
-                    <div class="form-group">
-                        <label for="name" data-i18n="prod_label_name">Product Name *</label>
-                        <input type="text" id="name" required data-i18n-placeholder="prod_placeholder_name" placeholder="e.g. One Piece OP-05 Display">
-                    </div>
-                    <div class="form-group">
-                        <label for="barcode" data-i18n="prod_label_barcode">Barcode / EAN</label>
-                        <input type="text" id="barcode" data-i18n-placeholder="prod_placeholder_barcode" placeholder="Scan or type barcode">
-                    </div>
-                    <div class="form-group">
-                        <label for="category" data-i18n="prod_label_category">Category *</label>
-                        <select id="category" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="minimum_stock" data-i18n="prod_label_minstock">Minimum Alert Stock</label>
-                        <input type="number" id="minimum_stock" value="0" min="0">
-                    </div>
-                    <button type="submit" class="btn-primary-submit" data-i18n="prod_btn_save">Save Product Master</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <h2 data-i18n="prod_list_title">Product Master Templates</h2>
-                <ul id="products-container" class="product-list">
-                    <li style="color: #888; font-style: italic; list-style: none;" data-i18n="loading_products">Querying product masters...</li>
-                </ul>
-            </div>
+      <!-- 1. BEREICH: FORMULAR (EXAKTES WARENEINGANGS-MUSTER MIT COLLAPSE) -->
+      <div class="card" id="product-form-card">
+        <div id="inbound-toggle-header">
+          <h3 id="product-form-title" data-i18n="prod_add_title"></h3>
+          <span id="inbound-toggle-btn" data-i18n="btn_collapse"></span>
         </div>
+        
+        <form id="product-form" class="lay_form-grid">
+          <input type="hidden" id="product-id-hidden" value="">
+
+          <div class="form-group">
+            <label for="name" data-i18n="prod_label_name"></label>
+            <input type="text" id="name" required data-i18n-placeholder="prod_placeholder_name" class="lay_input-select">
+          </div>
+          
+          <div class="form-group">
+            <label for="barcode" data-i18n="prod_label_barcode"></label>
+            <input type="text" id="barcode" data-i18n-placeholder="prod_placeholder_barcode" class="lay_input-date">
+          </div>
+          
+          <div class="form-group">
+            <label for="category" data-i18n="prod_label_category"></label>
+            <select id="category" required class="lay_input-number"></select>
+          </div>
+          
+          <div class="form-group">
+            <label for="minimum_stock" data-i18n="prod_label_minstock"></label>
+            <input type="number" id="minimum_stock" value="0" min="0" class="lay_input-number text-center">
+          </div>
+
+          <!-- BUTTON-CONTAINER FÜR AKTIONEN (REIN i18n-KONFORM UND STRUKTURELL VERBESSERT) -->
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="submit" id="product-btn-submit" class="btn-primary-submit" data-i18n="prod_btn_save" style="margin: 0; height: 38px; padding: 0 15px; width: auto; min-width: 160px; box-sizing: border-box;"></button>
+            <button type="button" id="product-btn-cancel" class="btn-primary-submit" data-i18n="btn_modal_cancel" style="display: none; margin: 0; height: 38px; padding: 0 15px; width: auto; min-width: 100px; box-sizing: border-box; background-color: var(--text-muted) !important;"></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 2. BEREICH: DIE SYSTEM-LISTE (TABELLE ÜBER DIE VOLLE BREITE) -->
+      <div class="card">
+        <div style="max-height: 530px; overflow-y: auto; padding-right: 5px;">
+          <!-- UNBESTECHLICH: Nur das saubere Container-Element für deine table.css! -->
+          <div id="tbl_table-container">
+            <p class="tbl_msg-empty" data-i18n="loading_products"></p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <script src="js/session.js"></script>
-    <script src="js/layout.js"></script>
-    <script src="js/core.js"></script>
-    <script src="js/products.js"></script>
-</body>
+    <!-- ZENTRALE LADEKETTE -->
+    <script src="js/config.js"></script>
+    <script src="js/products.js" defer></script>
+  </body>
 </html>

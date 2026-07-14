@@ -6,6 +6,9 @@
 #
 # docker compose restart node-app
 #
+# docker kill -s HUP appandor_backend
+#
+#
 # 1. Struktur neu aufbauen
 # docker compose exec -T postgres-db psql -U appandor_admin -d appandor_universal_inventory -f /docker-entrypoint-initdb.d/01_init_tables.sql
 #

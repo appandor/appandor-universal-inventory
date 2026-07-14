@@ -36,41 +36,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// =============================================================================
-// SLIDING SESSION MIDDLEWARE (KORREKTUR: ROLLE UNVERLIERBAR MITGEBEN!)
-// =============================================================================
-app.use((req, res, next) => {
-    if (req.url.startsWith('/api/') && !req.url.includes('/auth/login')) {
-        try {
-            const authHeader = req.headers['authorization'];
-            if (authHeader && authHeader.startsWith('Bearer ')) {
-                const tokenArray = authHeader.split(' ');
-                if (tokenArray.length === 2) {
-                    const token = tokenArray[1]; 
-                    const decoded = jwt.verify(token, JWT_SECRET);
-                    
-                    // SCHARFE KORREKTUR: Die Rolle wird ab jetzt IMMER atomsicher mitkopiert!
-                    const renewedToken = jwt.sign(
-                        { 
-                            user_id: decoded.user_id, 
-                            tenant_id: decoded.tenant_id, 
-                            tenant_name: decoded.tenant_name, 
-                            email: decoded.email,
-                            role: decoded.role // <--- DAS REISSENDE RECHTE-KETTENGLIED IST GEFLICKT!
-                        }, 
-                        JWT_SECRET, 
-                        { expiresIn: '1h' }
-                    );
-                    res.setHeader('X-Refresh-Token', renewedToken);
-                }
-            }
-        } catch (err) {
-            console.warn("[Sliding Session Refresh Warning]:", err.message);
-        }
-    }
-    next();
-});
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'lp.html'));
 });
@@ -84,12 +49,14 @@ const inventoryRouter = require('./routes/inventory');
 const productsRouter = require('./routes/products');
 const inboundRouter = require('./routes/inbound');
 const outboundRouter = require('./routes/outbound');
+const adminRouter = require('./routes/admin');
 
 app.use('/api/auth', authRouter); 
 app.use('/api/inventory', inventoryRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/inbound', inboundRouter);
 app.use('/api/outbound', outboundRouter);
+app.use('/api/admin', adminRouter);
 
 app.get('/api/verify-session', (req, res) => {
     res.redirect(307, '/api/auth/verify-session');

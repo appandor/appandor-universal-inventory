@@ -1,9 +1,14 @@
-/* ==========================================================================
-   APPANDOR CORE: MASTER DESIGN SYSTEM BUNDLER
-   ========================================================================== */
+/* =============================================================================
+   APPANDOR CORE SYSTEM — GLOBAL STYLESHEET ENTRY POINT 
+   ============================================================================= */
 
+/* 1. Das Fundament: Variablen für Farben, Schriften und Abstände */
 @import "modules/variables.css";
-@import "modules/components.css";
-@import "modules/tables.css";
-@import "modules/modals.css";
+
+/* 2. Das alte Original-Layout (Übergangs-Sicherheit für alte Seiten) */
 @import "style_original.css";
+
+/* 3. Die neuen, modularen UI-Komponenten */
+@import "modules/layout.css";     /* Globales Seiten-Gerüst (Header, Menü, Status) */
+@import "modules/components.css"; /* Einzelne UI-Bausteine (Cards, Buttons) */
+@import "modules/tables.css";     /* Tabellen-Engine */

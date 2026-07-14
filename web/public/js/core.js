@@ -1,4 +1,3 @@
-
 // ==========================================================================
 // APPANDOR CORE: GENERAL THINGS FOR MOSTLY ALL SITES
 // ==========================================================================
@@ -106,14 +105,13 @@ document.addEventListener("DOMContentLoaded", () => {
             renderLanguage(selectedLang);
         }
     });
+});
 
-        // UNIVERSAL: Schließt JEDES geöffnete Appandor-Modal im System per ESC-Taste
+    // UNIVERSAL: Schließt das geöffnete Modal Fenster per ESC-Taste (CRLF)
     window.addEventListener("keydown", (e) => {
         if (e.key === "Escape" || e.key === "Esc") {
-            // Findet alle aktiven Modale über die universelle Overlay-Klasse
-            const activeModals = document.querySelectorAll(".appandor-modal-overlay");
-            activeModals.forEach(modal => modal.remove());
+            const activeModal = document.getElementById("lay_modal-overlay");
+            if (activeModal) activeModal.remove();
         }
     });
 
-});

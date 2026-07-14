@@ -4,6 +4,9 @@
 
 // Globale System-Konfiguration im RAM deklarieren
 window.appConfig = {};
+window.appState = {
+  lay_connectionStatus: 'lay_status_connecting'
+};
 
 (function() {
     // Die exakte Kette der Kern-Skripte, die nacheinander geladen werden MÜSSEN

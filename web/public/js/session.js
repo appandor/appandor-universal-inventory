@@ -1,4 +1,12 @@
+// =============================================================================
+// APPANDOR LOGISTICS: SESSION & AUTHENTICATION WARDEN (CRLF)
+// =============================================================================
+
 let countdownInterval = null;
+
+// =============================================================================
+// 1. UTILITIES & HELPERS (Kompakte Hilfsfunktionen)
+// =============================================================================
 
 (function initThemeEngine() {
     const savedTheme = localStorage.getItem('appandor_theme');
@@ -23,43 +31,48 @@ function checkAndRefreshToken(response) {
 
 function parseJwt(token) {
     try {
-        return JSON.parse(atob(token.split('.')));
+        // KORREKTUR: Greift sich unbestechlich den zweiten Teil [1] (die Payload)
+        const base64Url = token.split('.')[1];
+        
+        // Ersetzt URL-sichere Zeichen zurück in Standard-Base64, falls vorhanden
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        
+        // Dekodiert den String und parst ihn als echtes JSON-Objekt
+        return JSON.parse(atob(base64));
     } catch (e) {
+        console.error("[parseJwt Error]:", e.message); // Hilft uns, Fehler sofort zu sehen
         return null;
     }
 }
 
-// SCHARFE COUNTDOWN-SCHLEIFE
+// =============================================================================
+// 2. CORE SESSION LOGIC (Die scharfen Triebwerke)
+// =============================================================================
+
 function startLiveCountdown() {
     if (countdownInterval) clearInterval(countdownInterval);
     
-    const badge = document.getElementById("connection-status");
-    const timerElement = document.getElementById("session-countdown-timer");
-    
-    if (!badge || !timerElement) return;
+    // 1. ZUSTANDS-WECHSEL IM RAM: Setzt den i18n-Schlüssel
+    window.appState.lay_connectionStatus = 'lay_status_connected';
 
-    const token = localStorage.getItem('appandor_jwt_token');
-    const decoded = parseJwt(token);
-    
-    const currentLang = localStorage.getItem('appandor_lang') || 'en';
-    
-    let statusText = "Connected";
-    if (currentLang === 'de') statusText = "VERBUNDEN";
-    if (currentLang === 'es') statusText = "CONECTADO";
-    
-    badge.innerText = statusText;
-    
-    let timeLeft = 3600; 
-    if (decoded && decoded.exp) {
-        const now = Math.floor(Date.now() / 1000);
-        const calculatedTime = decoded.exp - now;
-        if (calculatedTime > 0) {
-            timeLeft = calculatedTime;
-        }
+    // 2. VISUELLER KASTEN-WECHSEL: Greift die ID und schaltet das CSS unbestechlich auf Grün
+    const badge = document.getElementById("lay_connection_status");
+    if (badge) {
+        badge.setAttribute("data-state", "connected");
     }
 
+    // 3. TIMER-ELEMENT-SCHRANKE (Gefahrenfrei nach dem Status-Wechsel platziert)
+    const timerElement = document.getElementById("session-countdown-timer"); 
+    if (!timerElement) return;
+
+
+    let timeLeft = 0;     
+    const token = localStorage.getItem('appandor_jwt_token');
+    const decoded = parseJwt(token);   
+    if (decoded && decoded.exp && decoded.iat) {
+        timeLeft = decoded.exp - decoded.iat; 
+    }
     countdownInterval = setInterval(() => {
-        const now = Math.floor(Date.now() / 1000);
         if (timeLeft <= 0) {
             clearInterval(countdownInterval);
             localStorage.removeItem('appandor_jwt_token');
@@ -76,11 +89,18 @@ function startLiveCountdown() {
     }, 1000);
 }
 
-window.startLiveCountdown = startLiveCountdown;
-
 function initializeAppandorSession() {
     const path = window.location.pathname;
-    if (path.includes("index.html") || path.includes("login.html") || path === "/") return;
+
+    // REPARATUR: Befreit Impressum und Datenschutz unbestechlich von der Login-Schranke!
+    if (
+        path.includes("index.html") || 
+        path.includes("login.html") || 
+        path.includes("legal.html") ||
+        path === "/"
+    ) {
+        return; // Überspringt die Token-Sperre für diese öffentlichen Seiten komplett!
+    }    
 
     const token = localStorage.getItem('appandor_jwt_token');
     if (!token) {
@@ -139,7 +159,16 @@ function initializeAppandorSession() {
     });
 };
 
-// Aktualisiert den Verbindungs-Status sofort, wenn die Sprache wechselt
+// =============================================================================
+// 3. Globaler Export für das System
+// =============================================================================
+
+window.startLiveCountdown = startLiveCountdown;
+
+// =============================================================================
+// 4. SYSTEM TRIGGERS & LISTENERS (Alle Wächter sauber unten gebündelt)
+// =============================================================================
+
 window.addEventListener('appandor_language_changed', () => {
   if (typeof startLiveCountdown === 'function') {
     startLiveCountdown();
