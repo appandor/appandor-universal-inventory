@@ -3,70 +3,49 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="nav_admin"></title>
+    <title data-i18n="gen_page_title_admin">Admin Panel</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- FRAMEWORK-UNION: Echte architektonische Trennung über die layout.css -->
-    <link rel="stylesheet" href="css/layout.css">
   </head>
   <body>
     <!-- Sandbox Notice Bar -->
-    <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner"></div>
-
-    <!-- Das universelle, unsichtbare Schutzschild für den Gleichschritt -->
+    <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner">Sandbox Mode</div>
     <div class="lay_container">
-      <!-- Universeller dynamischer Header (Baut die Hauptnavigation vollautomatisch ein) -->
       <div id="appandor-header"></div>
-
-      <!-- 1. BEREICH: TRIEBWERKS-STEUERUNG (HARMONISIERTES FRAMEWORK-MUSTER) -->
+      
+      <!-- System-Steuerung (Restart-Sektor) -->
       <div class="card">
-        <div class="lay_toggle-header" id="admin-toggle-header">
-          <h3 id="admin-form-title" data-i18n="admin_title_control"></h3>
-          <span class="lay_toggle-btn" id="admin-toggle-btn" data-i18n="btn_collapse"></span>
-        </div>
-        
-        <!-- Bereich für die System-Aktionen im einzeiligen Formular-Raster -->
-        <form id="admin-control-form" class="lay_form-grid">
+        <div class="lay_toggle-header">
+          <h3 id="admin-form-title" data-i18n="admin_title_control">System Control</h3>
+          <span class="lay_toggle-btn" data-i18n="btn_collapse">Collapse</span>
+        </div>        
+        <form class="lay_form-grid">
           <div style="display: flex; gap: 10px; align-items: center; width: auto;">
-            <button type="button" id="admin-btn-restart" class="btn-receive-action" data-i18n="admin_btn_restart" style="margin: 0; height: 38px; padding: 0 20px; width: auto; min-width: 160px; box-sizing: border-box; background-color: #c62828 !important; color: #ffffff !important; border: none; font-weight: bold; text-transform: uppercase; font-size: 11px;"></button>
+            <button type="button" id="admin-btn-restart" class="btn-receive-action" data-i18n="admin_btn_restart" style="margin: 0; height: 38px; padding: 0 20px; width: auto; min-width: 160px; box-sizing: border-box; background-color: #c62828 !important; color: #ffffff !important; border: none; font-weight: bold; text-transform: uppercase; font-size: 11px;">Restart Server</button>
           </div>
         </form>
       </div>
 
-      <!-- 2. BEREICH: DYNAMISCHER CONTAINER FÜR INHALTE (VOLLE BREITE) -->
+      <!-- Administrativer Inhalts-Sektor -->
       <div class="card" style="display: flex; flex-direction: column;">
-        <h2 data-i18n="admin_title_content" style="margin-top: 0; padding-bottom: 10px;"></h2>
+        <h2 data-i18n="admin_title_content" style="margin-top: 0; padding-bottom: 10px;">Administration</h2>        
         
-        <!-- DIE INTERNE REITER-WEICHE (UMSCHALTER) -->
+        <!-- Die symmetrische Reiter-Navigation (IDs = Dateinamen) -->
         <ul class="settings-tab-container" style="margin: 0 0 20px 0; padding: 0; border-bottom: 1px solid var(--border-color);">
-          <li>
-            <span id="admin-tab-tables" class="settings-tab-item active" style="cursor: pointer;" data-i18n="admin_tab_tables">Database Tables</span>
-          </li>
-          <li>
-            <span id="admin-tab-logs" class="settings-tab-item" style="cursor: pointer;" data-i18n="admin_tab_logs">System Logs</span>
-          </li>
-          <li>
-            <span class="settings-tab-item" data-i18n="admin_tab_metrics">Server Metrics</span>
-          </li>
-        </ul>
+          <li><span id="admin-tables" class="settings-tab-item active" style="cursor: pointer;" data-i18n="admin_tab_tables">Database Tables</span></li>
+          <li><span id="admin-dbadmin" class="settings-tab-item" style="cursor: pointer;" data-i18n="admin_tab_dbadmin">Datenbank-Admin</span></li>
+          <li><span id="admin-logs" class="settings-tab-item" style="cursor: pointer;" data-i18n="admin_tab_logs">System Logs</span></li>
+          <li><span id="admin-metrics" class="settings-tab-item" style="cursor: pointer;" data-i18n="admin_tab_metrics">Server Metrics</span></li>
+        </ul>                
         
-        <!-- Tabellen-Auswahl (Wird bei "Logs" über JS unsichtbar) -->
-        <div id="admin-table-filter-zone" class="form-group" style="max-width: 300px;">
-          <label for="admin-table-select" data-i18n="admin_label_select_table"></label>
-          <select id="admin-table-select" class="lay_input-select"></select>
+        <!-- DAS SOUVERÄNE REITER-GEHÄUSE -->
+        <!-- Nutzt die Standard-Klasse, damit das Layout im Raster bleibt -->
+        <div id="admin-tab-content-area" style="display: flex; flex-direction: column; flex: 1; width: 100%; padding: 20px 0;">
+          <p class="tbl_text-bold" data-i18n="gen_loading_records">Loading engine records...</p>
         </div>
 
-        <!-- Der umschließende Kasten fängt alle Ansichten sicher ab -->
-        <div style="max-height: 530px; overflow-y: auto; padding-right: 5px; margin-top: 15px; flex: 1;">
-          <div id="tbl_table-container">
-            <p class="tbl_msg-empty" data-i18n="admin_msg_select_table_prompt"></p>
-          </div>
-        </div>
       </div>
-
     </div>
-
-    <!-- ZENTRALE LADEKETTE -->
-    <script src="js/config.js"></script>
+    <script src="js/config.js"></script>    
     <script src="js/admin.js" defer></script>
-  </body>
+  </body> 
 </html>

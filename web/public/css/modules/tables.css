@@ -81,3 +81,10 @@
     text-align: center;
     padding: 20px;
 }
+
+.tbl_table-blocked {
+  opacity: 0.35 !important;
+  pointer-events: none !important; /* Blockiert jeden Klick und Hover-Effekt im Keim */
+  user-select: none !important;
+  transition: opacity 0.2s ease-in-out;
+}

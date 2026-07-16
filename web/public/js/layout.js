@@ -1,35 +1,35 @@
 
+// =============================================================================
+// APPANDOR LOGISTICS: CORE PLATFORM INITIALIZATION CHORD (CRLF)
+// =============================================================================
+
 // UI-MANAGER: Wartet auf das Signal der asynchronen Seiten wenn sie fertig sind
 window.addEventListener("appandor_render_complete", () => {
 
   if (typeof window.translatePage === "function") {    
-
     window.translatePage();
     const container = document.querySelector(".lay_container");
     if (container) container.classList.add("lay_visible");
   }
 
   // =============================================================================
-  // GLOBAL PLATFORM COLLAPSE WATCHER (100% HARMONIZED FOR ALL MODULES)
+  // GLOBAL PLATFORM COLLAPSE WATCHER (100% KONSOLIDIERT FÜR ALLE LAYOUT-MODULE)
   // =============================================================================
-  // Sucht den Klick-Header auf jeder Seite – egal ob alte ID oder neue Klasse
-  const activeToggleHeader = document.getElementById("inbound-toggle-header") || 
-                             document.getElementById("admin-toggle-header") ||
-                             document.querySelector(".lay_toggle-header");
+  // Horcht reinrassig auf die universelle Framework-Klasse oder die Kern-ID
+  const activeToggleHeader = document.querySelector(".lay_toggle-header") || 
+                             document.getElementById("lay_toggle-header");
 
   if (activeToggleHeader) {
     activeToggleHeader.addEventListener("click", () => {
-      // 1. Holt die direkt umschließende Karte des Klick-Headers
+      // 1. Holt die direkt umschließende Framework-Karte
       const card = activeToggleHeader.closest('.card');
       if (!card) return;
 
-      // 2. Findet das Formular und den Button innerhalb dieser Karte
-      const form = card.querySelector('form');
-      const btn = activeToggleHeader.querySelector('span') || 
-                  activeToggleHeader.querySelector('.lay_toggle-btn') ||
-                  document.getElementById("lay_toggle-btn") ||
-                  document.getElementById("admin-toggle-btn") ||
-                  document.getElementById("inbound-toggle-btn");
+      // 2. Findet das Formular und den Button über die reinen Framework-Bezeichner
+      const form = card.querySelector('.lay_form-grid') || card.querySelector('form');
+      const btn = activeToggleHeader.querySelector('.lay_toggle-btn') || 
+                  activeToggleHeader.querySelector('span') ||
+                  document.getElementById("lay_toggle-btn");
 
       if (!form || !btn) return;
 
@@ -46,12 +46,13 @@ window.addEventListener("appandor_render_complete", () => {
         btn.setAttribute("data-state", "collapsed");
       }
 
-      // Startet die Übersetzung für den veränderten Button-Zustand
+      // Zündet die i18n-Übersetzung für den veränderten Button-Zustand (Pfeil-Switch)
       if (typeof window.translatePage === "function") window.translatePage();
     });
   }
 
 });
+
 
 function initializeAppandorLayout() {
   
@@ -71,7 +72,7 @@ function initializeAppandorLayout() {
   } catch (e) {}
 
   const settingsMenuHTML = (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPERADMIN')
-    ? `<li><a href="settings.html" id="nav-link-settings" style="color: #aaa; text-decoration: none;" data-i18n="nav_settings"></a></li>`
+    ? `<li><a href="settings.html" id="nav-link-settings" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_settings"></a></li>`
     : '';
 
   const currentTheme = localStorage.getItem('appandor_theme') || 'dark';
@@ -105,33 +106,22 @@ function initializeAppandorLayout() {
     </header>
     <nav style="margin: 20px 0; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px;">
       <ul id="main-nav-list" style="list-style: none; display: flex; gap: 20px; margin: 0; padding: 0;">
-        <li><a href="inventory.html" id="nav-link-inventory" style="color: #aaa; text-decoration: none;" data-i18n="nav_inventory"></a></li>
-        <li><a href="inbound.html" id="nav-link-inbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_inbound"></a></li>
-        <li><a href="outbound.html" id="nav-link-outbound" style="color: #aaa; text-decoration: none;" data-i18n="nav_outbound"></a></li>
+        <li><a href="inventory.html" id="nav-link-inventory" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_inventory"></a></li>
+        <li><a href="inbound.html" id="nav-link-inbound" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_inbound"></a></li>
+        <li><a href="outbound.html" id="nav-link-outbound" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_outbound"></a></li>
         ${settingsMenuHTML}
-        <li><a href="admin.html" id="nav-link-admin" style="color: #aaa; text-decoration: none;" data-i18n="nav_admin"></a></li>
-        <li><a href="legal.html" id="nav-link-legal" style="color: #aaa; text-decoration: none;" data-i18n="nav_legal"></a></li>
+        <li><a href="admin.html" id="nav-link-admin" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_admin"></a></li>
+        <li><a href="legal.html" id="nav-link-legal" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_legal"></a></li>
       </ul>
     </nav>
   `;
 
   // 2. AKTIVEN REITER OPTISCH HERVORHEBEN
-  if (path.includes("inventory.html")) {
-      const el = document.getElementById("nav-link-inventory");
-      if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
-  } else if (path.includes("inbound.html")) {
-      const el = document.getElementById("nav-link-inbound");
-      if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
-  } else if (path.includes("outbound.html")) {
-      const el = document.getElementById("nav-link-outbound");
-      if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
-  } else if (path.includes("settings.html") || path.includes("products.html")) {
-      // KORREKTUR: Wenn wir in den Stammdaten sind, bleibt "Einstellungen" fett verankert!
-      const el = document.getElementById("nav-link-settings");
-      if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
-  } else if (path.includes("legal.html")) {
-      const el = document.getElementById("nav-link-legal");
-      if (el) { el.style.color = "var(--text-color)"; el.style.fontWeight = "bold"; }
+  const currentPage = window.location.pathname.split("/").pop().replace(".html", ""); 
+  const activeEl = document.getElementById(`nav-link-${currentPage}`);
+  if (activeEl) {
+    activeEl.style.color = "var(--text-color)";
+    activeEl.style.fontWeight = "bold";
   }
 
   // 3. SCHARFER TRIGGGER FÜR DIE CORES.JS (KORREKTUR: Zwingt core.js zum sofortigen Übersetzen des frischen Headers!)

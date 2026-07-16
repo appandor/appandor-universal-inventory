@@ -4,8 +4,6 @@
 
 const express = require('express');
 const router = express.Router();
-
-// KORREKTUR: Lädt den unbestechlichen Routen-Wächter aus eurem zentralen Modul!
 const authenticateToken = require('./authMiddleware'); 
 
 // =============================================================================
@@ -14,7 +12,6 @@ const authenticateToken = require('./authMiddleware');
 router.get('/categories', authenticateToken, async (req, res) => {
   const pool = req.app.get('db_pool');
   const activeTenantId = req.user.tenant_id; // Greift direkt auf den Wächter-Wert zu
-
   try {
     const query = `
       SELECT category_id, category_code, display_name 
@@ -31,12 +28,11 @@ router.get('/categories', authenticateToken, async (req, res) => {
 });
 
 // =============================================================================
-// 2. API: Holt die Produkt-Stammdatenliste für die rechte Tabellenhälfte
+// 2. API: Holt die Produkt-Stammdatenliste 
 // =============================================================================
 router.get('/masters', authenticateToken, async (req, res) => {
   const pool = req.app.get('db_pool');
   const activeTenantId = req.user.tenant_id;
-
   try {
     const query = `
       SELECT p.product_id, p.name, p.barcode, p.minimum_stock, c.display_name AS category_name
@@ -54,25 +50,21 @@ router.get('/masters', authenticateToken, async (req, res) => {
 });
 
 // =============================================================================
-// 3. API: Speichert ein neues Produkt scharf unter der ID des angemeldeten Mandanten
+// 3. API: Speichert ein neues Produkt unter der ID des angemeldeten Mandanten
 // =============================================================================
 router.post('/add', authenticateToken, async (req, res) => {
   const pool = req.app.get('db_pool');
-  const activeTenantId = req.user.tenant_id;
-  
+  const activeTenantId = req.user.tenant_id;  
   const { name, barcode, category_id, minimum_stock } = req.body;
-
   if (!name || !category_id) {
     return res.status(400).json({ error: "Product name and category are required" });
   }
-
   try {
     const query = `
       INSERT INTO product_master (tenant_id, category_id, barcode, name, minimum_stock)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING product_id, name;
-    `;
-    
+    `; 
     const values = [
       activeTenantId, 
       parseInt(category_id), 
@@ -80,12 +72,79 @@ router.post('/add', authenticateToken, async (req, res) => {
       name.trim(), 
       parseInt(minimum_stock) || 0
     ];
-    
     const result = await pool.query(query, values);
     res.status(201).json({ message: "Product master successfully created", product: result.rows[0] });
   } catch (err) {
     console.error("[API Product Add Error]:", err.message);
     res.status(500).json({ error: "Failed to inject product into database" });
+  }
+});
+
+// =============================================================================
+// 4. API: Aktualisiert ein bestehendes Produkt des angemeldeten Mandanten
+// =============================================================================
+router.put('/update/:id', authenticateToken, async (req, res) => {
+  const pool = req.app.get('db_pool');
+  const activeTenantId = req.user.tenant_id;
+  const productId = parseInt(req.params.id);  
+  const { name, barcode, category_id, minimum_stock } = req.body;
+  if (!name || !category_id) {
+    return res.status(400).json({ error: "Product name and category are required" });
+  }
+  try {
+    // Das WHERE-Statement sichert ab, dass kein Mandant fremde Produkte manipuliert!
+    const query = `
+      UPDATE product_master 
+      SET category_id = $1, barcode = $2, name = $3, minimum_stock = $4
+      WHERE product_id = $5 AND tenant_id = $6
+      RETURNING product_id, name;
+    `;
+    
+    const values = [
+      parseInt(category_id), 
+      barcode || null, 
+      name.trim(), 
+      parseInt(minimum_stock) || 0,
+      productId,
+      activeTenantId
+    ];
+    
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Product not found or unauthorized access" });
+    }
+
+    res.json({ message: "Product master successfully updated", product: result.rows[0] });
+  } catch (err) {
+    console.error("[API Product Update Error]:", err.message);
+    res.status(500).json({ error: "Failed to update product in database" });
+  }
+});
+
+// =============================================================================
+// 5. API: Löscht ein bestehendes Produkt des angemeldeten Mandanten (Scharf)
+// =============================================================================
+router.delete('/delete/:id', authenticateToken, async (req, res) => {
+  const pool = req.app.get('db_pool');
+  const activeTenantId = req.user.tenant_id;
+  const productId = parseInt(req.params.id);
+
+  try {
+    // Das WHERE-Statement verhindert mandantenübergreifendes Löschen
+    const query = `
+      DELETE FROM product_master 
+      WHERE product_id = $1 AND tenant_id = $2;
+    `;
+    const result = await pool.query(query, [productId, activeTenantId]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Product not found or unauthorized access" });
+    }
+
+    res.json({ message: "Product successfully eliminated" });
+  } catch (err) {
+    console.error("[API Product Delete Error]:", err.message);
+    res.status(500).json({ error: "Failed to delete product from database" });
   }
 });
 

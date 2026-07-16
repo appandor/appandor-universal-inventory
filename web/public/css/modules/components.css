@@ -55,6 +55,29 @@
     transform: scale(0.98);
 }
 
+button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+
+/* Universeller System-Ladehinweis für die dynamischen Reiter-Gehäuse */
+.gen_text-loading {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-style: italic; /* Kursive Darstellung für den Ladezustand */
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 40px 0;
+  margin: 0;
+}
+
+
+
+
+
 /* =============================================================================
    GLOBAL COMPONENTS: EVACUATED UI BUILD BLOCKS (CRLF)
    ============================================================================= */

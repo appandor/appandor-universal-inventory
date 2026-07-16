@@ -74,13 +74,13 @@ CREATE TABLE product_master (
 );
 
 -- -----------------------------------------------------------------------------
--- TABLE 3: TRACKED PRODUCTS (Referenziert sauber Table 2)
+-- TABLE 3: TRACKED PRODUCTS (Mit purchased_at Absicherung für den Wareneingang)
 -- -----------------------------------------------------------------------------
 CREATE TABLE tracked_products (
     tracked_id SERIAL PRIMARY KEY,
     tenant_id INT NOT NULL,
-    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE CASCADE,
-    purchased_at DATE NOT NULL,
+    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE RESTRICT, -- SPERRE AKTIV
+    purchased_at DATE,                               -- Behalten für die Inbound-Maske!
     purchase_price_gross NUMERIC(10, 2) NOT NULL,
     estimated_delivery DATE,
     expiry_date DATE,
@@ -111,7 +111,7 @@ CREATE TABLE box_contents (
     tenant_id INT NOT NULL,
     box_id VARCHAR(50) NOT NULL REFERENCES boxes(box_id) ON DELETE CASCADE,
     tracked_id INT NOT NULL REFERENCES tracked_products(tracked_id) ON DELETE CASCADE,
-    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE CASCADE,
+    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE RESTRICT, -- KORREKTUR: Schutz für Box-Inhalte!
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (box_id, tracked_id)
 );
@@ -122,7 +122,7 @@ CREATE TABLE box_contents (
 CREATE TABLE stock_transactions (
     transaction_id SERIAL PRIMARY KEY,
     tenant_id INT NOT NULL,
-    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE CASCADE,
+    product_id INT NOT NULL REFERENCES product_master(product_id) ON DELETE RESTRICT, -- KORREKTUR: Historische Belege schützen!
     box_id VARCHAR(50),
     transaction_type VARCHAR(10) NOT NULL,
     quantity INT NOT NULL DEFAULT 1,

@@ -3,8 +3,16 @@
     "lang_en": "Englisch",
     "lang_es": "Spanisch",
 
-    "gen_loading_records": "Datenbank-Einträge werden abgefragt...",
-    "gen_sandbox_banner": "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
+    "GENERAL Start ------------------------------------------------------------------------------------------------------": 0,
+
+    "gen_loading_records":  "Einträge werden geladen...",
+    "gen_sandbox_banner":   "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
+
+    "gen_page_title_admin": "System Administration",
+    "GENERAL END   ------------------------------------------------------------------------------------------------------": 0,
+
+
+    "TABLES START -------------------------------------------------------------------------------------------------------": 0,
 
     "tbl_box_id": "Box-ID",
     "tbl_storage_location": "Lagerplatz",
@@ -13,11 +21,42 @@
     "tbl_price_gross": "EK Brutto",
     "tbl_logistics_status": "Logistik-Status",
 
-    "lay_status_connecting": "Verbinden...",
-    "lay_status_connected": "Verbunden",
-    "lay_status_disconnected": "Getrennt",
-    "lay_connectionStatus_tooltip": "Abmelden",
+    "TABLES END   -------------------------------------------------------------------------------------------------------": 0,
 
+
+    "LAYOUT Start -------------------------------------------------------------------------------------------------------": 0,
+
+    "lay_status_connecting":        "Verbinden...",
+    "lay_status_connected":         "Verbunden",
+    "lay_status_disconnected":      "Getrennt",
+    "lay_connectionStatus_tooltip": "Abmelden",
+    "lay_nav_inventory":            "Warenbestand",
+    "lay_nav_inbound":              "Wareneingang",
+    "lay_nav_outbound":             "Warenausgang",
+    "lay_nav_products":             "Produkt-Stammdaten",
+    "lay_nav_settings":             "Einstellungen",
+    "lay_nav_admin":                "System Administration",
+    "lay_nav_legal":                "Impressum & Datenschutz",
+
+    "LAYout END   -------------------------------------------------------------------------------------------------------": 0,
+
+
+    "INVENTORY Start ----------------------------------------------------------------------------------------------------": 0,
+    "INVENTORY END   ----------------------------------------------------------------------------------------------------": 0,
+
+    "ADMINISTRATION Start -----------------------------------------------------------------------------------------------": 0,
+
+    "admin_title_control":           "System-Steuerung",
+    "admin_btn_restart":             "System neustarten",
+    "admin_title_content":           "System-Inhalte",
+    "admin_tab_tables":              "Datenbank-Tabellen",
+    "admin_tab_logs":                "System-Logs",
+    "admin_tab_metrics":             "Server-Metriken",
+    "admin_label_select_table":      "Datenbank-Tabelle auswählen",
+    "admin_opt_choose":              "-- Tabelle wählen --",
+    "admin_msg_select_table_prompt": "Bitte wählen Sie eine Tabelle aus dem Dropdown aus, um die Rohdaten des Mandanten zu inspizieren.", 
+
+    "ADMINISTRATION END   -----------------------------------------------------------------------------------------------": 0,
 
 
     "lp_title": "Appandor Core",
@@ -149,8 +188,7 @@
     "modal_receive_title": "Menge bestätigen",
 
     "btn_inbound_confirm": "Einbuchen",
-    "btn_modal_confirm": "Abmelden",
-
+    "btn_modal_confirm": "Bestätigen",
     "btn_modal_cancel": "Abbrechen",
 
 

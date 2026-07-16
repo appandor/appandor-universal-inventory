@@ -1,3 +1,47 @@
+/* Der Toggle-Header: Bringt Titel und Minimieren-Button symmetrisch auf eine Höhe */
+.lay_toggle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color, #e4e7eb);
+  margin-bottom: 20px;
+}
+
+/* KORREKTUR: Bringt die gewohnte Eleganz in den Minimieren/Maximieren-Button */
+.lay_toggle-btn {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-muted, #888888);
+  font-family: monospace;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: var(--body-bg, rgba(0, 0, 0, 0.03));
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+/* Hover-Effekt: Wenn der Operator mit der Maus über das Feld streift */
+.lay_toggle-header:hover .lay_toggle-btn {
+  color: var(--theme-primary-green, #2e7d32);
+  border-color: rgba(46, 125, 50, 0.2);
+  background-color: rgba(46, 125, 50, 0.05);
+}
+
+/* Wenn das Formular eingeklappt ist, färbt sich der Button warnend Bernstein-Gelb */
+.lay_toggle-btn[data-state="collapsed"] {
+  color: #ef6c00;
+  background-color: rgba(239, 108, 0, 0.05);
+}
+
+.lay_toggle-header:hover .lay_toggle-btn[data-state="collapsed"] {
+  border-color: rgba(239, 108, 0, 0.2);
+  color: #e65100;
+}
 /* =============================================================================
    GLOBAL LAYOUT: HEADER & NAVIGATION INDICATORS (CRLF)
    ============================================================================= */
@@ -77,26 +121,24 @@
 }
 
 .lay_container {
-    flex: 1 0 auto; /* Drückt den Footer unbarmherzig an den absoluten unteren Rand */
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+  flex: 1 0 auto; /* Drückt den Footer unbarmherzig an den absoluten unteren Rand */
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
 }
 
 /* Der Vorhang-Öffner: Zündet, sobald Tabelle und Timer synchron bereitstehen */
 .lay_container.lay_visible {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* =============================================================================
-   GLOBAL LAYOUT: UNIVERSAL COLLAPSE & FORM GRID ENGINE (CRLF)
-   ============================================================================= */
 
-/* Das universelle, flache Formular-Raster für einzeilige Eingaben */
+
+/* Das universelle, flache Formular-Raster für alle Arbeitsmodule */
 .lay_form-grid {
   display: flex;
   flex-wrap: wrap;
@@ -104,25 +146,6 @@
   align-items: flex-end;
 }
 
-/* Der flexible Klick-Header: Titel links, Button rechts */
-.lay_toggle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-
-/* Der charakteristische, orangefarbene Klick-Link des Frameworks */
-.lay_toggle-btn {
-  font-size: 12px;
-  font-weight: bold;
-  color: #ff6b00;
-  text-transform: uppercase;
-  user-select: none;
-}
 
 /* Verhalten von einklappbaren Karten im minimierten Zustand */
 .card[data-state="collapsed"] {

@@ -79,6 +79,10 @@
     * Construct the responsive Info-Card-Grid (Weg 1) inside '#tbl_table-container'
     * Create backend API route for hardware utility (CPU, RAM, Disk usage)
     * Integrate active JWT user session counter and live Docker container health checks
+  [ ] Dynamische Mandanten-Logos (Tenant Logo Engine):
+    * Datenbank-Erweiterung: Spalte 'tenant_logo_url' in den Mandanten-Stammdaten hinterlegen.
+    * Backend-Injektion: Die spezifische Logo-URL beim Login-Response im JWT-Payload mitsenden.
+    * Frontend-Dynamik: Zentralen Header so umbauen, dass der statische Pfad 'app_images/logo.jpg' (der aktuell den 404-Fehler wirft) durch die dynamische URL des angemeldeten Mandanten ersetzt wird.
 
 [ ] PRIORITY 8: PASSWORD RESET FLOW (GEPARKT)
   [ ] Absendefunktion (API-Fetch) im Passwort-Modal einbauen.
