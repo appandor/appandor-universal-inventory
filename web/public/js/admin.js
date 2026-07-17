@@ -1,110 +1,58 @@
 // =============================================================================
-// APPANDOR LOGISTICS: SYSTEM ADMINISTRATION ENGINE (CRLF)
+// APPANDOR LOGISTICS: SYSTEM ADMINISTRATION MAIN MODULE (CRLF)
 // =============================================================================
 
-function loadAdminTablesDropdown() {
-  const token = localStorage.getItem('appandor_jwt_token');
-  const tableSelect = document.getElementById("admin-table-select");
-  
-  if (!tableSelect) return;
-
-  fetch('/api/admin/tables', {
-    method: 'GET',
-    headers: { 'Authorization': `Bearer ${token}` }
-  })
-  .then(res => res.json())
-  .then(tables => {
-    tableSelect.innerHTML = `<option value="" data-i18n="admin_opt_choose"></option>`;
-    
-    if (!tables || tables.error || tables.length === 0) {
-      if (typeof window.translatePage === "function") window.translatePage();
-      return;
-    }
-
-    tables.forEach(t => {
-      const option = document.createElement("option");
-      option.value = t.table_name;
-      option.innerText = t.table_name;
-      tableSelect.appendChild(option);
-    });
-
-    if (typeof window.translatePage === "function") window.translatePage();
-  })
-  .catch(err => console.error("[UI Admin Tables Error]:", err.message));
-}
-
-function inspectTableContent(tableName) {
-  const token = localStorage.getItem('appandor_jwt_token');
-  const tableContainer = document.getElementById("tbl_table-container");
-  
-  if (!tableContainer || !tableName) return;
-
-  fetch(`/api/admin/table/${tableName}`, {
-    method: 'GET',
-    headers: { 'Authorization': `Bearer ${token}` }
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (!data || data.error || data.length === 0) {
-      tableContainer.innerHTML = `<p class="tbl_msg-empty" data-i18n="admin_msg_empty_table"></p>`;
-      if (typeof window.translatePage === "function") window.translatePage();
-      return;
-    }
-
-    const columns = Object.keys(data[0]);
-    
-    let html = `<table class="tbl_table"><thead><tr>`;
-    columns.forEach(col => {
-      html += `<th>${col}</th>`;
-    });
-    html += `</tr></thead><tbody>`;
-
-    data.forEach((row, index) => {
-      const rowClass = index % 2 === 0 ? 'tbl_row-even' : 'tbl_row-odd';
-      html += `<tr class="${rowClass}">`;
-      columns.forEach(col => {
-        const val = row[col] !== null ? row[col] : '-';
-        html += `<td>${val}</td>`;
-      });
-      html += `</tr>`;
-    });
-
-    html += `</tbody></table>`;
-    tableContainer.innerHTML = html;
-    
-    if (typeof window.translatePage === "function") window.translatePage();
-  })
-  .catch(err => {
-    console.error("[UI Admin Inspect Error]:", err.message);
-    tableContainer.innerHTML = `<p class="tbl_text-bold tbl_msg-error" data-i18n="gen_ledger_error"></p>`;
-  });
-}
-
-// =============================================================================
-// INITIALISIERUNG ÜBER DIE ZENTRALE LADEKETTE
-// =============================================================================
 window.addEventListener("appandor_platform_ready", () => {
-  loadAdminTablesDropdown();
-
-  const tableSelect = document.getElementById("admin-table-select");
-  const filterZone = document.getElementById("admin-table-filter-zone");
-  const tableContainer = document.getElementById("tbl_table-container");
+  const mainContainer = document.getElementById("container");
 
   const tabTables = document.getElementById("admin-tab-tables");
+  const tabDbAdmin = document.getElementById("admin-tab-dbadmin");
   const tabLogs = document.getElementById("admin-tab-logs");
   const tabMetrics = document.getElementById("admin-tab-metrics");
 
-  // UNBESTECHLICHER DIAGNOSE-CHECK: Prüft, ob alle DOM-Elemente da sind
-  if (!tableContainer) console.error("[CORE ERROR]: Element #tbl_table-container fehlt im HTML!");
-  if (!tabMetrics) console.error("[CORE ERROR]: Element #admin-tab-metrics fehlt im HTML!");
+  // =============================================================================
+  // ZENTRALE ROUTING-MASCHINE: Steuert die Ansicht basierend auf dem URL-Hash
+  // =============================================================================
+  function renderActiveTabByHash() {
+    // Holt den aktuellen Hash-Wert (z.B. "#metrics") und entfernt das #-Zeichen
+    const currentHash = window.location.hash.substring(1);
 
-  if (tableSelect) {
-    tableSelect.addEventListener("change", (e) => {
-      inspectTableContent(e.target.value);
-    });
+    // Initialen Zustand von allen Reiter-Spans säubern
+    if (tabTables) tabTables.classList.remove("active");
+    if (tabDbAdmin) tabDbAdmin.classList.remove("active");
+    if (tabLogs) tabLogs.classList.remove("active");
+    if (tabMetrics) tabMetrics.classList.remove("active");
+
+    // Weist den Inhalt basierend auf dem Hash dem Container zu
+    if (currentHash === "dbadmin" && tabDbAdmin) {
+      tabDbAdmin.classList.add("active");
+      if (typeof window.initAdminDbAdmin === "function") window.initAdminDbAdmin();
+    } else if (currentHash === "logs" && tabLogs) {
+      tabLogs.classList.add("active");
+      if (typeof window.initAdminLogs === "function") window.initAdminLogs();
+    } else if (currentHash === "metrics" && tabMetrics) {
+      tabMetrics.classList.add("active");
+      if (typeof window.initAdminMetrics === "function") window.initAdminMetrics();
+    } else {
+      // FALLBACK: Wenn kein oder ein unbekannter Hash gesetzt ist, ab auf die Tabellen
+      if (tabTables) {
+        tabTables.classList.add("active");
+        // Erzwingt den Hash in der Adresszeile, damit die URL synchron bleibt
+        window.location.hash = "tables"; 
+        if (typeof window.initAdminTables === "function") window.initAdminTables();
+      }
+    }
   }
 
-  // HORCHPOSTEN: System Neustarten
+  // Horchposten für den Browser-Verlauf (Zurück-/Vorwärts-Buttons des Benutzers)
+  window.addEventListener("hashchange", renderActiveTabByHash);
+
+  // ERSTSTART: Zündet die Weiche sofort beim allerersten Laden der Seite
+  renderActiveTabByHash();
+
+  // =============================================================================
+  // GLOBALER RESTART-TRIGGER
+  // =============================================================================
   const restartBtn = document.getElementById("admin-btn-restart");
   if (restartBtn) {
     restartBtn.addEventListener("click", () => {
@@ -133,65 +81,32 @@ window.addEventListener("appandor_platform_ready", () => {
     });
   }
 
-  // REITER-SWITCH: LOGS GEKLICKT
-  if (tabLogs) {
-    tabLogs.addEventListener("click", () => {
-      if (!tableContainer) return;
-      
-      if (tabTables) tabTables.classList.remove("active");
-      if (tabMetrics) tabMetrics.classList.remove("active");
-      tabLogs.classList.add("active");
-
-      if (filterZone) filterZone.style.display = "none";
-      if (tableSelect) tableSelect.value = "";
-
-      tableContainer.innerHTML = `
-        <pre style="margin: 0; padding: 15px; background: #000000; color: #00ff00; font-family: monospace; font-size: 13px; line-height: 1.5; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-break: break-all;">
-[System]: Fetching live log streams from server engine...
-[System]: Awaiting pipeline connection...
-        </pre>
-      `;
-    });
-  }
-
-  // REITER-SWITCH: TABLES GEKLICKT
+  // =============================================================================
+  // REITER-KLICK-HANDLER: Ändern ab jetzt NUR noch den Hash. Den Rest macht die Weiche!
+  // =============================================================================
   if (tabTables) {
     tabTables.addEventListener("click", () => {
-      if (!tableContainer) return;
-
-      if (tabLogs) tabLogs.classList.remove("active");
-      if (tabMetrics) tabMetrics.classList.remove("active");
-      tabTables.classList.add("active");
-
-      if (filterZone) filterZone.style.display = "block";
-      
-      tableContainer.innerHTML = `<p class="tbl_msg-empty" data-i18n="admin_msg_select_table_prompt"></p>`;
-      if (typeof window.translatePage === "function") window.translatePage();
+      window.location.hash = "tables";
     });
   }
 
-  // REITER-SWITCH: METRICS GEKLICKT
+  if (tabDbAdmin) {
+    tabDbAdmin.addEventListener("click", () => {
+      window.location.hash = "dbadmin";
+    });
+  }
+
+  if (tabLogs) {
+    tabLogs.addEventListener("click", () => {
+      window.location.hash = "logs";
+    }); 
+  }
+
   if (tabMetrics) {
     tabMetrics.addEventListener("click", () => {
-      if (!tableContainer) return;
-
-      if (tabTables) tabTables.classList.remove("active");
-      if (tabLogs) tabLogs.classList.remove("active");
-      tabMetrics.classList.add("active");
-
-      if (filterZone) filterZone.style.display = "none";
-      if (tableSelect) tableSelect.value = "";
-
-      tableContainer.innerHTML = `
-        <div style="padding: 15px; color: var(--text-muted);" data-i18n="gen_loading_records">
-          Lade System-Metriken...
-        </div>
-      `;
-      if (typeof window.translatePage === "function") window.translatePage();
+      window.location.hash = "metrics";
     });
   }
 
   window.dispatchEvent(new Event("appandor_render_complete"));
 });
-
-window.addEventListener('appandor_language_changed', () => loadAdminTablesDropdown());

@@ -95,4 +95,72 @@ router.post('/system/execute', authenticateToken, (req, res) => {
   });
 });
 
+// =============================================================================
+// 4. API: Führt administrative SQL-Befehle direkt auf dem PostgreSQL-Host aus
+// =============================================================================
+router.post('/execute-sql', authenticateToken, async (req, res) => {
+  const pool = req.app.get('db_pool');
+  const { query } = req.body;
+
+  if (!query || query.trim() === "") {
+    return res.status(400).json({ error: "Kein SQL-Befehl empfangen." });
+  }
+
+  try {
+    console.log(`[API Admin SQL Exec]: Befehl wird ausgeführt: ${query.substring(0, 60)}...`);
+    
+    // Führt das SQL-Statement direkt über den zentralen Pool aus
+    const result = await pool.query(query);
+    const affectedRows = result.rowCount !== null ? result.rowCount : 0;
+
+    res.json({ 
+      success: true, 
+      message: `Befehl erfolgreich ausgeführt. Betroffene Zeilen: ${affectedRows}` 
+    });
+
+  } catch (err) {
+    console.error("[API Admin SQL Exec Error]:", err.message);
+    // Liefert das exakte DB-Fehler-Feedback an die Konsole zurück
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// =============================================================================
+// 5. API: Liest die aktuellsten System-Logs (Kombination aus log.1 und log) aus (CRLF)
+// =============================================================================
+router.get('/logs', authenticateToken, (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  
+  const logFile0Path = path.join(__dirname, '../combined.log'); 
+  const logFile1Path = path.join(__dirname, '../combined.log.1'); 
+
+  console.log('[API Admin Logs]: Operator fordert System-Protokolle an.');
+
+  // 1. Zuerst prüfen wir asynchron, ob die ältere combined.log.1 existiert
+  fs.readFile(logFile1Path, 'utf8', (err1, data1) => {
+    const historicalLogs = !err1 ? data1 : ''; // Falls Fehler (z.B. Datei nicht da), einfach leer lassen
+
+    // 2. Jetzt lesen wir die aktuelle, aktive combined.log aus
+    fs.readFile(logFile0Path, 'utf8', (err0, data0) => {
+      if (err0) {
+        // Falls selbst die Haupt-Logdatei fehlt, schicken wir den sauberen Fallback
+        console.error('[API Admin Logs Read Error]:', err0.message);
+        return res.json({ 
+          logs: '[System]: Live pipeline connected.\n[System]: Awaiting fresh engine cycle transactions.' 
+        });
+      }
+
+      // 3. Wir verheiraten die Historie unbestechlich mit den frischen Live-Zeilen
+      const combinedData = historicalLogs + data0;
+
+      // 4. Holt die letzten 100 Zeilen aus dem kombinierten Gesamt-String
+      const lines = combinedData.trim().split('\n');
+      const lastLines = lines.slice(-100).join('\n');
+
+      res.json({ logs: lastLines });
+    });
+  });
+});
+
 module.exports = router;
