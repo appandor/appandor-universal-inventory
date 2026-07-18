@@ -1,2 +1,5 @@
 node_modules/
 postgres_data/
+combined.log
+combined.log.1
+combined.log.2
