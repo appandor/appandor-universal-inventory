@@ -3,38 +3,48 @@
 // =============================================================================
 
 function executeDbMetricsPipeline(sizeCell, connCell, cacheCell, token) {
-  // Fetch 1: DB-Größe
-  fetch('/api/admin/metrics/db-size', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => { if (data && data.size_mb && sizeCell) sizeCell.innerText = `${data.size_mb} MB`; })
-    .catch(err => console.error("[DB Pipeline Size Error]:", err.message));
+  // Fetch 1: Echte DB-Größe über den neuen Pfad /metrics_db
+  fetch('/api/admin/metrics_db/db-size', { 
+    method: 'GET', 
+    headers: { 'Authorization': `Bearer ${token}` } 
+  })
+  .then(res => res.json())
+  .then(data => { if (data && data.size_mb !== undefined && sizeCell) sizeCell.innerText = `${data.size_mb} MB`; })
+  .catch(err => console.error("[DB Pipeline Size Error]:", err.message));
 
-  // Fetch 2: Aktive Verbindungen
-  fetch('/api/admin/metrics/db-connections', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => { if (data && typeof data.active_connections === 'number' && connCell) connCell.innerText = data.active_connections; })
-    .catch(err => console.error("[DB Pipeline Connections Error]:", err.message));
+  // Fetch 2: Aktive Verbindungen über den neuen Pfad /metrics_db
+  fetch('/api/admin/metrics_db/db-connections', { 
+    method: 'GET', 
+    headers: { 'Authorization': `Bearer ${token}` } 
+  })
+  .then(res => res.json())
+  .then(data => { if (data && typeof data.active_connections === 'number' && connCell) connCell.innerText = data.active_connections; })
+  .catch(err => console.error("[DB Pipeline Connections Error]:", err.message));
 
-  // Fetch 3: Cache-Hit-Rate
-  fetch('/api/admin/metrics/db-cache', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => { if (data && data.cache_hit_rate && cacheCell) cacheCell.innerText = data.cache_hit_rate; })
-    .catch(err => console.error("[DB Pipeline Cache Error]:", err.message));
+  // Fetch 3: Cache-Hit-Rate über den neuen Pfad /metrics_db
+  fetch('/api/admin/metrics_db/db-cache', { 
+    method: 'GET', 
+    headers: { 'Authorization': `Bearer ${token}` } 
+  })
+  .then(res => res.json())
+  .then(data => { if (data && data.cache_hit_rate && cacheCell) cacheCell.innerText = data.cache_hit_rate; })
+  .catch(err => console.error("[DB Pipeline Cache Error]:", err.message));
 }
 
 window.initAdminDbAdmin = function() {
   const mainContainer = document.getElementById("container");
   if (!mainContainer) return;
 
-  // FEINJUSTIERUNG: Der Trennstrich sitzt jetzt INNERHALB der klappbaren Zone!
   mainContainer.innerHTML = `
     <div style="padding: 15px; width: 100%; box-sizing: border-box;">
       
       <!-- 1. ETAGE: DIE EINKLAPPBARE SQL-DIREKTKONSOLE (PRODUKTIV-GEHÄUSE) -->
       <div class="card" style="margin-bottom: 25px; padding: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h3 style="margin: 0; font-size: 14px; font-weight: bold;" data-i18n="admin_metrics_db_console_title">admin_metrics_db_console_title</h3>
-          <span id="admin-sql-toggle-btn" style="font-size: 11px; font-family: monospace; cursor: pointer; color: var(--text-muted); font-weight: bold; letter-spacing: 0.5px;">[ EINBLENDEN ]</span>
+        <div id="admin-sql-toggle-header" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+          <h3 style="margin: 0; font-size: 14px; font-weight: bold;" data-i18n="admin_dbadmin_db_console_title"></h3>
+          <span id="admin-sql-toggle-btn" class="tbl_text-bold" data-i18n="btn_expand" style="font-size: 11px; font-family: monospace; letter-spacing: 0.5px;"></span>
         </div>
 
-        <!-- Klappbare Inhalts-Zone: Startet im Ruhezustand auf 'none' -->
         <div id="admin-sql-expand-zone" style="display: none;">
           <div style="border-top: 1px solid var(--border-color); margin-top: 15px; padding-top: 15px;">
             <div class="form-group" style="margin-bottom: 15px;">
@@ -81,18 +91,22 @@ window.initAdminDbAdmin = function() {
   }
 
   // Mechanik für das Minimieren/Einblenden
-  const toggleBtn = document.getElementById("admin-sql-toggle-btn");
+  const toggleHeader = document.getElementById("admin-sql-toggle-header");
   const expandZone = document.getElementById("admin-sql-expand-zone");
+  const btn = document.getElementById("admin-sql-toggle-btn");
 
-  if (toggleBtn && expandZone) {
-    toggleBtn.addEventListener("click", () => {
-      if (expandZone.style.display === "block") {
-        expandZone.style.display = "none";
-        toggleBtn.innerText = "[ EINBLENDEN ]";
-      } else {
+  if (toggleHeader && expandZone && btn) {
+    toggleHeader.addEventListener("click", () => {
+      if (expandZone.style.display === "none") {
         expandZone.style.display = "block";
-        toggleBtn.innerText = "[ MINIMIEREN ]";
+        btn.setAttribute("data-i18n", "btn_collapse");
+        btn.removeAttribute("data-state");
+      } else {
+        expandZone.style.display = "none";
+        btn.setAttribute("data-i18n", "btn_expand");
+        btn.setAttribute("data-state", "collapsed");
       }
+      if (typeof window.translatePage === "function") window.translatePage();
     });
   }
 

@@ -152,7 +152,8 @@ const productsRouter = require('./routes/products');
 const inboundRouter = require('./routes/inbound');
 const outboundRouter = require('./routes/outbound');
 const adminRouter = require('./routes/admin');
-const metricsRouter = require('./routes/metrics'); 
+const metricsRouterSystem = require('./routes/metrics_system'); 
+const metricsRouterDb = require('./routes/metrics_db'); 
 
 app.use('/api/auth', authRouter); 
 app.use('/api/inventory', inventoryRouter);
@@ -160,7 +161,8 @@ app.use('/api/products', productsRouter);
 app.use('/api/inbound', inboundRouter);
 app.use('/api/outbound', outboundRouter);
 app.use('/api/admin', adminRouter);
-app.use('/api/admin/metrics', metricsRouter);
+app.use('/api/admin/metrics', metricsRouterSystem);
+app.use('/api/admin/metrics_db', metricsRouterDb);
 
 app.get('/api/verify-session', (req, res) => {
   res.redirect(307, '/api/auth/verify-session');
