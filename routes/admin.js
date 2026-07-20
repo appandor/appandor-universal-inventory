@@ -82,7 +82,7 @@ router.post('/system/execute', authenticateToken, (req, res) => {
     return res.status(400).json({ error: "Unknown or untracked system control command." });
   }
 
-  console.log(`[SYSTEM CONTROL]: Einleitung der Aktion '${action}' -> Befehl: ${commandToExecute}`);
+  console.log(`[SYSTEM CONTROL]: Initiating action '${action}' -> Command: ${commandToExecute}`);
 
   // Ausführung auf dem Betriebssystem des Servers
   exec(commandToExecute, (error, stdout, stderr) => {
@@ -107,7 +107,7 @@ router.post('/execute-sql', authenticateToken, async (req, res) => {
   }
 
   try {
-    console.log(`[API Admin SQL Exec]: Befehl wird ausgeführt: ${query.substring(0, 60)}...`);
+    console.log(`[API Admin SQL Exec]: Executing command: ${query.substring(0, 60)}...`);
     
     // Führt das SQL-Statement direkt über den zentralen Pool aus
     const result = await pool.query(query);
@@ -135,7 +135,7 @@ router.get('/logs', authenticateToken, (req, res) => {
   const logFile0Path = path.join(__dirname, '../combined.log'); 
   const logFile1Path = path.join(__dirname, '../combined.log.1'); 
 
-  console.log('[API Admin Logs]: Operator fordert System-Protokolle an.');
+  console.log('[API Admin Logs]: Operator requesting system logs.');
 
   // 1. Zuerst prüfen wir asynchron, ob die ältere combined.log.1 existiert
   fs.readFile(logFile1Path, 'utf8', (err1, data1) => {

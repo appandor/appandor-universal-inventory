@@ -62,6 +62,8 @@ Plain HTML/CSS/JS served statically from `web/public` (no framework, no bundler)
 ## Rules
 
 - **Strictly ignore any files containing 'OLD' or 'copy' in their filename during any file scans or code modifications.**
+- **All `console.log` messages and HTTP log statements must be written in professional, clear English.**
+- **All inline code comments and source code documentation must remain written in German.**
 
 ## Conventions & gotchas
 

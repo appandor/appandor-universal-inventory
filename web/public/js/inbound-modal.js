@@ -1,11 +1,6 @@
 // ==========================================================================
-// APPANDOR INBOUND: EXTENDED MODAL RECEIPT WORKER (2026 LOGISTICS ENGINE)
+// APPANDOR INBOUND: EXTENDED MODAL RECEIPT WORKER 
 // ==========================================================================
-
-
-// =============================================================================
-// APPANDOR INBOUND: EXTENDED MODAL RECEIPT WORKER (2026 LOGISTICS ENGINE)
-// =============================================================================
 
 window.openReceiveModal = function(trackedId, maxQty, productId) {
     const currentLang = localStorage.getItem('appandor_lang') || 'en';    

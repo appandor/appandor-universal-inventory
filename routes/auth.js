@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 // Berechnet die Ablaufzeit ein einziges Mal!
 const JWT_EXPIRATION_SECONDS = process.env.JWT_EXPIRES_IN ? Number(process.env.JWT_EXPIRES_IN) : 7200;
 
-
 // 1. API: SCHARFES LOGIN
 router.post('/login', async (req, res) => {
     const pool = req.app.get('db_pool');
@@ -48,10 +47,10 @@ router.post('/login', async (req, res) => {
 
        // ZUSATZ FÜR UHRZEIT-CHECK (CRLF)
         const checkDecoded = jwt.decode(token);
-        console.log("--- ZEITSTEMPEL ABGLEICH ---");
-        console.log("Ausgestellt um (iat):", checkDecoded.iat);
-        console.log("Läuft ab um (exp):", checkDecoded.exp);
-        console.log("Differenz im Backend:", checkDecoded.exp - checkDecoded.iat);
+        console.log("--- TIMESTAMP COMPARISON ---");
+        console.log("Issued at (iat):", checkDecoded.iat);
+        console.log("Expires at (exp):", checkDecoded.exp);
+        console.log("Difference in backend:", checkDecoded.exp - checkDecoded.iat);
 
         res.json({ 
             message: "Authentication successful", 
@@ -96,32 +95,6 @@ router.get('/verify-session', async (req, res) => {
         // Der Header reist ab jetzt kontrolliert und nur über diese Route zum Client!
         res.setHeader('X-Refresh-Token', renewedToken);
         
-        res.json({ 
-            tenant_name: decoded.tenant_name, 
-            role: decoded.role,
-            email: decoded.email, 
-            is_sandbox: false 
-        });
-
-    } catch (err) {
-        res.status(401).json({ error: "Session expired." });
-    }
-});
-
-
-
-
-router.get('/OLDverify-session', async (req, res) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: "Access denied." });
-    }
-
-    const tokenArray = authHeader.split(' ');
-    if (tokenArray.length !== 2) return res.status(401).json({ error: "Invalid token" });
-
-    try {
-        const decoded = jwt.verify(tokenArray[1], process.env.JWT_SECRET);        
         res.json({ 
             tenant_name: decoded.tenant_name, 
             role: decoded.role,

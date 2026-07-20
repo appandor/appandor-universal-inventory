@@ -1,88 +1,78 @@
-
 // =============================================================================
 // APPANDOR LOGISTICS: CORE PLATFORM INITIALIZATION CHORD (CRLF)
 // =============================================================================
 
-// UI-MANAGER: Wartet auf das Signal der asynchronen Seiten wenn sie fertig sind
 window.addEventListener("appandor_render_complete", () => {
 
+  // =============================================================================
+  // Jetzt erst sichtbar machen um flackern zu vermeiden!
+  // =============================================================================
+
+  const container = document.querySelector(".lay_container")
+  if (container) container.classList.add("lay_visible")
+
   if (typeof window.translatePage === "function") {    
-    window.translatePage();
-    const container = document.querySelector(".lay_container");
-    if (container) container.classList.add("lay_visible");
+    window.translatePage()
   }
 
   // =============================================================================
-  // GLOBAL PLATFORM COLLAPSE WATCHER (100% KONSOLIDIERT FÜR ALLE LAYOUT-MODULE)
+  // Ausklappen / Einklappen Event Hanlder hinzufügen
   // =============================================================================
-  // Horcht reinrassig auf die universelle Framework-Klasse oder die Kern-ID
-  const activeToggleHeader = document.querySelector(".lay_toggle-header") || 
-                             document.getElementById("lay_toggle-header");
 
+  const activeToggleHeader = document.querySelector(".lay_toggle-header")
   if (activeToggleHeader) {
     activeToggleHeader.addEventListener("click", () => {
-      // 1. Holt die direkt umschließende Framework-Karte
-      const card = activeToggleHeader.closest('.card');
-      if (!card) return;
+      const card = activeToggleHeader.closest('.card')
+      if (!card) return
 
-      // 2. Findet das Formular und den Button über die reinen Framework-Bezeichner
-      const form = card.querySelector('.lay_form-grid') || card.querySelector('form');
-      const btn = activeToggleHeader.querySelector('.lay_toggle-btn') || 
-                  activeToggleHeader.querySelector('span') ||
-                  document.getElementById("lay_toggle-btn");
+      const form = card.querySelector('.lay_form-grid')
+      const btn = activeToggleHeader.querySelector('.lay_toggle-btn')
+                  
+      if (!form || !btn) return
 
-      if (!form || !btn) return;
-
-      // 3. Der unbestechliche Toggle über den data-state der Karte
       if (card.getAttribute("data-state") === "collapsed") {
-        card.removeAttribute("data-state");
-        form.style.display = "flex";
-        btn.setAttribute("data-i18n", "btn_collapse");
-        btn.removeAttribute("data-state");
+        card.removeAttribute("data-state")
+        btn.setAttribute("data-i18n", "btn_collapse")
+        form.style.display = "flex"
       } else {
-        card.setAttribute("data-state", "collapsed");
-        form.style.display = "none";
-        btn.setAttribute("data-i18n", "btn_expand");
-        btn.setAttribute("data-state", "collapsed");
+        card.setAttribute("data-state", "collapsed")
+        btn.setAttribute("data-i18n", "btn_expand")
+        form.style.display = "none"
       }
-
-      // Zündet die i18n-Übersetzung für den veränderten Button-Zustand (Pfeil-Switch)
-      if (typeof window.translatePage === "function") window.translatePage();
-    });
+      if (typeof window.translatePage === "function") window.translatePage()
+    })
   }
-
-});
-
+})
 
 function initializeAppandorLayout() {
   
-  const path = window.location.pathname;
-  
-  const headerContainer = document.getElementById("appandor-header");
-  if (!headerContainer) return;
+  const path = window.location.pathname
+  const headerContainer = document.getElementById("appandor-header")
+  if (!headerContainer) return
 
-  const token = localStorage.getItem('appandor_jwt_token');
-  let userRole = 'ROLE_WORKER';
+  const token = localStorage.getItem('appandor_jwt_token')
+  let userRole = 'ROLE_WORKER'
   
   try {
     if (token) {
-      const decoded = JSON.parse(atob(token.split('.')[1]));
-      userRole = decoded.role || 'ROLE_WORKER';
+      const decoded = JSON.parse(atob(token.split('.')[1]))
+      userRole = decoded.role || 'ROLE_WORKER'
     }
   } catch (e) {}
 
   const settingsMenuHTML = (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPERADMIN')
     ? `<li><a href="settings.html" id="nav-link-settings" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_settings"></a></li>`
-    : '';
+    : ''
 
-  const currentTheme = localStorage.getItem('appandor_theme') || 'dark';
-  const themeLabelKey = currentTheme === 'dark' ? 'theme_light' : 'theme_dark';
+  const currentTheme = localStorage.getItem('appandor_theme') || 'dark'
+  const themeLabelKey = currentTheme === 'dark' ? 'theme_light' : 'theme_dark'
 
   // 1. DYNAMISCHEN HEADER UND NAVIGATION BAUEN
   headerContainer.innerHTML = `
     <header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color);">
       <div style="display: flex; align-items: center; gap: 15px;">
         <img src="app_images/logo.jpg" alt="Logo" id="header-logo" onerror="this.style.display='none';" style="height: 35px; width: auto; border-radius: 4px; display: block;">
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
         <div>
           <h1 style="font-size: 24px; margin: 0; display: flex; align-items: center;">
             <span id="tenant-name">Loading Workspace</span>
@@ -114,71 +104,64 @@ function initializeAppandorLayout() {
         <li><a href="legal.html" id="nav-link-legal" style="color: #aaa; text-decoration: none;" data-i18n="lay_nav_legal"></a></li>
       </ul>
     </nav>
-  `;
+  `
 
   // 2. AKTIVEN REITER OPTISCH HERVORHEBEN
-  const currentPage = window.location.pathname.split("/").pop().replace(".html", ""); 
-  const activeEl = document.getElementById(`nav-link-${currentPage}`);
+  const currentPage = window.location.pathname.split("/").pop().replace(".html", "")
+  const activeEl = document.getElementById(`nav-link-${currentPage}`)
   if (activeEl) {
-    activeEl.style.color = "var(--text-color)";
-    activeEl.style.fontWeight = "bold";
+    activeEl.style.color = "var(--text-color)"
+    activeEl.style.fontWeight = "bold"
   }
 
   // 3. SCHARFER TRIGGGER FÜR DIE CORES.JS (KORREKTUR: Zwingt core.js zum sofortigen Übersetzen des frischen Headers!)
-  const activeLang = localStorage.getItem('appandor_lang') || 'en';
-  const langSelector = document.getElementById("language-selector");
+  const activeLang = localStorage.getItem('appandor_lang') || 'en'
+  const langSelector = document.getElementById("language-selector")
   if (langSelector) {
-      langSelector.value = activeLang;
+      langSelector.value = activeLang
       // Löst das 'change' Event aus, damit core.js die Übersetzungen sofort einpflegt
-      setTimeout(() => langSelector.dispatchEvent(new Event('change')), 10);
+      setTimeout(() => langSelector.dispatchEvent(new Event('change')), 10)
   }
 
   // 4. THEME-UMSCHALTER MIT DYNAMISCHER i18n ANBINDUNG
-  const themeBtn = document.getElementById("theme-toggle-text");
+  const themeBtn = document.getElementById("theme-toggle-text")
   if (themeBtn) {
       themeBtn.addEventListener("click", () => {
-          const activeTheme = document.documentElement.getAttribute("data-theme") || "dark";
-          const newTheme = activeTheme === "dark" ? "light" : "dark";
+          const activeTheme = document.documentElement.getAttribute("data-theme") || "dark"
+          const newTheme = activeTheme === "dark" ? "light" : "dark"
           
-          document.documentElement.setAttribute("data-theme", newTheme);
-          localStorage.setItem('appandor_theme', newTheme);
+          document.documentElement.setAttribute("data-theme", newTheme)
+          localStorage.setItem('appandor_theme', newTheme)
           
-          const nextLabelKey = newTheme === "dark" ? "theme_light" : "theme_dark";
-          themeBtn.setAttribute("data-i18n", nextLabelKey);
-
-          // KORREKTUR: Liest die Sprache JETZT live beim Klick aus, statt starr beim Laden!
-          const liveLang = localStorage.getItem('appandor_lang') || 'en';
+          const nextLabelKey = newTheme === "dark" ? "theme_light" : "theme_dark"
+          themeBtn.setAttribute("data-i18n", nextLabelKey)
+          const liveLang = localStorage.getItem('appandor_lang') || 'en'
           
           fetch(`lang/${liveLang}.json`)
               .then(r => r.json())
               .then(t => {
-                  themeBtn.innerText = t[nextLabelKey] || nextLabelKey;
-                  // Erzwingt eine komplette Neuübersetzung der Seite, damit kein Text auf Englisch zurückfällt
-                  if (langSelector) langSelector.dispatchEvent(new Event('change'));
+                  themeBtn.innerText = t[nextLabelKey] || nextLabelKey
+                  if (langSelector) langSelector.dispatchEvent(new Event('change'))
               })
-              .catch(err => console.error("[Theme Lang Fetch Error]:", err.message));
+              .catch(err => console.error("[Theme Lang Fetch Error]:", err.message))
       });
     }
 
   // 5. ABMELDUNG (LOGOUT) WITH CUSTOM BEAUTIFUL MODAL (CRLF)
-  const badgeElement = document.getElementById("lay_connection-status");
+  const badgeElement = document.getElementById("lay_connection-status")
 
   if (badgeElement) {
       badgeElement.addEventListener("click", () => {
-          const liveLang = localStorage.getItem('appandor_lang') || 'en';
+          const liveLang = localStorage.getItem('appandor_lang') || 'en'
           
           fetch(`lang/${liveLang}.json`)
               .then(r => r.json())
               .then(t => {
-                  const logoutMsg = t["msg_logout_confirm"] || "Do you really want to sign out?";
-                  
-                  const btnYes = t["btn_modal_confirm"] || (liveLang === 'es' ? 'Confirmar' : 'Confirm');
-                  const btnNo = t["btn_modal_cancel"] || (liveLang === 'es' ? 'Cancelar' : 'Cancel');
-
-                  const modalOverlay = document.createElement("div");
-                  modalOverlay.id = "lay_modal-overlay"; 
-
-                  // KONVENTIONS-ANPASSUNG: Nutzt jetzt deine neue Klasse "lay_modal-box"
+                  const logoutMsg = t["msg_logout_confirm"] || "Do you really want to sign out?"                  
+                  const btnYes = t["btn_modal_confirm"] || (liveLang === 'es' ? 'Confirmar' : 'Confirm')
+                  const btnNo = t["btn_modal_cancel"] || (liveLang === 'es' ? 'Cancelar' : 'Cancel')
+                  const modalOverlay = document.createElement("div")
+                  modalOverlay.id = "lay_modal-overlay"
                   modalOverlay.innerHTML = `
                       <div class="lay_modal-box" style="max-width: 400px; text-align: center;">
                           <p style="color: var(--text-color); font-size: 16px; font-weight: bold; margin: 0 0 25px 0;">${logoutMsg}</p>
@@ -192,24 +175,17 @@ function initializeAppandorLayout() {
                           </div>
                       </div>
                   `;
-                  document.body.appendChild(modalOverlay);
-                  
+                  document.body.appendChild(modalOverlay)            
                   document.getElementById("modal-confirm-yes").addEventListener("click", () => {
-                      localStorage.removeItem('appandor_jwt_token');
-                      window.location.href = "/";
-                  });
-
+                      localStorage.removeItem('appandor_jwt_token')
+                      window.location.href = "/"
+                  })
                   document.getElementById("modal-confirm-no").addEventListener("click", () => {
-                      modalOverlay.remove();
-                  });
-              });
-      });
-      // UNBESTECHLICHE REINIGUNG: Die alten mouseover/mouseout EventListener wurden entfernt.
-      // Das regelt ab jetzt die layout.css vollautomatisch und flüssiger über #lay_connection-status:hover!
+                      modalOverlay.remove()
+                  })
+              })
+      })
   }
 
-  if (typeof window.translatePage === 'function') {
-    window.translatePage();
-  }
-
-};
+  if (typeof window.translatePage === 'function') { window.translatePage() }
+}

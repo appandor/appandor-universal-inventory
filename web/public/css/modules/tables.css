@@ -1,13 +1,38 @@
 /* =============================================================================
+   APPANDOR LOGISTICS: GLOBAL UNIFIED TABLE HEADERS (CRLF)
+   ============================================================================= */
+
+/* Definiert das Verhalten für alle Überschriften-Zellen im Tabellenkopf */
+.tbl_table thead th {
+  color: #757575;                /* Das dezente, matte Grau für den Kontrast */
+  font-size: 13px;               /* Kompakte, professionelle Schriftgröße */
+  font-weight: 600;              /* Kräftiger, lesbarer Schnitt (Semi-Bold) */
+  padding: 12px 10px;            /* Symmetrischer Innenabstand (Oben/Unten, Links/Rechts) */
+  text-align: left;              /* Standardmäßige Ausrichtung nach links */
+  border-bottom: 2px solid #e0e0e0; /* Die feine, helle Trennlinie zum Content */
+  white-space: nowrap;           /* Verhindert unschöne Zeilenumbrüche im Header */
+  font-weight: bold; 
+}
+
+/* Optionale Hilfsklassen für abweichende Spalten-Ausrichtungen */
+.tbl_table thead th.tbl_text-center {
+  text-align: center;
+}
+
+.tbl_table thead th.tbl_text-right {
+  text-align: right;
+}
+
+/* =============================================================================
    GLOBAL TABLES: CORE DATA-TABLE ENGINE (CRLF)
    ============================================================================= */
 
 #tbl_table-container p[data-i18n="gen_loading_records"] {
-  color: #888;
+  color: var(--text-muted);
   font-style: italic;
 }
 
-/* Die neue, universelle Tabellen-Struktur mit deinem tbl_ Namensraum */
+/* Die universelle Tabellen-Struktur mit dynamischer Theme-Kopplung */
 .tbl_table {
   width: 100%;
   border-collapse: collapse;
@@ -16,47 +41,40 @@
   text-align: left;
 }
 
-.tbl_table thead tr {
-  border-bottom: 2px solid #444;
-  color: var(--text-color);
+/* Die Tabellenzeilen passen sich jetzt unbestechlich jedem Modus an! */
+.tbl_table tr {
+  border-bottom: 1px solid var(--border-color, #e0e0e0); /* Nutzt die Theme-Linie */
+  color: var(--text-color, #1e1e1e);                    /* FIX: Schaltet live um! */
 }
 
+/* th und td teilen sich das saubere Standard-Padding für die Symmetrie */
 .tbl_table th, 
 .tbl_table td {
-  padding: 12px 8px;
+  padding: 12px 10px;
 }
 
-.tbl_table tr {
-  border-bottom: 1px solid #333;
-  color: #ccc;
-}
-
-/* KONVENTIONS-ANPASSUNG: Struktur-Gliederung mit Bindestrich */
 .tbl_table .tbl_row-even {
-  background: var(--table-row-even);
+  background: var(--table-row-even, #ffffff);
 }
 
 .tbl_table .tbl_row-odd {
-  background: var(--table-row-odd);
+  background: var(--table-row-odd, #f9f9f9);
 }
 
-/* KONVENTIONS-ANPASSUNG: Zellen-Spezifikationen mit Bindestrich */
+/* =============================================================================
+   GLOBAL TABLES: ZEILENINHALTE
+   ============================================================================= */
+
 .tbl_table .tbl_cell-box-id {
   font-family: monospace;
   font-weight: bold;
   color: #2e7d32;
 }
 
-.tbl_table .tbl_cell-product {
-  color: #fff;
-}
+/* =============================================================================
+   GLOBAL TABLES: ANDERES
+   ============================================================================= */
 
-.tbl_table .tbl_cell-barcode {
-  font-family: monospace;
-  color: #888;
-}
-
-/* KONVENTIONS-ANPASSUNG: Universelle Hilfsklassen mit Bindestrich */
 .tbl_text-right { 
   text-align: right; 
 }
@@ -70,21 +88,36 @@
 }
 
 .tbl_msg-empty {
-    color: var(--text-muted, #888888);
-    font-style: italic;
-    text-align: center;
-    padding: 20px;
+  color: var(--text-muted, #888888);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
 }
 
 .tbl_msg-error {
-    color: var(--danger-color, #c62828);
-    text-align: center;
-    padding: 20px;
+  color: var(--danger-color, #c62828);
+  text-align: center;
+  padding: 20px;
 }
 
 .tbl_table-blocked {
   opacity: 0.35 !important;
-  pointer-events: none !important; /* Blockiert jeden Klick und Hover-Effekt im Keim */
+  pointer-events: none !important;
   user-select: none !important;
   transition: opacity 0.2s ease-in-out;
+}
+
+.tbl_table .tbl_cell-price {
+  text-align: right;
+  font-weight: bold;
+}
+
+.tbl_table .tbl_cell-status {
+  text-align: center;
+}
+
+.tbl_table td.tbl_cell-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

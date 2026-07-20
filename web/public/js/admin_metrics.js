@@ -107,7 +107,7 @@ window.initAdminMetrics = function() {
     if (!document.getElementById("metric-live-uptime")) {
       clearInterval(liveInterval);
       observer.disconnect();
-      console.log("[Admin-Metrics Module]: Grid verlassen. Pipeline-Fetch gestoppt.");
+      console.log("[Admin-Metrics Module]: Grid exited. Pipeline fetch stopped.");
     }
   });
 

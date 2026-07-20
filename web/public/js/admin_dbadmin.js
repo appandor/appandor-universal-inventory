@@ -160,7 +160,7 @@ window.initAdminDbAdmin = function() {
     if (!document.getElementById("db-metric-live-size")) {
       clearInterval(liveInterval);
       observer.disconnect();
-      console.log("[DB-Metrics Module]: Sektor verlassen. Live-Pipeline gestoppt.");
+      console.log("[DB-Metrics Module]: Sector exited. Live pipeline stopped.");
     }
   });
 

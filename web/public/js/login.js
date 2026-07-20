@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordInput = document.getElementById("password");
     const errorContainer = document.getElementById("error-container");
 
-    console.log("[TCG-DEBUG]: Formular geladen. E-Mail-Feld gefunden?", !!emailInput);
+    console.log("[TCG-DEBUG]: Form loaded. Email field found?", !!emailInput);
 
     if (loginForm) {        
         loginForm.addEventListener("submit", (e) => {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 password: passwordInput.value
             };
 
-            console.log("[TCG-DEBUG]: Sende Daten an die API:", payload);
+            console.log("[TCG-DEBUG]: Sending data to the API:", payload);
 
             fetch('/api/auth/login', {
                 method: 'POST',
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(payload)
             })
             .then(res => {
-                console.log("[TCG-DEBUG]: Antwort vom Server erhalten. HTTP-Status:", res.status);
+                console.log("[TCG-DEBUG]: Response received from server. HTTP status:", res.status);
                 if (res.status === 401) throw new Error("Invalid credentials");
                 if (!res.ok) throw new Error("Server communication error");
                 return res.json();
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = "inventory.html";
             })
             .catch(err => {
-                console.error("[TCG-ERROR]: Fehler im Login-Prozess:", err.message);
+                console.error("[TCG-ERROR]: Error during login process:", err.message);
                 if (errorContainer) {
                     const currentLang = localStorage.getItem('appandor_lang') || 'en';
                     

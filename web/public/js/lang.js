@@ -51,7 +51,7 @@ window.translatePage = function() {
         langSelector.innerHTML = dropdownHTML;
         langSelector.value = currentActive;
     }
-    console.log("[lang.js]: Seiten-Texte synchronisiert.");
+    console.log("[lang.js]: Page texts synchronized.");
 };
 
 window.changeLanguage = function(lang) {

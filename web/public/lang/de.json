@@ -16,7 +16,7 @@
 
     "tbl_box_id": "Box-ID",
     "tbl_storage_location": "Lagerplatz",
-    "tbl_product_name": "Artikelname",
+    "tbl_product_desc": "Artikelbezeichnung",
     "tbl_barcode": "Barcode",
     "tbl_price_gross": "EK Brutto",
     "tbl_logistics_status": "Logistik-Status",
@@ -155,7 +155,6 @@
     "status_received": "GELIEFERT",
 
     "tbl_purchase_date": "Kaufdatum",
-    "tbl_product_desc": "Artikelbezeichnung",
     "tbl_quantity": "Menge",
     "tbl_estimated_delivery": "Erwartet am",
     "tbl_received_at": "Geliefert am",

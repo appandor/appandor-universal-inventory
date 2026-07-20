@@ -89,7 +89,7 @@ window.addEventListener("appandor_platform_ready", () => {
     tableContainer.addEventListener("click", (e) => {
       if (e.target && e.target.classList.contains("btn-receive-action")) {
         const boxId = e.target.getAttribute("data-box-id");
-        console.log(`[Outbound]: Starte Fulfill-Prozess für Box-ID: ${boxId}`);
+        console.log(`[Outbound]: Starting fulfillment process for box ID: ${boxId}`);
         // Hier dockt später deine Fulfill-Logik an!
       }
     });

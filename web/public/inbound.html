@@ -15,15 +15,15 @@
       <div id="appandor-header"></div>
 
       <!-- 1. KASTEN: FORMULAR FÜR DEN WARENEINGANG -->
-      <div class="card">
-        <div id="inbound-toggle-header">
+      <div class="card" data-state="collapsed">
+        <div class="lay_toggle-header" id="inbound-toggle-header">
           <h3 data-i18n="inbound_form_title"></h3>
-          <span id="inbound-toggle-btn" data-i18n="btn_collapse"></span>
+          <span id="inbound-toggle-btn" data-i18n="btn_expand" data-state="collapsed"></span>          
         </div>
         
         <div id="inbound-error-message" class="tbl_msg-error" style="display: none;"></div>
         
-        <form id="inbound-add-form" class="lay_form-grid">
+        <form id="inbound-add-form" class="lay_form-grid" style="display: none;">
           <div class="form-group">
             <label data-i18n="inbound_label_template"></label>
             <select id="inbound-product-select" class="lay_input-select"></select>
@@ -49,7 +49,6 @@
             <input type="date" id="inbound-delivery-est" class="lay_input-date">
           </div>
           
-          <!-- KORREKTUR: Nutzt jetzt eure perfekt definierte, globale Button-Klasse! -->
           <button type="submit" data-i18n="inbound_btn_activate" class="btn-primary-submit"></button>
         </form>
       </div>

@@ -24,7 +24,7 @@ window.appState = {
             script.src = src;
             script.async = false; // Erzwingt die strikte Einhaltung der Reihenfolge im Browser
             script.onload = () => {
-                console.log(`[config.js]: '${src}' erfolgreich geladen.`);
+                console.log(`[config.js]: '${src}' loaded successfully.`);
                 resolve();
             };
             script.onerror = () => reject(new Error(`Fehler beim Laden des Skripts: ${src}`));
@@ -39,7 +39,7 @@ window.appState = {
         }, Promise.resolve());
     }
 
-    console.log("[config.js]: Initialisiere...");
+    console.log("[config.js]: Initializing...");
 
     // 1. ZUERST: Manifest von der obersten Ebene abrufen
     fetch("manifest.json")
@@ -50,17 +50,17 @@ window.appState = {
         .then(manifest => {
             // Manifest unzerstörbar im RAM verankern
             window.appConfig = manifest;
-            console.log("[config.js]: Manifest erfolgreich deklariert.", window.appConfig);
+            console.log("[config.js]: Manifest declared successfully.", window.appConfig);
 
             // 2. DANACH: Alle Kern-Skripte in exakter Reihenfolge nachladen
             return loadScriptsSerially(CORE_SCRIPTS);
         })
         .then(() => {
-            console.log("[config.js]: Gesamtes Core-System einsatzbereit. Sende Startsignal...");
+            console.log("[config.js]: Entire core system ready. Sending start signal...");
             // 3. SCHLUSSZEICHEN: Globales Event werfen, damit Render-Worker starten dürfen
             window.dispatchEvent(new CustomEvent("appandor_platform_ready"));
         })
         .catch(err => {
-            console.error("[config.js Fatal Error]: Kern-System konnte nicht geladen werden:", err.message);
+            console.error("[config.js Fatal Error]: Core system could not be loaded:", err.message);
         });
 })();
