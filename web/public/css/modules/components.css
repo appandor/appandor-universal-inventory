@@ -33,6 +33,36 @@
     margin-bottom: 15px;
 }
 
+.btn-action-edit,
+.btn-action-delete {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-family: monospace;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+
+/* Spezifische Farben für den Editieren-Button (Premium Blau) */
+.btn-action-edit {
+  background-color: #1565c0; /* Ein klares, professionelles Industrie-Blau */
+  color: #ffffff;            /* Kontraststarker weißer Text */
+}
+
+.btn-action-delete {
+  background-color: #c62828;
+  color: #ffffff;
+}
+
 /* Primary Action Buttons */
 .btn-primary-submit {
     width: 100%;
@@ -73,10 +103,6 @@ button:disabled {
   padding: 40px 0;
   margin: 0;
 }
-
-
-
-
 
 /* =============================================================================
    GLOBAL COMPONENTS: EVACUATED UI BUILD BLOCKS (CRLF)
@@ -129,23 +155,6 @@ button:disabled {
     padding: 2px 8px;
     border-radius: 4px;
     margin-left: 10px;
-}
-
-/* Actions & Status Badges */
-.btn-receive-action {
-    display: inline-block;
-    width: 105px;
-    height: 28px;
-    line-height: 28px;
-    background-color: #2e7d32;
-    color: #ffffff !important;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 12px;
-    text-align: center;
-    box-sizing: border-box;
 }
 
 .status-badge-container {

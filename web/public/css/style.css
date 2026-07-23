@@ -6,7 +6,7 @@
 @import "modules/variables.css";
 
 /* 2. Das alte Original-Layout (Übergangs-Sicherheit für alte Seiten) */
-@import "style_original.css"; 
+@import "style_original.css";
 
 /* 3. Die neuen, modularen UI-Komponenten */
 @import "modules/layout.css";     /* Globales Seiten-Gerüst (Header, Menü, Status) */

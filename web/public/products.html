@@ -5,75 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="nav_products"></title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/inbound.css"> <!-- Nutzen dein bestehendes Inbound-Raster! -->
+    <link rel="stylesheet" href="css/inbound.css">
   </head>
   <body>
     <!-- Sandbox Notice Bar -->
     <div id="gen_sandbox-banner" data-i18n="gen_sandbox_banner"></div>
-
-    <!-- Das universelle, unsichtbare Schutzschild für den Gleichschritt -->
+    
     <div class="lay_container">
-      <!-- Universeller dynamischer Header -->
       <div id="appandor-header"></div>
 
       <!-- HORIZONTALE TAB-REIHE (SUBMENÜ) -->
       <ul class="settings-tab-container">
-        <li>
-          <a href="products.html" class="settings-tab-item active" data-i18n="nav_products"></a>
-        </li>
-        <li>
-          <span class="settings-tab-item disabled" data-i18n="set_tab_categories"></span>
-        </li>
-        <li>
-          <span class="settings-tab-item disabled" data-i18n="set_tab_users"></span>
-        </li>
-        <li>
-          <span class="settings-tab-item disabled" data-i18n="tbl_storage_location"></span>
-        </li>
+        <li><a href="products.html" class="settings-tab-item active" data-i18n="nav_products"></a></li>
+        <li><a href="#" class="settings-tab-item" data-i18n="set_tab_categories"></a></li>
+        <li><a href="#" class="settings-tab-item" data-i18n="set_tab_users"></a></li>
+        <li><a href="#" class="settings-tab-item" data-i18n="tbl_storage_location"></a></li>
       </ul>
 
-      <!-- 1. BEREICH: FORMULAR (EXAKTES WARENEINGANGS-MUSTER MIT COLLAPSE) -->
-      <div class="card" id="product-form-card">
-        <div id="inbound-toggle-header">
+      <!-- 1. BEREICH: FORMULAR-KASTEN (STARTET STANDARDMÄSSIG EINGEKLAPPT) -->
+      <div class="card" id="product-form-card" data-state="collapsed">
+        <div class="lay_toggle-header" id="inbound-toggle-header">
           <h3 id="product-form-title" data-i18n="prod_add_title"></h3>
-          <span id="inbound-toggle-btn" data-i18n="btn_collapse"></span>
+          <span id="inbound-toggle-btn" data-i18n="btn_expand" data-state="collapsed"></span>
         </div>
         
-        <form id="product-form" class="lay_form-grid">
+        <!-- FIX: Kein blockierendes Flex-Grid mehr, die native Tabellen-Engine richtet alles aus! -->
+        <form id="product-form" style="display: none;">
           <input type="hidden" id="product-id-hidden" value="">
 
-          <div class="form-group">
-            <label for="name" data-i18n="prod_label_name"></label>
-            <input type="text" id="name" required data-i18n-placeholder="prod_placeholder_name" class="lay_input-select">
-          </div>
-          
-          <div class="form-group">
-            <label for="barcode" data-i18n="prod_label_barcode"></label>
-            <input type="text" id="barcode" data-i18n-placeholder="prod_placeholder_barcode" class="lay_input-date">
-          </div>
-          
-          <div class="form-group">
-            <label for="category" data-i18n="prod_label_category"></label>
-            <select id="category" required class="lay_input-number"></select>
-          </div>
-          
-          <div class="form-group">
-            <label for="minimum_stock" data-i18n="prod_label_minstock"></label>
-            <input type="number" id="minimum_stock" value="0" min="0" class="lay_input-number text-center">
-          </div>
-
-          <!-- BUTTON-CONTAINER FÜR AKTIONEN (REIN i18n-KONFORM UND STRUKTURELL VERBESSERT) -->
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button type="submit" id="product-btn-submit" class="btn-primary-submit" data-i18n="prod_btn_save" style="margin: 0; height: 38px; padding: 0 15px; width: auto; min-width: 160px; box-sizing: border-box;"></button>
-            <button type="button" id="product-btn-cancel" class="btn-primary-submit" data-i18n="btn_modal_cancel" style="display: none; margin: 0; height: 38px; padding: 0 15px; width: auto; min-width: 100px; box-sizing: border-box; background-color: var(--text-muted) !important;"></button>
-          </div>
+          <table class="tbl_table">
+            <thead>
+              <tr>
+                <th data-i18n="prod_label_name"></th>
+                <th data-i18n="prod_label_barcode"></th>
+                <th data-i18n="prod_label_category"></th>
+                <th data-i18n="prod_label_minstock" class="tbl_text-center"></th>
+                <th class="tbl_text-center" data-i18n="tbl_action"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tbl_cell-form">
+                  <input type="text" id="name" required data-i18n-placeholder="prod_placeholder_name" class="lay_input-select">
+                </td>
+                <td class="tbl_cell-form">
+                  <input type="text" id="barcode" data-i18n-placeholder="prod_placeholder_barcode" class="lay_input-date">
+                </td>
+                <td class="tbl_cell-form">
+                  <select id="category" required class="lay_input-number"></select>
+                </td>
+                <td class="tbl_cell-form">
+                  <input type="number" id="minimum_stock" value="0" min="0" class="lay_input-number text-center">
+                </td>
+                <td class="tbl_cell-form tbl_text-right" style="white-space: nowrap; width: 220px;">
+                  <!-- FIX: Buttons nutzen eure zierliche Klasse und sitzen ohne Behelfs-Divs felsenfest in der Zelle -->
+                  <button type="submit" id="product-btn-submit" class="btn-receive-action" data-i18n="btn_save"></button>
+                  <button type="button" id="product-btn-cancel" class="btn-receive-action" data-i18n="btn_cancel" style="display: none; background-color: var(--text-muted) !important; color: white !important; border: none;"></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </form>
       </div>
 
       <!-- 2. BEREICH: DIE SYSTEM-LISTE (TABELLE ÜBER DIE VOLLE BREITE) -->
       <div class="card">
         <div style="max-height: 530px; overflow-y: auto; padding-right: 5px;">
-          <!-- UNBESTECHLICH: Nur das saubere Container-Element für deine table.css! -->
           <div id="tbl_table-container">
             <p class="tbl_msg-empty" data-i18n="loading_products"></p>
           </div>
@@ -84,6 +81,7 @@
 
     <!-- ZENTRALE LADEKETTE -->
     <script src="js/config.js"></script>
+    <script src="js/products_render.js" defer></script>
     <script src="js/products.js" defer></script>
   </body>
 </html>

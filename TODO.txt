@@ -2,6 +2,38 @@
 # APPANDOR LOGISTICS: COMPLETE SYSTEM REFACTORING & MASTER ROADMAP (CRLF)
 # =============================================================================
 
+[ ] 1. DATEIEN UMSTRUCTUREN & ORDNER ANLEGEN
+    * Neuen Unterordner erstellen: 'web/public/sub_settings/'
+    * 'products.html' in diesen neuen Ordner verschieben.
+    * Eigenen 'js/'-Ordner im Unterordner anlegen für modulspezifische Scripte (z.B. 'products.js').
+
+[ ] 2. PFADE IN DER HTML-DATEI ANPASSEN ('../' REGEL)
+    * In 'products.html' die globalen Pfade im Head und am Ende anpassen:
+      -> href="../css/style.css"
+      -> href="../css/lay_subnav.css"
+      -> src="../js/config.js"
+      -> src="../js/settings.js"
+
+[ ] 3. CSS-DATEI UMBENNENEN (NAMENSRAUM-KONVENTION)
+    * 'settings.css' umbenennen in 'lay_subnav.css' (oder 'lay_settings.css').
+    * Die Datei zentral im globalen 'css/'-Ordner belassen.
+
+[ ] 4. JS-ZWISCHENSCHICHT BAUEN ('settings.js')
+    * Neue Datei 'web/public/js/settings.js' anlegen.
+    * Funktion 'initializeAppandorSettingsEngine(tabs)' implementieren.
+    * Logik: Generiert die Sub-Navigation dynamisch aus einem Array, steuert die 
+      Klasse 'active' (grüner Strich) per Klick und tauscht Inhalte im Hauptcontainer.
+
+[ ] 5. HTML SÄUBERN
+    * Das statische Submenü <ul> vollständig aus 'products.html' löschen.
+    * Ersetzen durch den leeren Empfänger-Anker: <div id="appandor-subnav-container"></div>
+
+[ ] 6. GLOBALEN ROUTER ANPASSEN ('layout.js')
+    * In der Hauptnavigation den Pfad zum neuen Ordner eintragen:
+      -> href="sub_settings/products.html" instead of href="products.html"
+
+=============================================================================
+
 [ ] PRIORITY 1: RADICAL FRAMEWORK CONSOLIDATION & CLEANUP (HIGH PRIO)
   [ ] Refactor HTML files to use unified lay_ identifiers (No module prefixes):
     * Card Container ID: "lay_toggle-card"
@@ -110,6 +142,3 @@
     * Express-Rate-Limiter: Blockiert IP-Adressen hart mit Status '429', wenn die Tracking-Route mit Bots geflutet wird.
     * In-Memory-Debounce per User-ID: Das Backend nimmt den asynchronen Bulk-Payload zwar sofort entgegen ('200 OK'), blockiert die Weiterleitung an PostgreSQL im RAM aber über eine zeitliche Sperre von z.B. 5 Minuten pro User-ID. PostgreSQL sieht maximal einen Schreibbefehl pro Nutzer alle 5 Minuten.
 
-# =============================================================================
-# END OF LEDGER FILE - ALL ROADMAPS SECURED
-# =============================================================================

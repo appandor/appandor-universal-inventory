@@ -9,6 +9,7 @@
     "gen_sandbox_banner":   "SANDBOX-MODUS — LIMITS AKTIV (Max. {max_products} Produkte / {max_transactions} Transaktionen)",
 
     "gen_page_title_admin": "System Administration",
+
     "GENERAL END   ------------------------------------------------------------------------------------------------------": 0,
 
 
@@ -23,6 +24,10 @@
 
     "TABLES END   -------------------------------------------------------------------------------------------------------": 0,
 
+    "btn_save": "Speichern",
+    "btn_cancel": "Abbrechen",
+    "btn_edit": "Editieren",
+    "btn_delete": "Löschen",
 
     "LAYOUT Start -------------------------------------------------------------------------------------------------------": 0,
 
@@ -146,7 +151,6 @@
     "prod_label_barcode": "Barcode / EAN",
     "prod_label_category": "Kategorie *",
     "prod_label_minstock": "Mindest-Warnbestand",
-    "prod_btn_save": "Produkt-Stammdaten speichern",
     
     "prod_placeholder_name": "z.B. One Piece OP-05 Display",
     "prod_placeholder_barcode": "Barcode scannen oder tippen",
