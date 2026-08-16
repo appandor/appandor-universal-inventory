@@ -135,16 +135,17 @@ router.get('/logs', authenticateToken, (req, res) => {
   const logFile0Path = path.join(__dirname, '../combined.log'); 
   const logFile1Path = path.join(__dirname, '../combined.log.1'); 
 
-  console.log('[API Admin Logs]: Operator requesting system logs.');
+  // Dynamisches Auslesen des Limits vom Frontend-Query (?limit=X)
+  // Nutzen vonparseInt, um sicherzustellen, dass es eine mathematische Zahl für .slice() wird
+  const requestLimit = parseInt(req.query.limit, 10) || 100;
 
   // 1. Zuerst prüfen wir asynchron, ob die ältere combined.log.1 existiert
   fs.readFile(logFile1Path, 'utf8', (err1, data1) => {
-    const historicalLogs = !err1 ? data1 : ''; // Falls Fehler (z.B. Datei nicht da), einfach leer lassen
+    const historicalLogs = !err1 ? data1 : ''; 
 
     // 2. Jetzt lesen wir die aktuelle, aktive combined.log aus
     fs.readFile(logFile0Path, 'utf8', (err0, data0) => {
       if (err0) {
-        // Falls selbst die Haupt-Logdatei fehlt, schicken wir den sauberen Fallback
         console.error('[API Admin Logs Read Error]:', err0.message);
         return res.json({ 
           logs: '[System]: Live pipeline connected.\n[System]: Awaiting fresh engine cycle transactions.' 
@@ -154,13 +155,17 @@ router.get('/logs', authenticateToken, (req, res) => {
       // 3. Wir verheiraten die Historie unbestechlich mit den frischen Live-Zeilen
       const combinedData = historicalLogs + data0;
 
-      // 4. Holt die letzten 100 Zeilen aus dem kombinierten Gesamt-String
-      const lines = combinedData.trim().split('\n');
-      const lastLines = lines.slice(-100).join('\n');
+      // 4. Zerlegt den String direkt in Zeilen
+      const lines = combinedData.split('\n');
+      
+      // Filtert beim slice() jetzt exakt mit dem dynamischen Wert (z.B. -100, -500, -1000)
+      // Das negative Vorzeichen sorgt dafür, dass von unten (neueste) abgeschnitten wird
+      const lastLines = lines.slice(-requestLimit).join('\n');
 
       res.json({ logs: lastLines });
     });
   });
 });
+
 
 module.exports = router;

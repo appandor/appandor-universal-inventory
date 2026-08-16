@@ -1,9 +1,15 @@
 #
-#
-# GIT UPDATE:
+###########################################################################################################
+# GIT BEFEHLE
 #
 # git add . && git commit -m "Message for Update" && git push origin main
+# 
+# git rm -r --cached *copy*
+###########################################################################################################
+# NUR APP neu generieren:
+# docker compose up -d --no-deps --force-recreate node-app
 #
+# ###############
 # docker compose restart node-app
 #
 # docker kill -s HUP appandor_backend

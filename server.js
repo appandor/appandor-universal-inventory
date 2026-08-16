@@ -1,96 +1,39 @@
 // =============================================================================
-// APPANDOR LOGISTICS: CENTRAL ENGINE FILE-LOGGER WITH 3-FILE ROTATION (CRLF)
+// APPANDOR LOGISTICS: CENTRAL ENGINE
 // =============================================================================
+
+global.appandor_server_branding = 'Microsoft-IIS/10.0'; // Für den Verkauf später änderbar in 'Appandor-Inventory'
+global.appandor_log_real_ips = true; // true = IPs mitloggen | false = komplett weglassen
+global.getLogIp = function(req) { return global.appandor_log_real_ips ? `[IP: ${req.ip}] ` : ''; };
+
+global.appandor_latency_pool = []; // Globales RAM-Array für die Zeitmessung
+
+require('./logger'); // Aktiviert die Dateirotation und überschreibt console.log
+
 const fs = require('fs');
 const path = require('path');
-
-const logFile0 = path.join(__dirname, 'combined.log');
-const logFile1 = path.join(__dirname, 'combined.log.1');
-const logFile2 = path.join(__dirname, 'combined.log.2');
-
-let logStream = fs.createWriteStream(logFile0, { flags: 'a' });
-
-const originalLog = console.log;
-const originalError = console.error;
-
-const MAX_SIZE = 100 * 1024 * 1024; // 100 MB Limit
-const sizeInMB = Math.round(MAX_SIZE / (1024 * 1024));
-let isRotating = false;
-
-function formatLogEntry(type, args) {
-  const timestamp = new Date().toISOString();
-  const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ');
-  return `[${timestamp}] [${type}] ${message}\n`;
-}
-
-// DAS ROTATIONS-RAD: Behält maximal 3 Dateien im System (.log, .log.1, .log.2)
-function handleRotation() {
-  if (isRotating) return;
-  isRotating = true;
-
-  logStream.end(() => {
-    // 1. Älteste Stufe (.2) restlos vom Server tilgen, falls vorhanden
-    fs.unlink(logFile2, () => {
-      // 2. Mittlere Stufe (.1) nach hinten schieben zu (.2)
-      fs.rename(logFile1, logFile2, () => {
-        // 3. Die gerade vollendete Live-Datei umbenennen zu (.1)
-        fs.rename(logFile0, logFile1, (err) => {
-          // 4. SOFORT den neuen, leeren Live-Stream öffnen
-          logStream = fs.createWriteStream(logFile0, { flags: 'a' });
-          isRotating = false;
-
-          if (!err) {
-            originalLog(`[File-Logger]: New logfile generated. Max size (${sizeInMB}MB) exceeded.`);            
-          }
-        });
-      });
-    });
-  });
-}
-
-function writeAndCheck(logLine) {
-  logStream.write(logLine);
-
-  // Prüft die Dateigröße asynchron im Hintergrund
-  if (!isRotating) {
-    fs.stat(logFile0, (err, stats) => {
-      if (!err && stats.size >= MAX_SIZE) {
-        handleRotation();
-      }
-    });
-  }
-}
-
-console.log = function(...args) {
-  originalLog.apply(console, args);
-  writeAndCheck(formatLogEntry('INFO', args));
-};
-
-console.error = function(...args) {
-  originalError.apply(console, args);
-  writeAndCheck(formatLogEntry('ERROR', args));
-};
-
-console.log(`[File-Logger]: Max logfile size set to ${sizeInMB}MB.`);            
-
-// =============================================================================
-// APPANDOR LOGISTICS: PLATFORM SERVICE INITIALIZATION
-// =============================================================================
+const firewall = require('./firewall');
 const express = require('express');
 const https = require('https');
 const { Pool } = require('pg');
 const jwt = require('jsonwebtoken');
-
 const app = express();
 const PORT = 443;
-const JWT_SECRET = 'AppandorSecureCoreSecret2026!!!';
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// Sicherheitsprüfung: Wenn die Variable leer ist, bricht der Server sofort ab
+if (!JWT_SECRET) {
+  console.error("[CRITICAL] ENGINE ABORT: JWT_SECRET is not defined in environment variables!");
+  process.exit(1); // Beendet den Node-Prozess sofort mit einem Fehlercode
+}
 
 const pool = new Pool({
-  user: 'appandor_admin',
-  host: 'appandor_postgres',
-  database: 'appandor_universal_inventory',
-  password: 'EinSicheresDatenbankPasswort123!',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT, 10),
 });
 
 app.set('db_pool', pool);
@@ -105,37 +48,57 @@ const publicPath = path.join(__dirname, 'web', 'public');
 app.use(express.static(publicPath));
 
 // =============================================================================
-// AUTOMATISCHER REQUEST-LOGGER: Protokolliert Aufrufe und berechnet API-Latenz
+// STUFE 1: SELEKTIVE SUCHMASCHINEN-SPERRE
 // =============================================================================
-global.appandor_latency_pool = []; // Globales RAM-Array für die Zeitmessung
-
 app.use((req, res, next) => {
-  const startTime = process.hrtime(); // Hochpräziser Start-Zeitstempel des Requests
+
+  res.removeHeader('X-Powered-By');
+  res.setHeader('Server', global.appandor_server_branding);
+
+  const p = req.path.toLowerCase();
+  if (p === '/' || p === '/robots.txt') {
+    res.setHeader('X-Robots-Tag', 'index, follow');
+  } else {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  }
+  next();
+});
+// =============================================================================
+// STUFE 2: FIREWALL & COUNTERMEASURES (HIEHER VERSCHIEBEN!)
+// =============================================================================
+app.use(firewall); 
+
+// =============================================================================
+// STUFE 3: PERFORMANCE-LOGGER (Loggt INFO über console.log)
+// =============================================================================
+app.use((req, res, next) => {
+  const startTime = process.hrtime();
 
   res.on('finish', () => {
+
+    if (req.originalUrl.toLowerCase().includes('/api/admin/')) {      
+      return; // Bricht das Logging ab, der Request läuft im Hintergrund trotzdem sauber durch
+    }
+    
     const diff = process.hrtime(startTime);
-    // Umrechnung der HR-Time in glatte Millisekunden
     const durationMs = Math.round((diff[0] * 1e3 + diff[1] / 1e6));
 
-    // Schiebt die Millisekunden in den globalen Pool
     global.appandor_latency_pool.push(durationMs);
 
-    // Deckelt das Array auf die letzten 100 Anfragen, damit das RAM niemals anschwillt
     if (global.appandor_latency_pool.length > 100) {
       global.appandor_latency_pool.shift();
     }
-
     console.log(`[HTTP] ${req.method} ${req.originalUrl} -> Status: ${res.statusCode} (${durationMs}ms)`);
   });
   next();
 });
 
 // =============================================================================
-// ZENTRALE SUCHMASCHINEN-SPERRE: Blockiert Google & Co. für das gesamte System
+// ENDPUNKTE / BASIS-ROUTEN
 // =============================================================================
-app.use((req, res, next) => {
-  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  next();
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.send('User-agent: *\nAllow: /$\nDisallow: /');
 });
 
 app.get('/', (req, res) => {
@@ -146,6 +109,9 @@ app.get('/api/status', (req, res) => {
   res.json({ status: "alive", multi_tenancy: "ready", security: "https_secured" });
 });
 
+// =============================================================================
+// PLATFORM API ROUTER INTERFACES
+// =============================================================================
 const authRouter = require('./routes/auth');
 const inventoryRouter = require('./routes/inventory');
 const productsRouter = require('./routes/products');
@@ -168,8 +134,24 @@ app.get('/api/verify-session', (req, res) => {
   res.redirect(307, '/api/auth/verify-session');
 });
 
+// =============================================================================
+// GLOBAL DEFENSIVE 404 CATCH-ALL HANDLER
+// =============================================================================
+app.use((req, res) => {
+  // Option A: Schickt einfach ein sauberes, kurzes "Not Found" als Text
+  //res.status(404).send('Not Found');
+
+  // Option B (Empfohlen für reine APIs): Schickt ein strukturiertes JSON zurück
+  res.status(404).json({ error: "Not Found", path: req.originalUrl });
+});
+
+// =============================================================================
+// SERVER ENGINE STARTUP
+// =============================================================================
 fs.writeFile(path.join(__dirname, 'last_start_time'), 'System started', () => {});
 
 https.createServer(options, app).listen(PORT, () => {
-  console.log(`[Appandor Core] Secure HTTPS running live on port 443`);
+  console.log('[SYSTEM] =====================================================');
+  console.log(`[SYSTEM] ENGINE REBOOT: Appandor Core running live on port ${PORT}`);
+  console.log('[SYSTEM] =====================================================');
 });

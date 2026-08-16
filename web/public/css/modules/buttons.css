@@ -1,0 +1,81 @@
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 105px;
+  height: 28px;
+  line-height: 26px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  color: #ffffff;
+}
+
+.btn-success {
+    background: rgba(74, 222, 128, 0.12) !important;
+    color: var(--success-color) !important;
+    border: 1px solid rgba(74, 222, 128, 0.25) !important;
+}
+
+.badge-ordered {
+    background: rgba(251, 192, 45, 0.12) !important;
+    color: var(--warning-color) !important;
+    border: 1px solid rgba(251, 192, 45, 0.25) !important;
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+
+/* Spezifische Farben für den Editieren-Button (Premium Blau) */
+.btn-cancel {
+  background-color: #b1b3b5;
+}
+
+.btn-edit {
+  background-color: #1565c0;
+}
+
+.btn-delete {
+  background-color: #c62828;
+}
+.btn-confirm {
+    background-color: #2e7d32;
+}
+
+
+/* Primary Action Buttons */
+.btn-primary-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--theme-primary-green) !important;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary-submit:hover {
+    background-color: #1b5e20 !important;
+}
+
+.btn-primary-submit:active {
+    transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+

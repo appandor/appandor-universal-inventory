@@ -18,6 +18,12 @@
   margin-top: 20px; /* HIER INTEGRIERT: Jede Hauptkarte erhält nun automatisch den sauberen Abstand nach oben */
 }
 
+.card h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
 #gen_sandbox-banner {
   display: none;
   background: #fbc02d;
@@ -31,64 +37,6 @@
 /* Form Elements */
 .form-group {
     margin-bottom: 15px;
-}
-
-.btn-action-edit,
-.btn-action-delete {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  font-family: monospace;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid transparent;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-
-/* Spezifische Farben für den Editieren-Button (Premium Blau) */
-.btn-action-edit {
-  background-color: #1565c0; /* Ein klares, professionelles Industrie-Blau */
-  color: #ffffff;            /* Kontraststarker weißer Text */
-}
-
-.btn-action-delete {
-  background-color: #c62828;
-  color: #ffffff;
-}
-
-/* Primary Action Buttons */
-.btn-primary-submit {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--theme-primary-green) !important;
-    color: #ffffff !important;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-.btn-primary-submit:hover {
-    background-color: #1b5e20 !important;
-}
-
-.btn-primary-submit:active {
-    transform: scale(0.98);
-}
-
-button:disabled {
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
-  pointer-events: none !important;
 }
 
 
@@ -157,14 +105,3 @@ button:disabled {
     margin-left: 10px;
 }
 
-.status-badge-container {
-    display: inline-block;
-    width: 105px;
-    height: 28px;
-    line-height: 26px;
-    text-align: center;
-    font-size: 11px;
-    font-weight: bold;
-    border-radius: 4px;
-    box-sizing: border-box;
-}

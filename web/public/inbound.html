@@ -14,43 +14,105 @@
     <div class="lay_container">
       <div id="appandor-header"></div>
 
-      <!-- 1. KASTEN: FORMULAR FÜR DEN WARENEINGANG -->
-      <div class="card" data-state="collapsed">
+      <!-- 1. KASTEN: DYNAMISCHER STEUERUNGS-BEREICH (BESTELLEN / EINBUCHEN) -->
+      <div class="card" data-state="collapsed" id="inbound-control-card">
         <div class="lay_toggle-header" id="inbound-toggle-header">
-          <h3 data-i18n="inbound_form_title"></h3>
+          <h3 id="inbound-card-title" data-i18n="inbound_form_title"></h3>
           <span id="inbound-toggle-btn" data-i18n="btn_expand" data-state="collapsed"></span>          
         </div>
         
         <div id="inbound-error-message" class="tbl_msg-error" style="display: none;"></div>
         
-        <form id="inbound-add-form" class="lay_form-grid" style="display: none;">
-          <div class="form-group">
-            <label data-i18n="inbound_label_template"></label>
-            <select id="inbound-product-select" class="lay_input-select"></select>
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="tbl_purchase_date"></label>
-            <input type="date" id="inbound-date" value="2026-06-18" class="lay_input-date">
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="inbound_label_price"></label>
-            <input type="number" id="inbound-price" step="0.01" min="0" placeholder="0.00 €" class="lay_input-number">
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="inbound_label_quantity"></label>
-            <input type="number" id="inbound-quantity" value="1" min="1" class="lay_input-number text-center">
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="inbound_label_expected"></label>
-            <input type="date" id="inbound-delivery-est" class="lay_input-date">
-          </div>
-          
-          <button type="submit" data-i18n="inbound_btn_activate" class="btn-receive-action" style="margin: 0; margin-bottom: 4px; width: 100px; box-sizing: border-box; height: 31px; display: flex; align-items: center; justify-content: center; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></button>
+        <!-- FORMULAR A: NEUE WARE BESTELLEN (Standard-Modus in Tabellenform) -->
+        <form id="inbound-order-form" style="display: none;">
+          <table class="tbl_table">
+            <thead>
+              <tr>
+                <th data-i18n="inbound_label_template"></th>
+                <th data-i18n="tbl_purchase_date"></th>
+                <th data-i18n="inbound_label_price"></th>
+                <th data-i18n="inbound_label_quantity" class="tbl_text-center"></th>
+                <th data-i18n="inbound_label_expected"></th>
+                <th class="tbl_text-center" data-i18n="tbl_action"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <select id="inbound-order-product-select" class="lay_input-select"></select>
+                </td>
+                <td>
+                  <input type="date" id="inbound-order-date" value="2026-06-18" class="lay_input-date">
+                </td>
+                <td>
+                  <input type="number" id="inbound-order-price" step="0.01" min="0" placeholder="0.00 €" class="lay_input-number">
+                </td>
+                <td>
+                  <input type="number" id="inbound-order-quantity" value="1" min="1" class="lay_input-number text-center">
+                </td>
+                <td>
+                  <input type="date" id="inbound-order-delivery-est" class="lay_input-date">
+                </td>
+                <td class="tbl_text-center">
+                  <button type="submit" data-i18n="btn_save" class="btn btn-confirm"></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
 
+        <!-- FORMULAR B: WARE PHYSISCH EINBUCHEN (Blockbasiert, ersetzt das obere Formular beim Zeilen-Klick) -->
+        <form id="inbound-receive-form" style="display: none; padding: 15px;">
+          <!-- Versteckte ID der Inbound-Order für die API -->
+          <input type="hidden" id="inbound-receive-id">
+          
+          <!-- Info-Zeile über die aktuelle Quell-Order -->
+          <div style="margin-bottom: 15px; padding: 10px; background: var(--input-bg); border-left: 4px solid #2e7d32;">
+            <strong id="inbound-receive-product-title"></strong> 
+            <span style="color: var(--text-muted); font-size: 13px; margin-left: 10px;" id="inbound-receive-meta-info"></span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+            <!-- 1. EINGABE: REGALPLATZ-SCAN -->
+            <div class="form-group">
+              <label style="display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 12px; font-weight: bold;" data-i18n="inbound_label_storage_location"></label>
+              <input type="text" id="inbound-receive-location" list="location-suggestions" placeholder="z.B. LOC-OB-REGAL-A1" class="lay_input-text">
+              <datalist id="location-suggestions"></datalist>
+            </div>
+
+            <!-- 2. EINGABE: PHYSISCHE BOX-SCAN -->
+            <div class="form-group">
+              <label style="display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 12px; font-weight: bold;" data-i18n="inbound_label_box"></label>
+              <input type="text" id="inbound-receive-box-id" list="box-suggestions" placeholder="z.B. APP-BOX-001" class="lay_input-text">
+              <datalist id="box-suggestions"></datalist>
+            </div>
+
+            <!-- 3. EINGABE: MINDESTHALTBARKEITSDATUM (MHD) -->
+            <div class="form-group">
+              <label style="display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 12px; font-weight: bold;" data-i18n="inbound_label_expiry"></label>
+              <input type="date" id="inbound-receive-expiry-date" class="lay_input-date">
+            </div>
+
+            <!-- 4. EINGABE: MENGEN-ANPASSUNG -->
+            <div class="form-group">
+              <label style="display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 12px; font-weight: bold;" id="inbound-receive-qty-label"></label>
+              <input type="number" id="inbound-receive-qty-actual" min="1" class="lay_input-number">
+            </div>
+          </div>
+
+          <!-- 4B. DYNAMISCHE ABFRAGE: Nur sichtbar bei Teilmengen -->
+          <div id="inbound-receive-backorder-zone" style="display: none; margin-bottom: 20px; background: var(--input-bg); padding: 10px; border: 1px solid var(--border-color); border-radius: 4px;">
+            <label style="display: flex; align-items: center; gap: 8px; color: var(--text-color); font-size: 13px; cursor: pointer;">
+              <input type="checkbox" id="inbound-receive-keep-backorder" checked style="width: 16px; height: 16px; cursor: pointer;">
+              <span id="inbound-receive-backorder-text"></span>
+            </label>
+          </div>
+
+          <!-- Aktions-Buttons unten rechts innerhalb der Card -->
+          <div style="display: flex; justify-content: flex-end; gap: 12px;">
+            <button type="button" id="inbound-receive-cancel-btn" data-i18n="btn_cancel" class="btn btn-cancel"></button>
+            <button type="submit" data-i18n="btn_receive" class="btn btn-confirm"></button>
+          </div>
         </form>
       </div>
 
@@ -64,7 +126,7 @@
 
     <script src="js/config.js"></script>
     <script src="js/inbound-render.js" defer></script>
-    <script src="js/inbound-modal.js" defer></script>
     <script src="js/inbound.js" defer></script>
+    <script src="js/inbound-receive.js" defer></script>
   </body>
 </html>

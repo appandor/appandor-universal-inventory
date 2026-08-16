@@ -29,6 +29,12 @@
     "btn_edit": "Editieren",
     "btn_delete": "Löschen",
 
+    "btn_collapse": "[ MINIMIEREN ]",
+    "btn_expand": "[ EINBLENDEN ]",    
+
+    "btn_receive": "Einbuchen",
+
+
     "LAYOUT Start -------------------------------------------------------------------------------------------------------": 0,
 
     "lay_status_connecting":        "Verbinden...",
@@ -49,6 +55,19 @@
     "INVENTORY Start ----------------------------------------------------------------------------------------------------": 0,
     "INVENTORY END   ----------------------------------------------------------------------------------------------------": 0,
 
+    "INBOUND Start ----------------------------------------------------------------------------------------------------": 0,
+
+    "inbound_form_title": "Bestellung eintragen",
+    "inbound_label_template": "Artikelvorlage *",
+    "inbound_label_date": "Kaufdatum *",
+    "inbound_label_price": "EK Brutto *",
+    "inbound_label_quantity": "Menge *",
+    "inbound_label_expected": "Erwartet am",
+    "inbound_btn_activate": "Bestellt",
+
+    "INBOUND END   ----------------------------------------------------------------------------------------------------": 0,
+
+
     "ADMINISTRATION Start -----------------------------------------------------------------------------------------------": 0,
 
     "admin_title_control":           "System-Steuerung",
@@ -60,6 +79,12 @@
     "admin_label_select_table":      "Datenbank-Tabelle auswählen",
     "admin_opt_choose":              "-- Tabelle wählen --",
     "admin_msg_select_table_prompt": "Bitte wählen Sie eine Tabelle aus dem Dropdown aus, um die Rohdaten des Mandanten zu inspizieren.", 
+
+    "admin_metrics_label_uptime": "System-Uptime",
+    "admin_metrics_label_ram_used": "RAM-Auslastung",
+    "admin_metrics_label_disk_free": "Festplattenspeicher",
+    "admin_metrics_label_gc_status": "Garbage Collector",
+    "admin_metrics_label_api_latency": "Durchschnittliche API-Latenz",
 
     "ADMINISTRATION END   -----------------------------------------------------------------------------------------------": 0,
 
@@ -155,8 +180,8 @@
     "prod_placeholder_name": "z.B. One Piece OP-05 Display",
     "prod_placeholder_barcode": "Barcode scannen oder tippen",
 
-    "status_ordered": "BESTELLT",
-    "status_received": "GELIEFERT",
+    "status_ordered": "Bestellt",
+    "status_received": "Geliefert",
 
     "tbl_purchase_date": "Kaufdatum",
     "tbl_quantity": "Menge",
@@ -184,9 +209,6 @@
     "set_tile_core": "System-Kern",
     "set_tile_ledger": "Finanzbuchhaltung",
     "title_history": "Chronik / Journal",
-    "btn_collapse": "[ MINIMIEREN ]",
-    "btn_expand": "[ EINBLENDEN ]",    
-    "btn_receive": "Einbuchen",
 
     "modal_receive_title": "Menge bestätigen",
 
@@ -194,14 +216,6 @@
     "btn_modal_confirm": "Bestätigen",
     "btn_modal_cancel": "Abbrechen",
 
-
-    "inbound_form_title": "Einkauf / Bestellung verbuchen",
-    "inbound_label_template": "Artikelvorlage *",
-    "inbound_label_date": "Kaufdatum *",
-    "inbound_label_price": "EK Brutto *",
-    "inbound_label_quantity": "Menge *",
-    "inbound_label_expected": "Erwartet am",
-    "inbound_btn_activate": "Bestellung aktivieren",
     "theme_light": "Heller Modus",
     "theme_dark": "Dunkler Modus",
     "tooltip_logout": "Klicken zum Abmelden / Abbrechen der Sitzung",

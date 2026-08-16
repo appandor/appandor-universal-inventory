@@ -1,83 +1,84 @@
 // ==========================================================================
-// APPANDOR INBOUND: PURE HTML TABLE RENDERING WORKER
+// INBOUND: HTML DYNAMIC DATA RENDERING
 // ==========================================================================
 
 window.renderInboundTable = function(data, targetContainer) {
-  const currentLang = localStorage.getItem('appandor_lang') || 'en';
+  if (!data || data.length === 0 || data.error) {
+    targetContainer.innerHTML = `<p class="tbl_msg-empty" data-i18n="loading_inbound_empty"></p>`
+    return
+  }
 
-  fetch(`lang/${currentLang}.json`)
-    .then(res => res.json())
-    .then(translations => {
-      if (!data || data.length === 0 || data.error) {
-        // FIX: Nutzt jetzt die globale, zentrierte Leer-Klasse aus tables.css
-        targetContainer.innerHTML = `<p class="tbl_msg-empty">${translations.gen_no_transactions || 'No transactions registered.'}</p>`;
-        return;
+  // Wir speichern die Rohdaten global im window-Objekt, damit die Klick-Events darauf zugreifen können
+  window.currentInboundTableData = data;
+
+  let html = `
+    <table class="tbl_table">
+      <thead>
+        <tr>
+          <th data-i18n="tbl_purchase_date"></th>
+          <th data-i18n="tbl_product_desc"></th>
+          <th data-i18n="tbl_barcode"></th>
+          <th class="tbl_text-center" data-i18n="tbl_quantity"></th>
+          <th class="tbl_text-right" data-i18n="tbl_price_gross"></th>
+          <th data-i18n="tbl_estimated_delivery"></th>
+          <th data-i18n="tbl_received_at"></th>
+          <th class="tbl_text-center" data-i18n="tbl_logistics_status"></th>
+        </tr>
+      </thead>
+      <tbody>
+  `
+
+  data.forEach((row, index) => {
+    // Formatiert das Datum systemspezifisch
+    const dateObj = new Date(row.purchased_at).toLocaleDateString()
+    const priceFormatted = parseFloat(row.price || 0).toFixed(2) + ' €'
+    const estDelivery = row.estimated_delivery ? new Date(row.estimated_delivery).toLocaleDateString() : '-'
+    const receivedDate = row.received_at ? new Date(row.received_at).toLocaleDateString() : '-'
+    
+    const statusI18nKey = "status_" + row.status.toLowerCase()
+    const rowClass = index % 2 === 0 ? 'tbl_row-even' : 'tbl_row-odd'
+
+    // Nutzt jetzt deine neuen, konsolidierten CSS-Button-Klassen für den Status
+    let actionCellHTML = `<span class="btn btn-success" data-i18n="${statusI18nKey}"></span>`
+
+    if (row.status === 'ORDERED') {
+      actionCellHTML = `
+        <button class="btn btn-confirm js-inbound-receive-trigger" data-index="${index}" data-i18n="btn_receive"></button>
+      `
+    }
+
+    html += `
+      <tr class="${rowClass}">
+        <td style="font-family: monospace;">${dateObj}</td>
+        <td class="tbl_text-bold">${row.product_name}</td>
+        <td style="font-family: monospace; color: var(--text-muted);">${row.barcode || '-'}</td>
+        <td class="tbl_text-center"><strong style="font-family: monospace; font-size: 14px;">${row.quantity || 1}</strong></td>
+        <td class="tbl_text-right tbl_text-bold">${priceFormatted}</td>
+        <td style="font-family: monospace; color: var(--text-muted);">${estDelivery}</td>
+        <td style="font-family: monospace;">${receivedDate}</td>
+        <td class="tbl_text-center">
+          ${actionCellHTML}
+        </td>
+      </tr>
+    `
+  })
+
+  html += `</tbody></table>`
+  targetContainer.innerHTML = html
+
+  // Event-Listener dynamisch an die gerenderten Buttons binden
+  const buttons = targetContainer.querySelectorAll(".js-inbound-receive-trigger")
+  buttons.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.target.getAttribute("data-index")
+      const selectedOrder = window.currentInboundTableData[idx]
+      
+      if (selectedOrder) {
+        // Feuert den Event an js/inbound-receive.js ab
+        window.dispatchEvent(new CustomEvent("appandor_trigger_inline_receive", {
+          detail: { order: selectedOrder }
+        }))
       }
-
-      // FIX: Keine Inline-Styles mehr! Tabelle nutzt jetzt die Klasse tbl_table
-      let html = `
-        <table class="tbl_table">
-          <thead>
-            <tr>
-              <th>${translations.tbl_purchase_date || 'Purchase Date'}</th>
-              <th>${translations.tbl_product_desc || 'Product Description'}</th>
-              <th>${translations.tbl_barcode || 'Barcode'}</th>
-              <th class="tbl_text-center">${translations.tbl_quantity || 'Quantity'}</th>
-              <th class="tbl_text-right">${translations.tbl_price_gross || 'Price Gross'}</th>
-              <th>${translations.tbl_estimated_delivery || 'Expected At'}</th>
-              <th>${translations.tbl_received_at || 'Delivered At'}</th>
-              <th class="tbl_text-center">${translations.tbl_logistics_status || 'Logistics Status'}</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      data.forEach((row, index) => {
-        const dateObj = new Date(row.purchased_at).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US');
-        const priceFormatted = parseFloat(row.price || 0).toFixed(2) + ' €';
-        const estDelivery = row.estimated_delivery ? new Date(row.estimated_delivery).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US') : '-';
-        const receivedDate = row.received_at ? new Date(row.received_at).toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-US') : '-';
-        
-        const statusKey = "status_" + row.status.toLowerCase();
-        const statusText = translations[statusKey] || row.status;
-        
-        const stateClass = "status-text-" + row.status.toLowerCase();
-        const badgeClass = row.status === 'RECEIVED' ? 'badge-received' : 'badge-ordered';
-        
-        // Die Zeilen-Klassen fluchten nun synchron mit dem unbestechlichen tables.css-Wechsel
-        const rowClass = index % 2 === 0 ? 'tbl_row-even' : 'tbl_row-odd';
-
-        let actionCellHTML = `<span class="status-badge-container ${badgeClass}">${statusText}</span>`;
-        const actionBtnText = translations.btn_receive || "Confirm";
-
-        if (row.status === 'ORDERED') {
-          const currentQty = row.quantity || 1;
-          actionCellHTML = `
-            <button class="btn-receive-action" onclick="openReceiveModal(${row.tracked_id}, ${currentQty}, ${row.product_id})">
-              ${actionBtnText}
-            </button>
-          `;
-        }
-
-        // FIX: Alle harten td Inline-Styles restlos entfernt!
-        html += `
-          <tr class="${rowClass}">
-            <td style="font-family: monospace;">${dateObj}</td>
-            <td class="tbl_text-bold">${row.product_name}</td>
-            <td style="font-family: monospace; color: var(--text-muted);">${row.barcode || '-'}</td>
-            <td class="tbl_text-center"><strong style="font-family: monospace; font-size: 14px;">${row.quantity || 1}</strong></td>
-            <td class="tbl_text-right tbl_text-bold">${priceFormatted}</td>
-            <td style="font-family: monospace; color: var(--text-muted);">${estDelivery}</td>
-            <td class="${stateClass}" style="font-family: monospace;">${receivedDate}</td>
-            <td class="tbl_text-center">
-              ${actionCellHTML}
-            </td>
-          </tr>
-        `;
-      });
-
-      html += `</tbody></table>`;
-      targetContainer.innerHTML = html;
     })
-    .catch(err => console.error("[Render Error]:", err.message));
-};
+  })
+}

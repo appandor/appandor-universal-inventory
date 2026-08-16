@@ -3,3 +3,6 @@ postgres_data/
 combined.log
 combined.log.1
 combined.log.2
+*copy*
+*2026*
+last_start_time

@@ -4,10 +4,10 @@
 
 function loadInboundData() {
   const token = localStorage.getItem('appandor_jwt_token')
-  const productSelect = document.getElementById("inbound-product-select")
+  const productSelect = document.getElementById("inbound-order-product-select")
   const tableContainer = document.getElementById("tbl_table-container")
 
-  // 1. DROPDOWN BEFÜLLEN (PRODUKT-STAMMDATEN)
+  // 1. DROPDOWN BEFÜLLEN (PRODUKT-STAMMDATEN) - Aktualisiert auf neue ID
   if (productSelect) {
     fetch('/api/products/masters', {
       method: 'GET',
@@ -59,14 +59,15 @@ function loadInboundData() {
 window.addEventListener("appandor_platform_ready", () => {
   loadInboundData()
 
-  const inboundForm = document.getElementById("inbound-add-form")
-  if (inboundForm) {
-    inboundForm.addEventListener("submit", (e) => {
+  // FORMULAR A: NEUE WARE BESTELLEN SUBMIT
+  const inboundOrderForm = document.getElementById("inbound-order-form")
+  if (inboundOrderForm) {
+    inboundOrderForm.addEventListener("submit", (e) => {
       e.preventDefault()
       const token = localStorage.getItem('appandor_jwt_token')
-      const productSelect = document.getElementById("inbound-product-select")
-      const dateInput = document.getElementById("inbound-date")
-      const priceInput = document.getElementById("inbound-price")
+      const productSelect = document.getElementById("inbound-order-product-select")
+      const dateInput = document.getElementById("inbound-order-date")
+      const priceInput = document.getElementById("inbound-order-price")
       const errorEl = document.getElementById("inbound-error-message")
 
       // VALIDIERUNG: Pflichtfeld-Kontrolle
@@ -84,8 +85,8 @@ window.addEventListener("appandor_platform_ready", () => {
         product_id: productSelect.value,
         purchased_at: dateInput.value,
         purchase_price_gross: priceInput.value,
-        quantity: parseInt(document.getElementById("inbound-quantity").value || 1),
-        estimated_delivery: document.getElementById("inbound-delivery-est").value || null
+        quantity: parseInt(document.getElementById("inbound-order-quantity").value || 1),
+        estimated_delivery: document.getElementById("inbound-order-delivery-est").value || null
       }
 
       fetch('/api/inbound/add', {
@@ -95,29 +96,33 @@ window.addEventListener("appandor_platform_ready", () => {
       })
       .then(res => { if (!res.ok) throw new Error("Rejected"); return res.json();})
       .then(() => {
-        document.getElementById("inbound-price").value = ""
-        document.getElementById("inbound-quantity").value = "1"
-        document.getElementById("inbound-delivery-est").value = ""
+        document.getElementById("inbound-order-price").value = ""
+        document.getElementById("inbound-order-quantity").value = "1"
+        document.getElementById("inbound-order-delivery-est").value = ""
         loadInboundData()
       })
       .catch(err => console.error("[Form Error]:", err.message))
     })
   }
 
-  // 4. TOGGLE MECHANISMUS FÜR DEN FORMULARKASTEN (SÄUBERUNG)
+  // TOGGLE MECHANISMUS FÜR DEN FORMULARKASTEN (SÄUBERUNG)
   const toggleHeader = document.getElementById("inbound-toggle-header")
   if (toggleHeader) {
     toggleHeader.addEventListener("click", () => {
-      const form = document.getElementById("inbound-add-form")
+      const orderForm = document.getElementById("inbound-order-form")
+      const receiveForm = document.getElementById("inbound-receive-form")
       const btn = document.getElementById("inbound-toggle-btn")
-      if (!form || !btn) return
+      if (!btn) return
 
-      if (form.style.display === "none") {
-        form.style.display = "flex"
+      // Wenn das Einbuchungsformular gerade aktiv ist, blockieren wir das Einklappen des Headers per Klick
+      if (receiveForm && receiveForm.style.display !== "none") return
+
+      if (orderForm && orderForm.style.display === "none") {
+        orderForm.style.display = "flex"
         btn.setAttribute("data-i18n", "btn_collapse")
         btn.removeAttribute("data-state")
-      } else {
-        form.style.display = "none"
+      } else if (orderForm) {
+        orderForm.style.display = "none"
         btn.setAttribute("data-i18n", "btn_expand")
         btn.setAttribute("data-state", "collapsed")
       }      
@@ -126,5 +131,4 @@ window.addEventListener("appandor_platform_ready", () => {
   }
 })
 
-// Event-Listener für Sprachwechsel sauber unten gebunden
 window.addEventListener('appandor_language_changed', () => loadInboundData())
