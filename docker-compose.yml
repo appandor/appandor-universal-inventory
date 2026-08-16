@@ -36,6 +36,5 @@ services:
     volumes:
       - .:/usr/src/app
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./app_images:/usr/src/app/public/images
     depends_on:
       - postgres-db

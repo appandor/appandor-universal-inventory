@@ -139,7 +139,6 @@ window.initAdminLogs = function() {
         <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
           <span style="font-weight: bold; font-size: 13px; color: #333333;">Zeilen-Limit:</span>
           <select id="admin-log-limit-select" class="lay_input-select" style="width: 80px; height: 32px; padding: 0 5px; box-sizing: border-box;">
-            <option value="10">10</option>
             <option value="100">100</option>
             <option value="500">500</option>
             <option value="1000">1000</option>

@@ -80,11 +80,21 @@
     "admin_opt_choose":              "-- Tabelle wählen --",
     "admin_msg_select_table_prompt": "Bitte wählen Sie eine Tabelle aus dem Dropdown aus, um die Rohdaten des Mandanten zu inspizieren.", 
 
-    "admin_metrics_label_uptime": "System-Uptime",
-    "admin_metrics_label_ram_used": "RAM-Auslastung",
-    "admin_metrics_label_disk_free": "Festplattenspeicher",
-    "admin_metrics_label_gc_status": "Garbage Collector",
+    "admin_metrics_label_uptime":      "System-Uptime",
+    "admin_metrics_label_ram_used":    "RAM-Auslastung",
+    "admin_metrics_label_disk_free":   "Festplattenspeicher",
+    "admin_metrics_label_gc_status":   "Garbage Collector",
     "admin_metrics_label_api_latency": "Durchschnittliche API-Latenz",
+    "admin_metrics_label_cpu_load":    "CPU Auslastung",
+
+    "admin_tab_dbadmin": "Datenbank-Admin",
+    "admin_dbadmin_db_console_title": "SQL-Direktkonsole",
+    "admin_label_sql_query": "SQL-Befehl eingeben",
+    "admin_btn_execute_sql": "Befehl ausführen",
+    "admin_dbadmin_sql_success": "Befehl erfolgreich ausgeführt. Betroffene Zeilen",
+    "admin_metrics_db_size": "Datenbank-Größe",
+    "admin_metrics_db_connections": "Aktive Verbindungen",
+    "admin_metrics_db_cache": "Cache-Hit-Rate",
 
     "ADMINISTRATION END   -----------------------------------------------------------------------------------------------": 0,
 

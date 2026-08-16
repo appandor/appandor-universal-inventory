@@ -11,7 +11,7 @@ function loadInventoryTable() {
 // =============================================================================
 
   const token = localStorage.getItem('appandor_jwt_token')
-  fetch('/api/inventory', {
+  fetch('/api/inventory/stock', {
     method: 'GET',
     headers: { 'Authorization': `Bearer ${token}` }
   })

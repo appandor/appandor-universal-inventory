@@ -30,7 +30,7 @@ router.get('/tables', authenticateToken, async (req, res) => {
 });
 
 // =============================================================================
-// 2. API: Holt die Rohdaten (Mit unkompliziertem Existenz-Check vor dem SELECT!)
+// 2. API: Holt die Rohdaten (Mit existenz-Check vor dem SELECT!)
 // =============================================================================
 router.get('/table/:name', authenticateToken, async (req, res) => {
   const pool = req.app.get('db_pool');
@@ -47,7 +47,7 @@ router.get('/table/:name', authenticateToken, async (req, res) => {
       );
     `;
     const checkResult = await pool.query(checkQuery, [tableName]);
-    const tableExists = checkResult.rows[0].exists; // Unbestechlicher PG-Pfad
+    const tableExists = checkResult.rows[0].exists;
 
     if (!tableExists) {
       return res.status(400).json({ error: "Access denied: Table does not exist." });
@@ -103,7 +103,7 @@ router.post('/execute-sql', authenticateToken, async (req, res) => {
   const { query } = req.body;
 
   if (!query || query.trim() === "") {
-    return res.status(400).json({ error: "Kein SQL-Befehl empfangen." });
+    return res.status(400).json({ error: "No SQL command." });
   }
 
   try {
@@ -114,13 +114,14 @@ router.post('/execute-sql', authenticateToken, async (req, res) => {
     const affectedRows = result.rowCount !== null ? result.rowCount : 0;
 
     res.json({ 
-      success: true, 
-      message: `Befehl erfolgreich ausgeführt. Betroffene Zeilen: ${affectedRows}` 
+      success: true,
+      affectedRows: affectedRows,
+      rows: result.rows,        
+      message: `Command executed successful. Affected rows: ${affectedRows}` 
     });
 
   } catch (err) {
     console.error("[API Admin SQL Exec Error]:", err.message);
-    // Liefert das exakte DB-Fehler-Feedback an die Konsole zurück
     res.status(500).json({ error: err.message });
   }
 });

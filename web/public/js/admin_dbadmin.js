@@ -66,19 +66,19 @@ window.initAdminDbAdmin = function() {
         
         <!-- KACHEL 1: DATENBANK-GRÖSSE -->
         <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-          <span data-i18n="admin_metrics_db_size" style="font-size: 10px; font-weight: bold; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">admin_metrics_db_size</span>
+          <span data-i18n="admin_metrics_db_size" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
           <div id="db-metric-live-size" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
         </div>
 
         <!-- KACHEL 2: AKTIVE CONNECTIONS -->
         <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-          <span data-i18n="admin_metrics_db_connections" style="font-size: 10px; font-weight: bold; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">admin_metrics_db_connections</span>
+          <span data-i18n="admin_metrics_db_connections" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
           <div id="db-metric-live-connections" style="font-size: 18px; font-weight: bold; color: #2e7d32;">-</div>
         </div>
 
         <!-- KACHEL 3: CACHE-HIT-RATE -->
         <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-          <span data-i18n="admin_metrics_db_cache" style="font-size: 10px; font-weight: bold; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">admin_metrics_db_cache</span>
+          <span data-i18n="admin_metrics_db_cache" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
           <div id="db-metric-live-cache" style="font-size: 18px; font-weight: bold; color: #1565c0;">-</div>
         </div>
 
@@ -134,7 +134,26 @@ window.initAdminDbAdmin = function() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          responseZone.innerHTML = `<div style="padding: 10px; background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; font-family: monospace; font-size: 13px; margin-top: 15px;">${data.message}</div>`;
+          // Erstellt die Box mit dem data-i18n Attribut für Ihr Übersetzungssystem
+          let htmlResult = `
+            <div style="padding: 10px; background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; font-family: monospace; font-size: 13px; margin-top: 15px; margin-bottom: 10px;">
+              <span data-i18n="admin_dbadmin_sql_success"></span>: <span>${data.affectedRows}</span>
+            </div>
+          `;
+          
+          // Wenn Daten da sind (SELECT), hängen wir das Ergebnis an
+          if (data.rows && data.rows.length > 0) {
+            htmlResult += `
+              <pre style="margin: 0; padding: 15px; background: #111111; color: #ffffff; font-family: monospace; font-size: 12px; line-height: 1.4; border-radius: 4px; overflow-x: auto; max-height: 300px; border: 1px solid var(--border-color);">${JSON.stringify(data.rows, null, 2)}</pre>
+            `;
+          }
+          
+          responseZone.innerHTML = htmlResult;
+
+          // Zwingt Ihr Frontend-System, den neu eingefügten data-i18n-Schlüssel sofort zu übersetzen
+          if (typeof window.translatePage === "function") {
+            window.translatePage();
+          }
         } else {
           responseZone.innerHTML = `<div style="padding: 10px; background: #ffebee; color: #c62828; border-left: 4px solid #f44336; font-family: monospace; font-size: 13px; margin-top: 15px;">Error: ${data.error}</div>`;
         }

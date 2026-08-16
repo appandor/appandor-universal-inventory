@@ -45,44 +45,59 @@ function executeMetricsPipeline(uptimeCell, ramCell, diskCell, token) {
         latencyCell.style.color = data.avg_latency_ms > 200 ? "#c62828" : "#2e7d32";
       }
     }).catch(err => console.error("[Metrics Pipeline Latency Error]:", err.message));
+
+  // NEU - Fetch 6: CPU-Auslastung
+  const cpuCell = document.getElementById("metric-live-cpu");
+  fetch('/api/admin/metrics/cpu', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
+    .then(res => res.json()).then(data => {
+      if (data && typeof data.cpu_percent === 'number' && cpuCell) {
+        cpuCell.innerText = `${data.cpu_percent} %`;
+        cpuCell.style.color = data.cpu_percent > 80 ? "#c62828" : "#2e7d32";
+      }
+    }).catch(err => console.error("[Metrics Pipeline CPU Error]:", err.message));
 }
 
 window.initAdminMetrics = function() {
   const mainContainer = document.getElementById("container");
   if (!mainContainer) return;
 
-  // UNBESTECHLICHER UNTERSCHIED: Alle data-i18n-Schlüssel konsequent in KLEINSCHREIBUNG
   mainContainer.innerHTML = `
     <div class="lay_form-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; padding: 15px; width: 100%; box-sizing: border-box;">
       
       <!-- KACHEL 1: BETRIEBSZEIT -->
       <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_uptime" style="font-size: 10px; font-weight: bold; text-transform: color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
+        <span data-i18n="admin_metrics_label_uptime" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
         <div id="metric-live-uptime" style="font-size: 16px; font-weight: bold; color: #1b5e20;">-</div>
       </div>
 
       <!-- KACHEL 2: ARBEITSSPEICHER -->
       <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_ram_used" style="font-size: 10px; font-weight: bold; text-transform: color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
+        <span data-i18n="admin_metrics_label_ram_used" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
         <div id="metric-live-ram" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
       </div>
 
       <!-- KACHEL 3: FESTPLATTENSPEICHER -->
       <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_disk_free" style="font-size: 10px; font-weight: bold; text-transform: color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
+        <span data-i18n="admin_metrics_label_disk_free" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
         <div id="metric-live-disk" style="font-size: 18px; font-weight: bold; color: #b71c1c;">-</div>
       </div>
 
       <!-- KACHEL 4: BEREINIGUNGSSTATUS (GARBAGE COLLECTION) -->
       <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_gc_status" style="font-size: 10px; font-weight: bold; text-transform: color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
+        <span data-i18n="admin_metrics_label_gc_status" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
         <div id="metric-live-gc" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
       </div>
 
       <!-- KACHEL 5: API-ANTWORTZEIT (LATENCY) -->
       <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_api_latency" style="font-size: 10px; font-weight: bold; text-transform: color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
+        <span data-i18n="admin_metrics_label_api_latency" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
         <div id="metric-live-latency" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
+      </div>
+
+      <!-- NEU - KACHEL 6: CPU-AUSLASTUNG -->
+      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
+        <span data-i18n="admin_metrics_label_cpu_load" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">CPU-Auslastung</span>
+        <div id="metric-live-cpu" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
       </div>
 
     </div>

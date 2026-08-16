@@ -5,9 +5,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const logFile0 = path.join(__dirname, 'combined.log');
-const logFile1 = path.join(__dirname, 'combined.log.1');
-const logFile2 = path.join(__dirname, 'combined.log.2');
+const logFile0 = path.join(process.cwd(), 'combined.log');
+const logFile1 = path.join(process.cwd(), 'combined.log.1');
+const logFile2 = path.join(process.cwd(), 'combined.log.2');
 
 let logStream = fs.createWriteStream(logFile0, { flags: 'a' });
 
@@ -70,5 +70,3 @@ console.error = function(...args) {
   originalError.apply(console, args);
   writeAndCheck(formatLogEntry('ERROR', args));
 };
-
-console.log(`[File-Logger]: Max logfile size set to ${sizeInMB}MB.`);

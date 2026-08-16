@@ -23,15 +23,12 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
-        // KORREKTUR: Das ERSTE Element [0] aus den Datenbank-Zeilen ziehen!
         const user = result.rows[0];
 
-        // KORREKTUR: Sicherer Bcrypt-Vergleich auf das exakte Datenbank-Objekt!
         const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
-
 
         const token = jwt.sign(
             { 
@@ -45,7 +42,6 @@ router.post('/login', async (req, res) => {
             { expiresIn: JWT_EXPIRATION_SECONDS } 
         );
 
-       // ZUSATZ FÜR UHRZEIT-CHECK (CRLF)
         const checkDecoded = jwt.decode(token);
         console.log("--- TIMESTAMP COMPARISON ---");
         console.log("Issued at (iat):", checkDecoded.iat);

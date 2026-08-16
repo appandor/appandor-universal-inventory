@@ -1,9 +1,10 @@
 // =============================================================================
-// APPANDOR LOGISTICS: BACKEND METRICS ROUTE (CRLF)
+// APPANDOR LOGISTICS: SERVER METRICS ROUTES
 // =============================================================================
 
 const express = require('express');
 const router = express.Router();
+const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const authenticateToken = require('./authMiddleware'); 
@@ -130,6 +131,28 @@ router.get('/latency', authenticateToken, (req, res) => {
   res.json({
     success: true,
     avg_latency_ms: average
+  });
+});
+
+// =============================================================================
+// 6. API: Berechnet die CPU-Auslastung über den Load-Average (CRLF)
+// =============================================================================
+router.get('/cpu', authenticateToken, (req, res) => {
+  // os.cpus().length gibt die Anzahl der CPU-Kerne 
+  const cpuCores = os.cpus().length;
+  
+  // os.loadavg()[0] gibt die Systemlast der letzten 1 Minute zurück
+  const loadOneMinute = os.loadavg()[0]; 
+  
+  // Umrechnung in Prozent basierend auf der Kern-Anzahl
+  let cpuPercent = Math.round((loadOneMinute / cpuCores) * 100);
+  
+  // Begrenzung, falls das System kurzzeitig überlastet ist
+  if (cpuPercent > 100) cpuPercent = 100;
+
+  res.json({
+    success: true,
+    cpu_percent: cpuPercent
   });
 });
 
