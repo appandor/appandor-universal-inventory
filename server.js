@@ -2,7 +2,7 @@
 // APPANDOR LOGISTICS: CENTRAL ENGINE
 // =============================================================================
 
-global.appandor_server_branding = process.env.SERVER_BRANDING || '[YOUR BRANDING]'
+global.appandor_server_branding = process.env.SERVER_BRANDING || '[YOUR BRANDING]';
 global.appandor_log_real_ips = true; // true = IPs mitloggen | false = komplett weglassen
 global.getLogIp = function(req) { return global.appandor_log_real_ips ? `[IP: ${req.ip}] ` : ''; };
 
@@ -16,7 +16,6 @@ console.log('[SYSTEM] =====================================================');
 
 const fs = require('fs');
 const path = require('path');
-const firewall = require('./server_core/firewall');
 const express = require('express');
 const https = require('https');
 const { Pool } = require('pg');
@@ -73,7 +72,6 @@ app.use(express.static(publicPath));
 // STUFE 1: SELEKTIVE SUCHMASCHINEN-SPERRE
 // =============================================================================
 app.use((req, res, next) => {
-
   res.removeHeader('X-Powered-By');
   res.setHeader('Server', global.appandor_server_branding);
 
@@ -85,9 +83,17 @@ app.use((req, res, next) => {
   }
   next();
 });
+
 // =============================================================================
-// STUFE 2: FIREWALL & COUNTERMEASURES (HIEHER VERSCHIEBEN!)
+// STUFE 2: FIREWALL & COUNTERMEASURES (MIT DYNAMISCHEM FALLBACK)
 // =============================================================================
+let firewall;
+try {
+  firewall = require('./server_core/firewall');
+} catch (e) {
+  console.log('[SYSTEM] [WARN] Private firewall.js not found. Using Open-Source pass-through fallback.');
+  firewall = function(req, res, next) { next(); };
+}
 app.use(firewall); 
 
 // =============================================================================
@@ -97,9 +103,8 @@ app.use((req, res, next) => {
   const startTime = process.hrtime();
 
   res.on('finish', () => {
-
     if (req.originalUrl.toLowerCase().includes('/api/admin/')) {      
-      return; // Bricht das Logging ab, der Request läuft im Hintergrund trotzdem sauber durch
+      return; 
     }
     
     const diff = process.hrtime(startTime);
@@ -160,10 +165,6 @@ app.get('/api/verify-session', (req, res) => {
 // GLOBAL DEFENSIVE 404 CATCH-ALL HANDLER
 // =============================================================================
 app.use((req, res) => {
-  // Option A: Schickt einfach ein sauberes, kurzes "Not Found" als Text
-  //res.status(404).send('Not Found');
-
-  // Option B (Empfohlen für reine APIs): Schickt ein strukturiertes JSON zurück
   res.status(404).json({ error: "Not Found", path: req.originalUrl });
 });
 
