@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: appandor_universal_inventory
     volumes:
       - ./postgres_data:/var/lib/postgresql/data  # Wieder dein gewohnter, sichtbarer Festplatten-Ordner!
-      - ./init_sql:/docker-entrypoint-initdb.d
+      - ./private_core/init_sql:/docker-entrypoint-initdb.d
 
   # --- CONTAINER 2: API-FIRST NODE.JS BACKEND ---
   node-app:
@@ -23,6 +23,9 @@ services:
       - "443:443"
     environment:
       - NODE_ENV=production
+      - SERVER_BRANDING=Microsoft-IIS/10.0
+      - SSL_KEY_PATH=/etc/letsencrypt/live/inventory.appandor.de/privkey.pem
+      - SSL_CERT_PATH=/etc/letsencrypt/live/inventory.appandor.de/fullchain.pem
       - JWT_SECRET=AppandorSecureCoreSecret2026!!!
       - JWT_EXPIRES_IN=1800
       - DB_HOST=appandor_postgres        
@@ -36,5 +39,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./private_core/server_core:/usr/src/app/server_core
+
     depends_on:
       - postgres-db

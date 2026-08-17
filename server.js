@@ -2,7 +2,7 @@
 // APPANDOR LOGISTICS: CENTRAL ENGINE
 // =============================================================================
 
-global.appandor_server_branding = 'Microsoft-IIS/10.0'; // Für den Verkauf später änderbar in 'Appandor-Inventory'
+global.appandor_server_branding = process.env.SERVER_BRANDING || '[YOUR BRANDING]'
 global.appandor_log_real_ips = true; // true = IPs mitloggen | false = komplett weglassen
 global.getLogIp = function(req) { return global.appandor_log_real_ips ? `[IP: ${req.ip}] ` : ''; };
 
@@ -31,6 +31,17 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
+// =============================================================================
+// PRÜFUNG DER DATENBANK-UMGEBUNGSVARIABLEN
+// =============================================================================
+const REQUIRED_DB_ENVS = ['DB_USER', 'DB_HOST', 'DB_NAME', 'DB_PASSWORD', 'DB_PORT'];
+const missingDbEnvs = REQUIRED_DB_ENVS.filter(env => !process.env[env]);
+
+if (missingDbEnvs.length > 0) {
+  console.error(`[CRITICAL] ENGINE ABORT: Missing database environment variables: ${missingDbEnvs.join(', ')}`);
+  process.exit(1);
+}
+
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -41,9 +52,17 @@ const pool = new Pool({
 
 app.set('db_pool', pool);
 
+const SSL_KEY_PATH = process.env.SSL_KEY_PATH;
+const SSL_CERT_PATH = process.env.SSL_CERT_PATH;
+
+if (!SSL_KEY_PATH || !SSL_CERT_PATH) {
+  console.error("[CRITICAL] ENGINE ABORT: SSL_KEY_PATH or SSL_CERT_PATH is not defined in environment variables!");
+  process.exit(1);
+}
+
 const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/inventory.appandor.de/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/inventory.appandor.de/fullchain.pem')
+  key: fs.readFileSync(SSL_KEY_PATH),
+  cert: fs.readFileSync(SSL_CERT_PATH)
 };
 
 app.use(express.json());

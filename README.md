@@ -11,6 +11,8 @@
 #
 # ###############
 # docker compose restart node-app
+# docker compose logs -f node-app
+#
 #
 # docker kill -s HUP appandor_backend
 #
