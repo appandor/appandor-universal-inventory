@@ -4,8 +4,18 @@
 
 global.appandor_server_branding = process.env.SERVER_BRANDING || '[YOUR BRANDING]';
 global.appandor_log_real_ips = true; // true = IPs mitloggen | false = komplett weglassen
-global.getLogIp = function(req) { return global.appandor_log_real_ips ? `[IP: ${req.ip}] ` : ''; };
+//global.getLogIp = function(req) { return global.appandor_log_real_ips ? `[IP: ${req.ip}] ` : ''; };
+global.getLogIp = function(req) {
+  // Wenn der globale Schalter auf false steht, wird die IP sofort komplett weggelassen
+  if (!global.appandor_log_real_ips) return '';
 
+  const forwarded = req.headers['x-forwarded-for'];
+  // Nimmt die erste IP aus dem Proxy-Header ODER den harten Linux-Socket
+  const rawIp = forwarded ? forwarded.split(',')[0].trim() : req.socket.remoteAddress;
+  
+  // Liefert das exakte Format für deinen Frontend-Filter und verhindert das "undefined"
+  return `[IP: ${rawIp || '0.0.0.0'}] `;
+};
 global.appandor_latency_pool = [];
 
 require('./server_core/logger');
@@ -115,7 +125,12 @@ app.use((req, res, next) => {
     if (global.appandor_latency_pool.length > 100) {
       global.appandor_latency_pool.shift();
     }
-    console.log(`[HTTP] ${global.getLogIp(req)}${req.method} ${req.originalUrl} -> Status: ${res.statusCode} (${durationMs}ms)`);
+    /* console.log(`[HTTP] ${global.getLogIp(req)}${req.method} ${req.originalUrl} -> Status: ${res.statusCode} (${durationMs}ms)`);
+*/
+    const usedHost = req.headers.host ? `[Host: ${req.headers.host}] ` : '';
+    console.log(`[HTTP] ${global.getLogIp(req)}${usedHost}${req.method} ${req.originalUrl} -> Status: ${res.statusCode} (${durationMs}ms)`);
+
+
   });
   next();
 });

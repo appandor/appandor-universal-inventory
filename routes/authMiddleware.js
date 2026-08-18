@@ -20,7 +20,9 @@ function authenticateToken(req, res, next) {
         req.user = decoded; 
         next();
     } catch (err) {
-        console.error("[Auth Middleware Token Error]:", err.message);
+        if (err.name !== 'TokenExpiredError') {
+          console.error("[Auth Middleware [SECURITY_ALERT]:", err.message);
+        }  
         return res.status(401).json({ error: "Invalid or expired session token." });
     }
 }

@@ -5,10 +5,40 @@
 # git add . && git commit -m "Message for Update" && git push origin main
 # 
 # git rm -r --cached *copy*
+#
+#
+
+cd private_core
+git add .
+git commit -m "Update private core files"
+git push origin main
+cd ..
+git add .
+git commit -m "Update main engine and link new private commit"
+git push origin main
+
+
+cd /home/appandor/appandor-system
+git submodule set-url private_core git@github-private:appandor/appandor-server-core.git
+git submodule sync
+
+cd private_core
+git remote set-url origin git@github-private:appandor/appandor-server-core.git
+
+# Der unbestechliche Test
+git push origin main
+
+
+#
+#
+#
+#
 ###########################################################################################################
 # NUR APP neu generieren:
-# docker compose up -d --no-deps --force-recreate node-app
-#
+# docker compose up -d --no-deps --force-recreate node-app    <- nur in docker-compose.yml etwas geändert 
+# docker compose up -d --no-deps --build node-app <- quellcode geändert >
+
+
 # ###############
 # docker compose restart node-app
 # docker compose logs -f node-app

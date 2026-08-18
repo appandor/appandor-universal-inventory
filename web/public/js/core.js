@@ -1,8 +1,36 @@
 // ==========================================================================
-// APPANDOR CORE: GENERAL THINGS FOR MOSTLY ALL SITES
+// APPANDOR CORE: GENERAL THINGS MOSTLY ALL SITES
 // ==========================================================================
 
-// Neue Welt: Zündet über das Signal der config.js
+// GLOBALER HTTP-WÄCHTER (PUNKT 1): Überschreibt das native fetch des Browsers
+const originalFetch = window.fetch;
+window.fetch = async function(...args) {
+  const response = await originalFetch(...args);
+
+  // Sobald irgendein Request auf der aktuellen Seite ein 401 (jwt expired) wirft
+  if (response.status === 401) {
+    console.warn("[SECURITY] Token abgelaufen. Erzwinge globalen Logout...");
+
+    // 1. Radikaler Timer-Stopp: Killt sofort alle aktiven Intervalle und Timeouts
+    let id = window.setTimeout(function() {}, 0);
+    while (id--) { 
+      window.clearInterval(id); 
+      window.clearTimeout(id); 
+    }
+
+    // 2. Altes Token aus dem Browser-Speicher löschen
+    localStorage.removeItem('appandor_jwt_token');
+
+    // 3. Sofort hart zum Login wechseln
+    window.location.href = '/login.html';
+    
+    throw new Error("Session expired");
+  }
+
+  return response;
+};
+
+// Zündet über das Signal der config.js
 window.addEventListener("appandor_platform_ready", () => {
   initializeAppandorLayout();
   initializeAppandorSession();

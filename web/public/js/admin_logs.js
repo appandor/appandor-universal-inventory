@@ -38,21 +38,26 @@ function fetchTerminalStreams(limitValue) {
   });
 }
 
-// Verarbeitet und filtert die Zeilen im Browser-RAM
+
+// Verarbeitet und filtert die Zeilen im Browser-RAM mit UND-Logik
 function applyLogFilter(keyword) {
   const terminal = document.getElementById("admin-log-terminal");
   if (!terminal || !window.currentRawLogs) return;
 
   terminal.style.color = ""; 
   const lines = window.currentRawLogs.split('\n');
-  const searchWord = keyword.toLowerCase().trim();
+  
+  // Splittet das Suchfeld bei Leerzeichen auf und filtert leere Fragmente heraus
+  const searchTerms = keyword.toLowerCase().trim().split(/\s+/).filter(term => term.length > 0);
 
   const formattedLines = lines.map(line => {
     if (!line.trim()) return ""; 
 
-    // Wenn ein Suchbegriff eingegeben wurde, überspringen wir Zeilen, die ihn nicht enthalten
-    if (searchWord && !line.toLowerCase().includes(searchWord)) {
-      return null; 
+    // Wenn Suchbegriffe eingegeben wurden, müssen ALLE (UND-Logik) in der Zeile vorkommen
+    if (searchTerms.length > 0) {
+      const lowerLine = line.toLowerCase();
+      const hasAllTerms = searchTerms.every(term => lowerLine.includes(term));
+      if (!hasAllTerms) return null; // Zeile überspringen, wenn auch nur ein Wort fehlt
     }
 
     let color = "#ffffff"; 

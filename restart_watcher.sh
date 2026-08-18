@@ -7,7 +7,8 @@ while true; do
   if [ -f "$TRIGGER_FILE" ]; then
     echo "[Watcher]: Signal erkannt! Lösche Trigger und starte node-app neu..."
     rm -f "$TRIGGER_FILE"
-    docker compose restart node-app
+    #docker compose restart node-app
+    docker compose up -d --no-deps --force-recreate node-app
   fi
   sleep 1
 done

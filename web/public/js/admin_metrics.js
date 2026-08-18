@@ -10,51 +10,45 @@ function formatUptimeFromSeconds(totalSeconds) {
   return `${hours} Std, ${minutes} Min, ${seconds} Sek`;
 }
 
-function executeMetricsPipeline(uptimeCell, ramCell, diskCell, token) {
-  // Fetch 1: Uptime
-  fetch('/api/admin/metrics/uptime', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => { if (data && typeof data.uptime_seconds === 'number' && uptimeCell) uptimeCell.innerText = formatUptimeFromSeconds(data.uptime_seconds); })
-    .catch(err => console.error("[Metrics Pipeline Uptime Error]:", err.message));
+function executeMetricsPipeline(uptimeCell, ramCell, diskCell, gcCell, latencyCell, cpuCell, token) {
+  // NUR NOCH EIN EINZIGER FETCH FÜR ALLE DATEN! 🚀
+  fetch('/api/admin/metrics/all', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
+    .then(res => {
+      if (!res.ok) throw new Error("Pipeline Response Error");
+      return res.json();
+    })
+    .then(data => {
+      if (!data) return;
 
-  // Fetch 2: RAM
-  fetch('/api/admin/metrics/ram', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => { if (data && typeof data.ram_mb === 'number' && ramCell) ramCell.innerText = `${data.ram_mb} MB`; })
-    .catch(err => console.error("[Metrics Pipeline RAM Error]:", err.message));
-
-  // Fetch 3: Disk Space
-  fetch('/api/admin/metrics/disk', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => { if (data && typeof data.disk_free_gb === 'number' && diskCell) diskCell.innerText = `${data.disk_free_gb} GB frei`; })
-    .catch(err => console.error("[Metrics Pipeline Disk Error]:", err.message));
-
-  // Fetch 4: Engine-Bereinigung (Garbage Collection)
-  const gcCell = document.getElementById("metric-live-gc");
-  fetch('/api/admin/metrics/gc', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => {
-      if (data && data.gc_status && gcCell) {
+      // 1. Uptime
+      if (typeof data.uptime_seconds === 'number' && uptimeCell) {
+        uptimeCell.innerText = formatUptimeFromSeconds(data.uptime_seconds);
+      }
+      // 2. RAM
+      if (typeof data.ram_mb === 'number' && ramCell) {
+        ramCell.innerText = `${data.ram_mb} MB`;
+      }
+      // 3. Disk Space
+      if (typeof data.disk_free_gb === 'number' && diskCell) {
+        diskCell.innerText = `${data.disk_free_gb} GB frei`;
+      }
+      // 4. Garbage Collection
+      if (data.gc_status && gcCell) {
         gcCell.innerText = data.gc_status;
         gcCell.style.color = data.gc_status.includes("Aktiv") ? "#ef6c00" : "#1e1e1e";
       }
-    }).catch(err => console.error("[Metrics Pipeline GC Error]:", err.message));
-
-  // Fetch 5: API-Antwortzeit (Latency)
-  const latencyCell = document.getElementById("metric-live-latency");
-  fetch('/api/admin/metrics/latency', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => {
-      if (data && typeof data.avg_latency_ms === 'number' && latencyCell) {
+      // 5. Latency
+      if (typeof data.avg_latency_ms === 'number' && latencyCell) {
         latencyCell.innerText = `${data.avg_latency_ms} ms`;
         latencyCell.style.color = data.avg_latency_ms > 200 ? "#c62828" : "#2e7d32";
       }
-    }).catch(err => console.error("[Metrics Pipeline Latency Error]:", err.message));
-
-  // NEU - Fetch 6: CPU-Auslastung
-  const cpuCell = document.getElementById("metric-live-cpu");
-  fetch('/api/admin/metrics/cpu', { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => {
-      if (data && typeof data.cpu_percent === 'number' && cpuCell) {
+      // 6. CPU
+      if (typeof data.cpu_percent === 'number' && cpuCell) {
         cpuCell.innerText = `${data.cpu_percent} %`;
         cpuCell.style.color = data.cpu_percent > 80 ? "#c62828" : "#2e7d32";
       }
-    }).catch(err => console.error("[Metrics Pipeline CPU Error]:", err.message));
+    })
+    .catch(err => console.error("[Metrics Pipeline ALL Error]:", err.message));
 }
 
 window.initAdminMetrics = function() {
@@ -63,43 +57,12 @@ window.initAdminMetrics = function() {
 
   mainContainer.innerHTML = `
     <div class="lay_form-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; padding: 15px; width: 100%; box-sizing: border-box;">
-      
-      <!-- KACHEL 1: BETRIEBSZEIT -->
-      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_uptime" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
-        <div id="metric-live-uptime" style="font-size: 16px; font-weight: bold; color: #1b5e20;">-</div>
-      </div>
-
-      <!-- KACHEL 2: ARBEITSSPEICHER -->
-      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_ram_used" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
-        <div id="metric-live-ram" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
-      </div>
-
-      <!-- KACHEL 3: FESTPLATTENSPEICHER -->
-      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_disk_free" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
-        <div id="metric-live-disk" style="font-size: 18px; font-weight: bold; color: #b71c1c;">-</div>
-      </div>
-
-      <!-- KACHEL 4: BEREINIGUNGSSTATUS (GARBAGE COLLECTION) -->
-      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_gc_status" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
-        <div id="metric-live-gc" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
-      </div>
-
-      <!-- KACHEL 5: API-ANTWORTZEIT (LATENCY) -->
-      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_api_latency" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span>
-        <div id="metric-live-latency" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
-      </div>
-
-      <!-- NEU - KACHEL 6: CPU-AUSLASTUNG -->
-      <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; margin: 0; min-height: 100px;">
-        <span data-i18n="admin_metrics_label_cpu_load" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">CPU-Auslastung</span>
-        <div id="metric-live-cpu" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div>
-      </div>
-
+      <div class="card"><span data-i18n="admin_metrics_label_uptime" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span><div id="metric-live-uptime" style="font-size: 16px; font-weight: bold; color: #1b5e20;">-</div></div>
+      <div class="card"><span data-i18n="admin_metrics_label_ram_used" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span><div id="metric-live-ram" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div></div>
+      <div class="card"><span data-i18n="admin_metrics_label_disk_free" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span><div id="metric-live-disk" style="font-size: 18px; font-weight: bold; color: #b71c1c;">-</div></div>
+      <div class="card"><span data-i18n="admin_metrics_label_gc_status" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span><div id="metric-live-gc" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div></div>
+      <div class="card"><span data-i18n="admin_metrics_label_api_latency" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span><div id="metric-live-latency" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div></div>
+      <div class="card"><span data-i18n="admin_metrics_label_cpu_load" style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;"></span><div id="metric-live-cpu" style="font-size: 18px; font-weight: bold; color: #1e1e1e;">-</div></div>
     </div>
   `;
 
@@ -110,12 +73,15 @@ window.initAdminMetrics = function() {
   const uptimeCell = document.getElementById("metric-live-uptime");
   const ramCell = document.getElementById("metric-live-ram");
   const diskCell = document.getElementById("metric-live-disk");
+  const gcCell = document.getElementById("metric-live-gc");
+  const latencyCell = document.getElementById("metric-live-latency");
+  const cpuCell = document.getElementById("metric-live-cpu");
   const token = localStorage.getItem('appandor_jwt_token');
 
-  executeMetricsPipeline(uptimeCell, ramCell, diskCell, token);
+  executeMetricsPipeline(uptimeCell, ramCell, diskCell, gcCell, latencyCell, cpuCell, token);
 
   const liveInterval = setInterval(() => {
-    executeMetricsPipeline(uptimeCell, ramCell, diskCell, token);
+    executeMetricsPipeline(uptimeCell, ramCell, diskCell, gcCell, latencyCell, cpuCell, token);
   }, 1000);
 
   const observer = new MutationObserver(() => {
